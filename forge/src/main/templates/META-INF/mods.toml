@@ -1,0 +1,58 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="${mod_url}/issues"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+displayURL="${mod_url}"
+logoFile="logo.png"
+description='''${mod_description}'''
+# Adds nothing to the registries: a client without the mod joins a server with it, and keeps the Let's Do menus there.
+displayTest="IGNORE_ALL_VERSION"
+
+[[dependencies.${mod_id}]]
+    modId="forge"
+    mandatory=true
+    versionRange="${forge_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="diegesis"
+    mandatory=true
+    versionRange="${diegesis_version_range}"
+    ordering="AFTER"
+    side="BOTH"
+
+# Every Let's Do mod is optional: its stations come with it.
+[[dependencies.${mod_id}]]
+    modId="vinery"
+    mandatory=false
+    versionRange="[${vinery_min_version},)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="farm_and_charm"
+    mandatory=false
+    versionRange="[${farm_and_charm_min_version},)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="herbalbrews"
+    mandatory=false
+    versionRange="[${herbalbrews_min_version},)"
+    ordering="AFTER"
+    side="BOTH"

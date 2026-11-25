@@ -1,0 +1,208 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "vinery:block/apple_press_support",
+    "boards": "vinery:block/apple_press_support",
+    "grain": "vinery:block/apple_press_support_side"
+  },
+  "elements": [
+    {
+      "name": "plate_boards",
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        1,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            6,
+            10,
+            7
+          ],
+          "texture": "#boards"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            8,
+            3
+          ],
+          "texture": "#grain"
+        },
+        "south": {
+          "uv": [
+            2,
+            6,
+            10,
+            7
+          ],
+          "texture": "#boards"
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            8,
+            3
+          ],
+          "texture": "#grain"
+        },
+        "up": {
+          "uv": [
+            2,
+            0,
+            10,
+            8
+          ],
+          "texture": "#boards"
+        },
+        "down": {
+          "uv": [
+            2,
+            0,
+            10,
+            8
+          ],
+          "texture": "#boards"
+        }
+      }
+    },
+    {
+      "name": "plate_block_low",
+      "from": [
+        7,
+        1,
+        4
+      ],
+      "to": [
+        9,
+        2,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            2,
+            3,
+            3
+          ],
+          "texture": "#grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            6,
+            8,
+            7
+          ],
+          "texture": "#boards"
+        },
+        "south": {
+          "uv": [
+            1,
+            2,
+            3,
+            3
+          ],
+          "texture": "#grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            6,
+            8,
+            7
+          ],
+          "texture": "#boards"
+        },
+        "up": {
+          "uv": [
+            1,
+            4,
+            3,
+            12
+          ],
+          "texture": "#grain"
+        }
+      }
+    },
+    {
+      "name": "plate_block_high",
+      "from": [
+        4,
+        2,
+        7
+      ],
+      "to": [
+        12,
+        3,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            6,
+            10,
+            7
+          ],
+          "texture": "#boards"
+        },
+        "east": {
+          "uv": [
+            3,
+            2,
+            5,
+            3
+          ],
+          "texture": "#grain"
+        },
+        "south": {
+          "uv": [
+            2,
+            6,
+            10,
+            7
+          ],
+          "texture": "#boards"
+        },
+        "west": {
+          "uv": [
+            3,
+            2,
+            5,
+            3
+          ],
+          "texture": "#grain"
+        },
+        "up": {
+          "uv": [
+            2,
+            8,
+            10,
+            10
+          ],
+          "texture": "#boards"
+        },
+        "down": {
+          "uv": [
+            2,
+            9,
+            10,
+            11
+          ],
+          "texture": "#boards"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,680 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
+  "$comment": "Farm & Charm's crafting bowl, as its own renderer draws it: x and z 3..13, 8 px deep, open, its whisk resting with its loops in the bowl and its handle out over the -x rim. The scene faces the cook; the code turns the bowl back to the world's sides (node bowl), so it stands as the block does from any side, and the scene is the bowl in the world wherever it is drawn. What goes in comes over from the hand: what is thrown in lies as itself, a few of a stack, and the whisk pushes it about; liquids are poured, eggs cracked, flour shaken out. The whisk is taken by its handle (and only there) with a click and goes where the mouse goes. The mixture rises and thickens as it is whisked; once done, what it became shows on the badge to the right, where a click takes it. Camera, badge and book as at the cooking pot (the bowl is as wide), the camera 14 degrees steeper about the same target and the badge and the book turned with it: the bowl is deep and what lies on its floor near the front wall must be seen.",
+  "work_plane": 8,
+  "idle_visible": true,
+  "camera": {
+    "position": [
+      8,
+      48.233,
+      -12.763
+    ],
+    "target": [
+      8,
+      7.5,
+      8
+    ],
+    "fov": 30
+  },
+  "interface": {
+    "hide_player": true,
+    "inventory_panel": false,
+    "outline_color": "#FFFFE8C0"
+  },
+  "inventory_drawer": {
+    "side": "bottom",
+    "style": "minimal",
+    "always_open": true,
+    "compact": true,
+    "background": "#00000000",
+    "slot_color": "#8C1E140C",
+    "carry_size": 3.4
+  },
+  "nodes": [
+    {
+      "$comment": "The bowl, turned by the code to the world's sides; the whisk is its child, so that it rests as the block has it.",
+      "id": "bowl",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "pickable": false,
+      "visual": {
+        "model": "handson_letsdo:diegesis/crafting_bowl/bowl",
+        "lit_as_block": true
+      },
+      "children": [
+        {
+          "$comment": "The foot of the whisk's loops, at its rest as Farm & Charm draws it (its model's upright turned 40 degrees about +z, the handle out over the -x rim). The code moves and turns it from there: in the hand the loops follow the hand through the mixture and the handle leans as it is dragged.",
+          "id": "whisk_pivot",
+          "pos": [
+            2.84814,
+            2.82621,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            39.998
+          ],
+          "pickable": false,
+          "children": [
+            {
+              "$comment": "The bowl's own whisk, taken by its handle with a click; its box is the handle's end alone, over the rim and beyond (from 8.4 px up it, a little before the camera sees it leave the bowl), so a click on the loops, on the mixture or on anything that lies under the handle in the bowl does not take it. Posed by the code through whisk_pivot.",
+              "id": "whisk",
+              "strokes": true,
+              "visual": {
+                "model": "handson_letsdo:diegesis/crafting_bowl/whisk",
+                "anchor": [
+                  8.5,
+                  0,
+                  7.5
+                ],
+                "lit_as_block": true
+              },
+              "collider": {
+                "from": [
+                  -1.0,
+                  8.4,
+                  -1.0
+                ],
+                "to": [
+                  1.0,
+                  13.2,
+                  1.0
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "$comment": "The finished bowlful's top, a sheet at y 7 that the code keeps at the mixture's surface and never draws (the mixture is the bowlful). While the result waits the code shows and enables it: under an empty hand it is outlined and a click on it takes the result; otherwise it is hidden and the cursor passes through it. Its box is in the bowl's pixels, from its middle.",
+          "id": "dough",
+          "hidden": true,
+          "visual": {
+            "mesh": "handson_letsdo:crafting_bowl/mass",
+            "texture": "handson_letsdo:block/bowl/dough"
+          },
+          "collider": {
+            "from": [
+              -4.7,
+              0,
+              -4.7
+            ],
+            "to": [
+              4.7,
+              7,
+              4.7
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "$comment": "The mixture, a liquid the code fills: what was poured, rising and turning into the mass of what the bowlful becomes as it is whisked (butter, dough, porridge, salad, mince, a batter), the finished mass until its result is taken. The bowl keeps no liquid; the station's tank only names the node's look. Its box stays 0.3 px inside the walls, under the rim, so that the liquid's sides never show through them; the mass reaches across that gap to the walls.",
+      "id": "mixture",
+      "pickable": false,
+      "tank": {
+        "tank": "mixture",
+        "inner": {
+          "from": [
+            3.3,
+            0.1,
+            3.3
+          ],
+          "to": [
+            12.7,
+            7.5,
+            12.7
+          ]
+        },
+        "wall_gap": 0.3
+      }
+    },
+    {
+      "$comment": "What a stack on the cursor is thrown into: the whole bowl and the air over its rim, so that anywhere over it will do.",
+      "id": "mouth",
+      "drop_zone": "ingredients",
+      "collider": {
+        "from": [
+          1.5,
+          0,
+          1.5
+        ],
+        "to": [
+          14.5,
+          10.5,
+          14.5
+        ]
+      }
+    },
+    {
+      "$comment": "An ingredient: the code draws it as its item where it lies (a few of a stack, the others copy_N_1..2), and a click on any of its pieces takes it. Its box is in the item's own pixels (the code scales the node to the item's size), a little larger than the icon, so the whole item it shows can be clicked.",
+      "id": "item_0",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[0]",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover",
+        "display": "hidden"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "item_1",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[1]",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover",
+        "display": "hidden"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      },
+      "$comment": "An ingredient: the code draws it as its item where it lies (a few of a stack, the others copy_N_1..2), and a click on any of its pieces takes it."
+    },
+    {
+      "id": "item_2",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[2]",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover",
+        "display": "hidden"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      },
+      "$comment": "An ingredient: the code draws it as its item where it lies (a few of a stack, the others copy_N_1..2), and a click on any of its pieces takes it."
+    },
+    {
+      "id": "item_3",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[3]",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover",
+        "display": "hidden"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      },
+      "$comment": "An ingredient: the code draws it as its item where it lies (a few of a stack, the others copy_N_1..2), and a click on any of its pieces takes it."
+    },
+    {
+      "id": "copy_0_1",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "hidden": true,
+      "slot": {
+        "slot": "ingredients[0]",
+        "display": "hidden",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "copy_0_2",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "hidden": true,
+      "slot": {
+        "slot": "ingredients[0]",
+        "display": "hidden",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "copy_1_1",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "hidden": true,
+      "slot": {
+        "slot": "ingredients[1]",
+        "display": "hidden",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "copy_1_2",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "hidden": true,
+      "slot": {
+        "slot": "ingredients[1]",
+        "display": "hidden",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "copy_2_1",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "hidden": true,
+      "slot": {
+        "slot": "ingredients[2]",
+        "display": "hidden",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "copy_2_2",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "hidden": true,
+      "slot": {
+        "slot": "ingredients[2]",
+        "display": "hidden",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "copy_3_1",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "hidden": true,
+      "slot": {
+        "slot": "ingredients[3]",
+        "display": "hidden",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "copy_3_2",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "hidden": true,
+      "slot": {
+        "slot": "ingredients[3]",
+        "display": "hidden",
+        "size": 3.4,
+        "highlight": false,
+        "counts": "hover"
+      },
+      "collider": {
+        "from": [
+          -8.5,
+          -8.5,
+          -4
+        ],
+        "to": [
+          8.5,
+          8.5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "hand_0",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "hand_1",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "hand_2",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "hand_3",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "spill_0",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "spill_1",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "spill_2",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "spill_3",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "badge",
+      "pos": [
+        -0.6,
+        16.327,
+        5.666
+      ],
+      "rotation": [
+        -36,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "dial_track",
+      "pos": [
+        -0.6,
+        16.351,
+        5.652
+      ],
+      "rotation": [
+        -36,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "dial",
+      "pos": [
+        -0.6,
+        16.375,
+        5.637
+      ],
+      "rotation": [
+        -36,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "$comment": "The badge's pale count of what is still to come, and its time.",
+      "id": "dial_more",
+      "pos": [
+        -0.6,
+        16.387,
+        5.63
+      ],
+      "rotation": [
+        -36,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "preview",
+      "pos": [
+        -0.6,
+        16.424,
+        5.608
+      ],
+      "rotation": [
+        54,
+        0,
+        0
+      ],
+      "scale": 0.125,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -12,
+          -12,
+          -12
+        ],
+        "to": [
+          12,
+          12,
+          12
+        ]
+      }
+    },
+    {
+      "id": "book_open",
+      "pos": [
+        16.33,
+        24.928,
+        -1.053
+      ],
+      "rotation": [
+        -36,
+        0,
+        0
+      ],
+      "scale": 0.69,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -5.3,
+          -0.4,
+          -3.9
+        ],
+        "to": [
+          5.3,
+          1.4,
+          3.9
+        ]
+      }
+    }
+  ]
+}

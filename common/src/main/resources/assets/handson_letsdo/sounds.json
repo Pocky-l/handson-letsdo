@@ -1,0 +1,88 @@
+{
+  "barrel.plop": {
+    "sounds": [
+      "handson_letsdo:barrel/plop1",
+      "handson_letsdo:barrel/plop2",
+      "handson_letsdo:barrel/plop3"
+    ]
+  },
+  "barrel.blub": {
+    "sounds": [
+      "handson_letsdo:barrel/blub1",
+      "handson_letsdo:barrel/blub2",
+      "handson_letsdo:barrel/blub3",
+      "handson_letsdo:barrel/blub4"
+    ]
+  },
+  "barrel.burst": {
+    "sounds": [
+      "handson_letsdo:barrel/burst1",
+      "handson_letsdo:barrel/burst2",
+      "handson_letsdo:barrel/burst3"
+    ]
+  },
+  "barrel.pour": {
+    "sounds": [
+      "handson_letsdo:barrel/pour1",
+      "handson_letsdo:barrel/pour2"
+    ]
+  },
+  "barrel.pour_quick": {
+    "sounds": [
+      "handson_letsdo:barrel/pour_quick1",
+      "handson_letsdo:barrel/pour_quick2"
+    ]
+  },
+  "pot.body": {
+    "sounds": [
+      {
+        "name": "handson_letsdo:pot/body",
+        "stream": false
+      }
+    ]
+  },
+  "pot.stir": {
+    "sounds": [
+      {
+        "name": "handson_letsdo:pot/stir",
+        "stream": false
+      }
+    ]
+  },
+  "pot.plop": {
+    "sounds": [
+      "handson_letsdo:pot/plop1",
+      "handson_letsdo:pot/plop2",
+      "handson_letsdo:pot/plop3"
+    ]
+  },
+  "pot.burst": {
+    "sounds": [
+      "handson_letsdo:pot/burst1",
+      "handson_letsdo:pot/burst2",
+      "handson_letsdo:pot/burst3"
+    ]
+  },
+  "pot.blub": {
+    "sounds": [
+      "handson_letsdo:pot/blub1",
+      "handson_letsdo:pot/blub2",
+      "handson_letsdo:pot/blub3",
+      "handson_letsdo:pot/blub4"
+    ]
+  },
+  "pot.scoop": {
+    "sounds": [
+      "handson_letsdo:pot/scoop1",
+      "handson_letsdo:pot/scoop2"
+    ]
+  },
+  "kettle.whistle": {
+    "sounds": [
+      {
+        "name": "handson_letsdo:kettle/whistle",
+        "stream": false
+      }
+    ]
+  }
+}

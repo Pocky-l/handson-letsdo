@@ -1,0 +1,79 @@
+{
+  "textures": {
+    "particle": "vinery:block/fermentation_barrel_side",
+    "2": "vinery:block/fermentation_barrel_side",
+    "inside": "vinery:block/fermentation_barrel_back"
+  },
+  "elements": [
+    {
+      "name": "lid",
+      "from": [
+        2,
+        15,
+        1
+      ],
+      "to": [
+        14,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            14,
+            3
+          ],
+          "texture": "#inside"
+        },
+        "east": {
+          "uv": [
+            1,
+            2,
+            15,
+            3
+          ],
+          "texture": "#inside"
+        },
+        "south": {
+          "uv": [
+            2,
+            2,
+            14,
+            3
+          ],
+          "texture": "#inside"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            15,
+            3
+          ],
+          "texture": "#inside"
+        },
+        "up": {
+          "uv": [
+            1,
+            2,
+            15,
+            14
+          ],
+          "rotation": 90,
+          "texture": "#2"
+        },
+        "down": {
+          "uv": [
+            2,
+            1,
+            14,
+            15
+          ],
+          "texture": "#inside"
+        }
+      }
+    }
+  ]
+}

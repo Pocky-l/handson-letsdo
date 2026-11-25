@@ -1,0 +1,458 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
+  "$comment": "HerbalBrews' tea kettle, iron or copper. The station hides the block while it is used and shows it here, open: the same kettle, x 3..13, z 3..13, 8 px high, hollow (walls and floor 1 px), open where its lid sits (x 5..11, z 5..11), standing as its block stands: its spout on the cook's left, its handle on the cook's right, so that nothing turns when the scene takes the block's place. Camera, badge and book stand to it as Hands-On Delight's stand to its kettle, whose spout faces its cook: in front of the spout, on the cook's left, the spout towards the camera on the left of the frame. Four places for what a drink is made of, as the kettle's own four slots, floating on the water; water is poured in at the opening once the lid is off; the drink waits in the kettle and is poured into bottles at the spout, the kettle picked up, turned side on and tipped over each; drinks the kettle filled into bottles a hopper brought stand behind the spout; what feeds the heat lies at the kettle's foot at the front corner on the spout's side, the lid set down before the kettle on the other. The badge shows the drink, how far its bottle has brewed, and the water and the heat against what it needs. With nobody at it the scene is there too, drawing nothing of its own while the block shows: its steam, its boil and its whistle go on for whoever passes by.",
+  "work_plane": 8,
+  "idle_visible": true,
+  "camera": {
+    "position": [
+      36.52,
+      31.09,
+      -16.52
+    ],
+    "target": [
+      12.0,
+      4.0,
+      8
+    ],
+    "fov": 30
+  },
+  "interface": {
+    "hide_player": true,
+    "inventory_panel": false,
+    "outline_color": "#FFFFE8C0"
+  },
+  "inventory_drawer": {
+    "side": "bottom",
+    "style": "minimal",
+    "always_open": true,
+    "compact": true,
+    "background": "#00000000",
+    "slot_color": "#8C1E140C",
+    "carry_size": 3.4
+  },
+  "nodes": [
+    {
+      "$comment": "The kettle as its block has it: turned half round, its spout (on its model's west) on the cook's left, its handle on the cook's right. Nothing is drawn here; the children are in the kettle's own axes, pixels from the middle of its foot.",
+      "id": "kettle",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "pickable": false,
+      "children": [
+        {
+          "$comment": "The kettle itself, open. The code gives it the copper kettle's model on a copper kettle, and tips it towards its spout as it fills a bottle.",
+          "id": "body",
+          "pickable": false,
+          "visual": {
+            "model": "handson_letsdo:diegesis/tea_kettle/body",
+            "lit_as_block": true
+          }
+        }
+      ]
+    },
+    {
+      "$comment": "The kettle's lid: a click takes it off or puts it back. Off, it is set down on its edge on the stove before the kettle, on the side away from the spout, leaning on the kettle's side, its knob outwards. Moved by the code.",
+      "id": "lid",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "hidden": true,
+      "visual": {
+        "model": "handson_letsdo:diegesis/tea_kettle/lid",
+        "lit_as_block": true
+      },
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "collider": {
+        "from": [
+          -3,
+          -0.4,
+          -3
+        ],
+        "to": [
+          3,
+          2.2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "water",
+      "pickable": false,
+      "tank": {
+        "tank": "water",
+        "inner": {
+          "from": [
+            4,
+            1,
+            4
+          ],
+          "to": [
+            12,
+            6.6,
+            12
+          ]
+        }
+      }
+    },
+    {
+      "$comment": "The opening: what a drink is made of is dropped in here, water is poured in here.",
+      "id": "mouth",
+      "drop_zone": "ingredients",
+      "collider": {
+        "from": [
+          4,
+          6,
+          4
+        ],
+        "to": [
+          12,
+          12.5,
+          12
+        ]
+      }
+    },
+    {
+      "$comment": "Takes the click of an empty hand over the opening while a bucket or bottle of water from the inventory is offered; off otherwise.",
+      "id": "dip",
+      "collider": {
+        "from": [
+          4,
+          6,
+          4
+        ],
+        "to": [
+          12,
+          12.5,
+          12
+        ]
+      }
+    },
+    {
+      "id": "item_0",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[0]",
+        "size": 2.6,
+        "counts": "hover",
+        "highlight": false
+      }
+    },
+    {
+      "id": "item_1",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[1]",
+        "size": 2.6,
+        "counts": "hover",
+        "highlight": false
+      }
+    },
+    {
+      "id": "item_2",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[2]",
+        "size": 2.6,
+        "counts": "hover",
+        "highlight": false
+      }
+    },
+    {
+      "id": "item_3",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[3]",
+        "size": 2.6,
+        "counts": "hover",
+        "highlight": false
+      }
+    },
+    {
+      "$comment": "The spout: a glass bottle clicked on it (or an empty hand, with bottles in the inventory) is filled from the kettle, which is picked up and tipped over it.",
+      "id": "spout",
+      "collider": {
+        "from": [
+          12.9,
+          1.5,
+          6.6
+        ],
+        "to": [
+          16.3,
+          10.5,
+          9.4
+        ]
+      }
+    },
+    {
+      "$comment": "The drinks that are done stand behind the spout, on the cook's left.",
+      "id": "served",
+      "pos": [
+        14.6,
+        0,
+        12.8
+      ],
+      "slot": {
+        "slot": "served",
+        "size": 3.2,
+        "display": "upright",
+        "highlight": false,
+        "count_facing": "camera"
+      }
+    },
+    {
+      "$comment": "What feeds the heat lies at the kettle's foot, at its front corner on the spout's side.",
+      "id": "embers",
+      "pos": [
+        14.0,
+        0.05,
+        1.6
+      ],
+      "slot": {
+        "slot": "embers",
+        "size": 3.0,
+        "highlight": false,
+        "ghost": [
+          "#herbalbrews:heat_items"
+        ]
+      }
+    },
+    {
+      "$comment": "And is taken from the hand anywhere at that corner.",
+      "id": "fire",
+      "drop_zone": "embers",
+      "collider": {
+        "from": [
+          11.8,
+          0,
+          -0.3
+        ],
+        "to": [
+          16,
+          3.2,
+          3.4
+        ]
+      }
+    },
+    {
+      "$comment": "A bucket or bottle of water from the inventory, shown see-through over the opening to an empty hand, its face to the camera. Moved by the code.",
+      "id": "offer",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "rotation": [
+        0,
+        135,
+        0
+      ],
+      "scale": 0.35,
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "$comment": "The vessel water is poured from. Moved by the code.",
+      "id": "pour_hand",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "$comment": "A bottle filled at the spout: it comes from the player, is held under the spout while the kettle pours, and goes back as the drink. Moved by the code.",
+      "id": "cup",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "badge",
+      "pos": [
+        9.51,
+        10.96,
+        -1.38
+      ],
+      "rotation": [
+        -38,
+        -45,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "dial_track",
+      "pos": [
+        9.52,
+        10.97,
+        -1.4
+      ],
+      "rotation": [
+        -38,
+        -45,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "dial",
+      "pos": [
+        9.54,
+        10.99,
+        -1.41
+      ],
+      "rotation": [
+        -38,
+        -45,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "$comment": "The badge's pale count of what is still to come, and its time.",
+      "id": "dial_more",
+      "pos": [
+        9.55,
+        11.0,
+        -1.415
+      ],
+      "rotation": [
+        -38,
+        -45,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "gauge_water",
+      "pos": [
+        9.54,
+        10.99,
+        -1.41
+      ],
+      "rotation": [
+        -38,
+        -45,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "gauge_heat",
+      "pos": [
+        9.54,
+        10.99,
+        -1.41
+      ],
+      "rotation": [
+        -38,
+        -45,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "gauge_marks",
+      "pos": [
+        9.555,
+        11.005,
+        -1.425
+      ],
+      "rotation": [
+        -38,
+        -45,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "preview",
+      "pos": [
+        9.57,
+        11.02,
+        -1.44
+      ],
+      "rotation": [
+        52,
+        -45,
+        0
+      ],
+      "scale": 0.125,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -12,
+          -12,
+          -12
+        ],
+        "to": [
+          12,
+          12,
+          12
+        ]
+      }
+    },
+    {
+      "id": "book_open",
+      "pos": [
+        27.96,
+        15.64,
+        3.54
+      ],
+      "rotation": [
+        -38,
+        -45,
+        0
+      ],
+      "scale": 0.69,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -5.3,
+          -0.4,
+          -3.9
+        ],
+        "to": [
+          5.3,
+          1.4,
+          3.9
+        ]
+      }
+    }
+  ]
+}

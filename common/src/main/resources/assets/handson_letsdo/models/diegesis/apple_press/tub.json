@@ -1,0 +1,283 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "vinery:block/apple_press_barrel",
+    "barrel": "vinery:block/apple_press_barrel",
+    "top": "vinery:block/apple_press_barrel_top"
+  },
+  "elements": [
+    {
+      "name": "tub_front",
+      "from": [
+        4,
+        0,
+        0
+      ],
+      "to": [
+        12,
+        4,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            8,
+            16
+          ],
+          "texture": "#barrel"
+        },
+        "east": {
+          "uv": [
+            0,
+            12,
+            1,
+            16
+          ],
+          "texture": "#barrel"
+        },
+        "south": {
+          "uv": [
+            0,
+            8,
+            8,
+            12
+          ],
+          "texture": "#barrel"
+        },
+        "west": {
+          "uv": [
+            0,
+            12,
+            1,
+            16
+          ],
+          "texture": "#barrel"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            8,
+            9
+          ],
+          "texture": "#barrel"
+        },
+        "down": {
+          "uv": [
+            0,
+            13,
+            8,
+            14
+          ],
+          "texture": "#barrel"
+        }
+      }
+    },
+    {
+      "name": "tub_back",
+      "from": [
+        4,
+        0,
+        5
+      ],
+      "to": [
+        12,
+        4,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            8,
+            8,
+            12
+          ],
+          "texture": "#barrel"
+        },
+        "east": {
+          "uv": [
+            0,
+            12,
+            1,
+            16
+          ],
+          "texture": "#barrel"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            8,
+            16
+          ],
+          "texture": "#barrel"
+        },
+        "west": {
+          "uv": [
+            0,
+            12,
+            1,
+            16
+          ],
+          "texture": "#barrel"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            8,
+            9
+          ],
+          "texture": "#barrel"
+        },
+        "down": {
+          "uv": [
+            0,
+            13,
+            8,
+            14
+          ],
+          "texture": "#barrel"
+        }
+      }
+    },
+    {
+      "name": "tub_left",
+      "from": [
+        11,
+        0,
+        1
+      ],
+      "to": [
+        12,
+        4,
+        5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            12,
+            4,
+            16
+          ],
+          "texture": "#barrel"
+        },
+        "west": {
+          "uv": [
+            0,
+            8,
+            4,
+            12
+          ],
+          "texture": "#barrel"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            1,
+            12
+          ],
+          "texture": "#barrel"
+        },
+        "down": {
+          "uv": [
+            1,
+            8,
+            2,
+            12
+          ],
+          "texture": "#barrel"
+        }
+      }
+    },
+    {
+      "name": "tub_right",
+      "from": [
+        4,
+        0,
+        1
+      ],
+      "to": [
+        5,
+        4,
+        5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            8,
+            4,
+            12
+          ],
+          "texture": "#barrel"
+        },
+        "west": {
+          "uv": [
+            0,
+            12,
+            4,
+            16
+          ],
+          "texture": "#barrel"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            1,
+            12
+          ],
+          "texture": "#barrel"
+        },
+        "down": {
+          "uv": [
+            1,
+            8,
+            2,
+            12
+          ],
+          "texture": "#barrel"
+        }
+      }
+    },
+    {
+      "name": "tub_floor",
+      "from": [
+        5,
+        0,
+        1
+      ],
+      "to": [
+        11,
+        1,
+        5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            5,
+            5,
+            11,
+            9
+          ],
+          "texture": "#top"
+        },
+        "down": {
+          "uv": [
+            5,
+            5,
+            11,
+            9
+          ],
+          "texture": "#top"
+        }
+      }
+    }
+  ]
+}

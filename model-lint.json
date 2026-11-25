@@ -1,0 +1,107 @@
+{
+  "mc": "1.20.1",
+  "allow": [
+    {
+      "model": "handson_letsdo:diegesis/stove/fire",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001",
+        "T010"
+      ],
+      "reason": "Farm & Charm's own flames inside its stove, kept where it has them"
+    },
+    {
+      "model": "handson_letsdo:diegesis/stove/inside",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001",
+        "D001",
+        "F014"
+      ],
+      "reason": "Farm & Charm's own inner box of its stove, seen from inside, kept as it has it"
+    },
+    {
+      "model": "handson_letsdo:diegesis/roaster/frame",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001",
+        "D001",
+        "two-sided"
+      ],
+      "reason": "Farm & Charm's own frame and chains of its hanging roaster, kept as it has them"
+    },
+    {
+      "model": "handson_letsdo:diegesis/tea_kettle/body",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "D001",
+        "two-sided",
+        "H002"
+      ],
+      "reason": "HerbalBrews' own spout and handle, kept as its kettle has them"
+    },
+    {
+      "model": "handson_letsdo:diegesis/copper_tea_kettle/body",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "D001",
+        "two-sided",
+        "H002"
+      ],
+      "reason": "HerbalBrews' own spout and handle, kept as its kettle has them"
+    },
+    {
+      "model": "handson_letsdo:diegesis/apple_press/lower",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001"
+      ],
+      "reason": "Vinery's own posts, bar, beam and screw of its press, kept on the half pixels it has them on"
+    },
+    {
+      "model": "handson_letsdo:diegesis/apple_press/upper",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001"
+      ],
+      "reason": "Vinery's own posts, bar, beam and screw of its press, kept on the half pixels it has them on"
+    },
+    {
+      "model": "handson_letsdo:diegesis/apple_press/screw",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001"
+      ],
+      "reason": "Vinery's own posts, bar, beam and screw of its press, kept on the half pixels it has them on"
+    },
+    {
+      "model": "handson_letsdo:diegesis/crafting_bowl/bowl",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "two-sided"
+      ],
+      "reason": "Farm & Charm draws its bowl without culling: each wall and the floor is one sheet seen from both sides, the inside is their backs"
+    },
+    {
+      "model": "handson_letsdo:diegesis/crafting_bowl/whisk",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001",
+        "two-sided",
+        "intersect",
+        "coplanar"
+      ],
+      "reason": "Farm & Charm's own whisk, kept as it has it: its loops are sheets seen from both sides, one 0.027 px off the grid and through the handle; where the other lies on the handle's side its pixels are clear"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.pockyl.handson_letsdo.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "handson_letsdo.refmap.json",
+  "plugin": "com.pockyl.handson_letsdo.compat.OptionalMixins",
+  "mixins": [
+    "ApplePressInvoker",
+    "ApplePressMixin",
+    "BlockEntityUpdateMixin",
+    "CraftingBowlMixin",
+    "FermentationBarrelMixin",
+    "MincerMixin",
+    "StirredPotMixin",
+    "TeaKettleMixin"
+  ],
+  "client": [
+    "EntitySpritesMixin",
+    "SpriteContentsAccessor",
+    "SpriteResourceLoaderAccessor",
+    "StationRenderersMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

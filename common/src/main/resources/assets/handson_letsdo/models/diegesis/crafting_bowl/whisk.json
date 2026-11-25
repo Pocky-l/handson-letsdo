@@ -1,0 +1,144 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "farm_and_charm:block/crafting_bowl",
+    "bowl": "farm_and_charm:entity/crafting_bowl"
+  },
+  "elements": [
+    {
+      "name": "loop_a",
+      "from": [
+        6.027,
+        0,
+        7.5
+      ],
+      "to": [
+        11.027,
+        6,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.25,
+            0,
+            0,
+            1.5
+          ],
+          "texture": "#bowl"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.25,
+            1.5
+          ],
+          "texture": "#bowl"
+        }
+      }
+    },
+    {
+      "name": "loop_b",
+      "from": [
+        9,
+        0,
+        5
+      ],
+      "to": [
+        9,
+        6,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1.25,
+            4.5,
+            0,
+            6
+          ],
+          "texture": "#bowl"
+        },
+        "west": {
+          "uv": [
+            0,
+            4.5,
+            1.25,
+            6
+          ],
+          "texture": "#bowl"
+        }
+      }
+    },
+    {
+      "name": "handle",
+      "from": [
+        8,
+        4,
+        7
+      ],
+      "to": [
+        9,
+        12,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.25,
+            4.75,
+            3.5,
+            6.75
+          ],
+          "texture": "#bowl"
+        },
+        "east": {
+          "uv": [
+            3,
+            4.75,
+            3.25,
+            6.75
+          ],
+          "texture": "#bowl"
+        },
+        "south": {
+          "uv": [
+            2.75,
+            4.75,
+            3,
+            6.75
+          ],
+          "texture": "#bowl"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            4.75,
+            2.75,
+            6.75
+          ],
+          "texture": "#bowl"
+        },
+        "up": {
+          "uv": [
+            2.75,
+            4.5,
+            3,
+            4.75
+          ],
+          "texture": "#bowl"
+        },
+        "down": {
+          "uv": [
+            3,
+            4.75,
+            3.25,
+            4.5
+          ],
+          "texture": "#bowl"
+        }
+      }
+    }
+  ]
+}

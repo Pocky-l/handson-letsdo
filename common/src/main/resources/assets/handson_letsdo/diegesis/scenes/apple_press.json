@@ -1,0 +1,412 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
+  "$comment": "Vinery's apple press, two blocks tall. The station hides both blocks while it is used, or while it presses or stands open with nobody at it (the scene then stands in for the blocks in the world), and shows the press here: the same press with its basket hollow (x 3..13, z 3..13 from y 9 to y 21, walls 1 px, the plate under it its floor) and the basket's front in two halves that the cook opens and shuts with a click; the press presses only while they are shut. Scene pixels past 16 upwards are its upper block. The fruit stands in the basket under the pressing plate, which goes down on it as the screw over it turns; the mash lies before the fruit; the juice runs off the plate's lip into a small wooden tub of ours between the feet, and an empty wine bottle clicked on the tub (or an empty hand, with bottles in the inventory) is dipped in it and comes back full; what the press bottled the old way, in bottles a hopper laid in, stands beside the tub. The camera stands further off than at the other stations: the press is twice as tall.",
+  "work_plane": 9,
+  "idle_visible": true,
+  "camera": {
+    "position": [
+      8,
+      47,
+      -52
+    ],
+    "target": [
+      8,
+      14.5,
+      6
+    ],
+    "fov": 30
+  },
+  "interface": {
+    "hide_player": true,
+    "inventory_panel": false,
+    "outline_color": "#FFFFE8C0"
+  },
+  "inventory_drawer": {
+    "side": "bottom",
+    "style": "minimal",
+    "always_open": true,
+    "compact": true,
+    "background": "#00000000",
+    "slot_color": "#8C1E140C",
+    "carry_size": 4.5
+  },
+  "nodes": [
+    {
+      "$comment": "The press's lower block as it has it, the basket hollow: its front is the two doors below.",
+      "id": "lower",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "pickable": false,
+      "visual": {
+        "model": "handson_letsdo:diegesis/apple_press/lower",
+        "lit_as_block": true
+      }
+    },
+    {
+      "$comment": "Its upper block, without the screw.",
+      "id": "upper",
+      "pos": [
+        8,
+        16,
+        8
+      ],
+      "pickable": false,
+      "visual": {
+        "model": "handson_letsdo:diegesis/apple_press/upper",
+        "lit_as_block": true
+      }
+    },
+    {
+      "$comment": "The basket front's left half (the cook's right), hinged at x 3: a click opens or shuts both halves.",
+      "id": "door_a",
+      "pos": [
+        3,
+        9,
+        3.5
+      ],
+      "visual": {
+        "model": "handson_letsdo:diegesis/apple_press/door_a",
+        "anchor": [
+          0,
+          0,
+          0.5
+        ],
+        "lit_as_block": true
+      },
+      "collider": {
+        "from": [
+          0,
+          0,
+          -0.6
+        ],
+        "to": [
+          5,
+          12,
+          0.6
+        ]
+      }
+    },
+    {
+      "id": "door_b",
+      "pos": [
+        13,
+        9,
+        3.5
+      ],
+      "visual": {
+        "model": "handson_letsdo:diegesis/apple_press/door_b",
+        "anchor": [
+          5,
+          0,
+          0.5
+        ],
+        "lit_as_block": true
+      },
+      "$comment": "The basket front's other half, hinged at x 13.",
+      "collider": {
+        "from": [
+          -5,
+          0,
+          -0.6
+        ],
+        "to": [
+          0,
+          12,
+          0.6
+        ]
+      }
+    },
+    {
+      "$comment": "The pressing plate: the basket's top, it goes down on the fruit and up again without turning; the screw on it turns.",
+      "id": "plate",
+      "pos": [
+        8,
+        20,
+        8
+      ],
+      "pickable": false,
+      "visual": {
+        "model": "handson_letsdo:diegesis/apple_press/plate",
+        "lit_as_block": true
+      }
+    },
+    {
+      "$comment": "The screw and its cap, standing on the plate: they turn as the plate goes down. A click on the cap presses it once: four presses press the load in the basket.",
+      "id": "screw",
+      "strokes": true,
+      "pos": [
+        8,
+        20,
+        8
+      ],
+      "visual": {
+        "model": "handson_letsdo:diegesis/apple_press/screw",
+        "lit_as_block": true
+      },
+      "collider": {
+        "from": [
+          -2.8,
+          7.6,
+          -2.8
+        ],
+        "to": [
+          2.8,
+          11,
+          2.8
+        ]
+      }
+    },
+    {
+      "$comment": "The basket takes fruit anywhere in it once its front is open.",
+      "id": "basket",
+      "drop_zone": "fruit",
+      "collider": {
+        "from": [
+          3,
+          9,
+          3
+        ],
+        "to": [
+          13,
+          21,
+          13
+        ]
+      }
+    },
+    {
+      "$comment": "The fruit stands in the basket under the plate. The code shows see-through what the press takes while it is empty.",
+      "id": "fruit",
+      "pos": [
+        8,
+        9,
+        9.5
+      ],
+      "slot": {
+        "slot": "fruit",
+        "size": 7.5,
+        "display": "upright",
+        "highlight": false,
+        "count_facing": "camera",
+        "counts": "hover"
+      }
+    },
+    {
+      "$comment": "The mash lies before the fruit: it is bottled from there, and can be taken as it is.",
+      "id": "mash",
+      "pos": [
+        8,
+        9.05,
+        6
+      ],
+      "slot": {
+        "slot": "mash",
+        "size": 3.6,
+        "highlight": false,
+        "counts": "hover"
+      }
+    },
+    {
+      "$comment": "The tub under the plate's lip (ours, of the basket's wood): the juice the press makes runs into it, up to eight bottles' worth. An empty wine bottle clicked on it, or an empty hand with bottles in the inventory, fills one (Shift: as many as it holds).",
+      "id": "tub",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "visual": {
+        "model": "handson_letsdo:diegesis/apple_press/tub",
+        "lit_as_block": true
+      },
+      "collider": {
+        "from": [
+          -4,
+          0,
+          -8
+        ],
+        "to": [
+          4,
+          4.3,
+          -2
+        ]
+      },
+      "children": [
+        {
+          "$comment": "The juice in it: a bottle's worth a portion.",
+          "id": "tub_juice",
+          "pickable": false,
+          "tank": {
+            "tank": "tub",
+            "inner": {
+              "from": [
+                -3,
+                1,
+                -7
+              ],
+              "to": [
+                3,
+                3.6,
+                -3
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "$comment": "A bottle filled at the tub: it comes from the player, is dipped and goes back as the drink. Moved by the code.",
+      "id": "draught",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "$comment": "What the press bottled in bottles a hopper or its menu laid in stands before its right foot.",
+      "id": "served",
+      "pos": [
+        13.2,
+        0,
+        -1.4
+      ],
+      "slot": {
+        "slot": "served",
+        "size": 3.4,
+        "display": "upright",
+        "highlight": false,
+        "count_facing": "camera",
+        "counts": "hover"
+      }
+    },
+    {
+      "$comment": "Where the juice leaves the plate, over the tub.",
+      "id": "lip",
+      "pos": [
+        8,
+        7,
+        2.2
+      ],
+      "pickable": false
+    },
+    {
+      "id": "badge",
+      "pos": [
+        -4.51,
+        23.29,
+        -3.95
+      ],
+      "rotation": [
+        -60.7,
+        0,
+        0
+      ],
+      "scale": 1.454,
+      "pickable": false
+    },
+    {
+      "id": "dial_track",
+      "pos": [
+        -4.51,
+        23.31,
+        -3.99
+      ],
+      "rotation": [
+        -60.7,
+        0,
+        0
+      ],
+      "scale": 1.454,
+      "pickable": false
+    },
+    {
+      "id": "dial",
+      "pos": [
+        -4.51,
+        23.34,
+        -4.04
+      ],
+      "rotation": [
+        -60.7,
+        0,
+        0
+      ],
+      "scale": 1.454,
+      "pickable": false
+    },
+    {
+      "$comment": "The badge's pale count of what is still to come, and its time.",
+      "id": "dial_more",
+      "pos": [
+        -4.51,
+        23.355,
+        -4.065
+      ],
+      "rotation": [
+        -60.7,
+        0,
+        0
+      ],
+      "scale": 1.454,
+      "pickable": false
+    },
+    {
+      "id": "preview",
+      "pos": [
+        -4.51,
+        23.39,
+        -4.12
+      ],
+      "rotation": [
+        29.3,
+        0,
+        0
+      ],
+      "scale": 0.182,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -12,
+          -12,
+          -12
+        ],
+        "to": [
+          12,
+          12,
+          12
+        ]
+      }
+    },
+    {
+      "id": "book_open",
+      "pos": [
+        20.11,
+        28.27,
+        -19.02
+      ],
+      "rotation": [
+        -60.7,
+        0,
+        0
+      ],
+      "scale": 1.003,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -5.3,
+          -0.4,
+          -3.9
+        ],
+        "to": [
+          5.3,
+          1.4,
+          3.9
+        ]
+      }
+    }
+  ]
+}

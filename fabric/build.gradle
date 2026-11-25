@@ -1,0 +1,114 @@
+plugins {
+    id 'multiloader-loader'
+    id 'fabric-loom'
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${parchment_minecraft_version}:${parchment_mappings_version}@zip")
+    }
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+    // The API is in Diegesis' common jar, in Mojang names like this project; the Fabric jar of the library plays in
+    // the playtest client (playtest-1.20.1-fabric).
+    compileOnly "com.pockyl.diegesis:common:${diegesis_version}"
+    modCompileOnly "maven.modrinth:lets-do-vinery:${vinery_fabric_version}"
+    modCompileOnly "maven.modrinth:lets-do-farm-charm:${farm_and_charm_fabric_version}"
+    modCompileOnly "maven.modrinth:lets-do-herbalbrews:${herbalbrews_fabric_version}"
+}
+
+loom {
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+    runs {
+        client {
+            client()
+            configName = 'Fabric Client'
+            ideConfigGenerated(true)
+            runDir('run')
+        }
+    }
+}
+
+configurations {
+    gameTestMods { transitive = false }
+}
+
+dependencies {
+    if (!providers.gradleProperty('bare').isPresent()) {
+        gameTestMods "maven.modrinth:architectury-api:${architectury_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-vinery:${vinery_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-farm-charm:${farm_and_charm_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-herbalbrews:${herbalbrews_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-candlelight-farmcharm-compat:${candlelight_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-bakery-farmcharm-compat:${bakery_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-brewery-farmcharm-compat:${brewery_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-meadow:${meadow_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-nethervinery:${nethervinery_fabric_version}"
+    }
+    gameTestMods "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+    // Not in the fabric-api jar: the module that runs the tests (the version fabric-api's POM names).
+    gameTestMods 'net.fabricmc.fabric-api:fabric-gametest-api-v1:1.2.15+1802ada577'
+}
+
+// The game tests of common on a production Fabric server with the release jars of this mod, Diegesis and the Let's Do mods:
+// gradlew :fabric:runGameTest. They need no client and no development run.
+tasks.register('runGameTest', net.fabricmc.loom.task.prod.ServerProductionRunTask) {
+    group = 'fabric'
+    dependsOn gradle.includedBuild('diegesis').task(':fabric:remapJar')
+    mods.from(tasks.named('remapJar'))
+    mods.from(configurations.gameTestMods)
+    mods.from(file("../../diegesis/fabric/build/libs/diegesis-fabric-${minecraft_version}-${diegesis_version}.jar"))
+    installerVersion = '1.1.0'
+    jvmArgs.add('-Dfabric-api.gametest')
+    runDir = file('run-gametest')
+    def eula = file('run-gametest/eula.txt')
+    def vineryConfig = file('run-gametest/config/vinery.json')
+    doFirst {
+        eula.parentFile.mkdirs()
+        eula.text = 'eula=true' + System.lineSeparator()
+        // A wine in ten seconds, not five minutes, where Vinery has written its config already: one test waits for a wine.
+        if (vineryConfig.exists()) {
+            vineryConfig.text = vineryConfig.text.replaceFirst(/"totalFermentationTime":\s*\d+/, '"totalFermentationTime": 200')
+        }
+    }
+}
+
+tasks.named('processResources', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version                : minecraft_version,
+            fabric_loader_version            : fabric_loader_min_version,
+            fabric_api_version               : fabric_api_min_version,
+            mod_id                           : mod_id,
+            mod_name                         : mod_name,
+            mod_license                      : mod_license,
+            mod_version                      : mod_version,
+            mod_authors                      : mod_authors,
+            mod_description                  : mod_description,
+            mod_url                          : mod_url,
+            diegesis_version                 : diegesis_version,
+            vinery_min_version               : vinery_min_version,
+            farm_and_charm_min_version       : farm_and_charm_min_version,
+            herbalbrews_min_version          : herbalbrews_min_version,
+    ]
+    inputs.properties replaceProperties
+    filesMatching('fabric.mod.json') {
+        expand replaceProperties
+    }
+    // Forge finds its SRG names through the refmap the mixin config names; Loom remaps the mixins in the jar itself
+    // and writes none, so the Fabric jar leaves the line out.
+    filesMatching('handson_letsdo.mixins.json') {
+        filter { String line -> line.contains('"refmap"') ? null : line }
+    }
+}
+
+publishMods {
+    file = tasks.named('remapJar').flatMap { it.archiveFile }
+    displayName = "${mod_name} ${mod_version}+${minecraft_version} (Fabric)"
+    modLoaders.add('fabric')
+}

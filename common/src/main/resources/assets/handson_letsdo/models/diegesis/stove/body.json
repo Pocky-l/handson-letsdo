@@ -1,0 +1,80 @@
+{
+  "textures": {
+    "1": "farm_and_charm:block/stove_side",
+    "4": "farm_and_charm:block/stove_bottom",
+    "5": "farm_and_charm:block/stove_front_on",
+    "7": "farm_and_charm:block/stove_top",
+    "particle": "farm_and_charm:block/stove_side"
+  },
+  "elements": [
+    {
+      "name": "stove",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#5"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#1"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#1"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#1"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#7"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#4"
+        }
+      }
+    }
+  ]
+}

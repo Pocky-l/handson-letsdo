@@ -1,0 +1,198 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "farm_and_charm:block/crafting_bowl",
+    "bowl": "farm_and_charm:entity/crafting_bowl"
+  },
+  "elements": [
+    {
+      "name": "wall_north",
+      "from": [
+        3,
+        0.05,
+        3
+      ],
+      "to": [
+        13,
+        8.05,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            2.5,
+            10,
+            4.5
+          ],
+          "texture": "#bowl"
+        },
+        "south": {
+          "uv": [
+            10,
+            2.5,
+            7.5,
+            4.5
+          ],
+          "texture": "#bowl"
+        }
+      }
+    },
+    {
+      "name": "wall_south",
+      "from": [
+        3,
+        0.05,
+        13
+      ],
+      "to": [
+        13,
+        8.05,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            2.5,
+            2.5,
+            4.5
+          ],
+          "texture": "#bowl"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            2.5,
+            5,
+            4.5
+          ],
+          "texture": "#bowl"
+        }
+      }
+    },
+    {
+      "name": "wall_west",
+      "from": [
+        3,
+        0.05,
+        3
+      ],
+      "to": [
+        3,
+        8.05,
+        13
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2.5,
+            2.5,
+            0,
+            4.5
+          ],
+          "texture": "#bowl"
+        },
+        "west": {
+          "uv": [
+            0,
+            2.5,
+            2.5,
+            4.5
+          ],
+          "texture": "#bowl"
+        }
+      }
+    },
+    {
+      "name": "wall_east",
+      "from": [
+        13,
+        0.05,
+        3
+      ],
+      "to": [
+        13,
+        8.05,
+        13
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            2.5,
+            7.5,
+            4.5
+          ],
+          "texture": "#bowl"
+        },
+        "west": {
+          "uv": [
+            7.5,
+            2.5,
+            5,
+            4.5
+          ],
+          "texture": "#bowl"
+        }
+      }
+    },
+    {
+      "name": "floor",
+      "from": [
+        3,
+        0.05,
+        3
+      ],
+      "to": [
+        13,
+        0.05,
+        13
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            5,
+            0,
+            7.5,
+            2.5
+          ],
+          "texture": "#bowl"
+        },
+        "down": {
+          "uv": [
+            5,
+            2.5,
+            7.5,
+            0
+          ],
+          "texture": "#bowl"
+        }
+      }
+    },
+    {
+      "name": "rim",
+      "from": [
+        3,
+        8.05,
+        3
+      ],
+      "to": [
+        13,
+        8.05,
+        13
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            2.5,
+            0,
+            5,
+            2.5
+          ],
+          "texture": "#bowl"
+        }
+      }
+    }
+  ]
+}

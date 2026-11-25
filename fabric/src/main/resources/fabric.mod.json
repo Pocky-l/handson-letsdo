@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": ["${mod_authors}"],
+  "contact": {
+    "homepage": "${mod_url}",
+    "sources": "${mod_url}",
+    "issues": "${mod_url}/issues"
+  },
+  "license": "${mod_license}",
+  "icon": "logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.pockyl.handson_letsdo.fabric.HandsOnLetsDoFabric"],
+    "client": ["com.pockyl.handson_letsdo.fabric.HandsOnLetsDoFabricClient"],
+    "fabric-gametest": ["com.pockyl.handson_letsdo.fabric.FabricStationTests"]
+  },
+  "mixins": ["handson_letsdo.mixins.json"],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": ">=${fabric_api_version}",
+    "minecraft": "${minecraft_version}",
+    "java": ">=17",
+    "diegesis": ">=${diegesis_version}"
+  },
+  "suggests": {
+    "vinery": ">=${vinery_min_version}",
+    "farm_and_charm": ">=${farm_and_charm_min_version}",
+    "herbalbrews": ">=${herbalbrews_min_version}"
+  }
+}

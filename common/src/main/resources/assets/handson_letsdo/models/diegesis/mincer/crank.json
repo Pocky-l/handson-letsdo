@@ -1,0 +1,189 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/iron_bars",
+    "mincer": "farm_and_charm:entity/mincer"
+  },
+  "elements": [
+    {
+      "name": "axle",
+      "from": [
+        13,
+        9,
+        7
+      ],
+      "to": [
+        14,
+        11,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.75,
+            2,
+            0.5,
+            1.5
+          ],
+          "texture": "#mincer"
+        },
+        "south": {
+          "uv": [
+            1.5,
+            2,
+            1.25,
+            1.5
+          ],
+          "texture": "#mincer"
+        },
+        "up": {
+          "uv": [
+            0.75,
+            1.5,
+            1,
+            1
+          ],
+          "texture": "#mincer"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            1,
+            0.75,
+            1.5
+          ],
+          "texture": "#mincer"
+        }
+      }
+    },
+    {
+      "name": "arm",
+      "from": [
+        14,
+        9,
+        7
+      ],
+      "to": [
+        15,
+        11,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            10,
+            7.25,
+            9.5
+          ],
+          "texture": "#mincer"
+        },
+        "east": {
+          "uv": [
+            9.25,
+            10,
+            7.5,
+            9.5
+          ],
+          "texture": "#mincer"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            10,
+            5.5,
+            9.5
+          ],
+          "texture": "#mincer"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            9.5,
+            7.75,
+            7.75
+          ],
+          "texture": "#mincer"
+        },
+        "down": {
+          "uv": [
+            7.25,
+            7.75,
+            7.5,
+            9.5
+          ],
+          "texture": "#mincer"
+        }
+      }
+    },
+    {
+      "name": "grip",
+      "from": [
+        14,
+        9,
+        14
+      ],
+      "to": [
+        16,
+        11,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            0.5,
+            0.5
+          ],
+          "texture": "#mincer"
+        },
+        "east": {
+          "uv": [
+            1.5,
+            1,
+            1,
+            0.5
+          ],
+          "texture": "#mincer"
+        },
+        "south": {
+          "uv": [
+            2,
+            1,
+            1.5,
+            0.5
+          ],
+          "texture": "#mincer"
+        },
+        "west": {
+          "uv": [
+            0.5,
+            1,
+            0,
+            0.5
+          ],
+          "texture": "#mincer"
+        },
+        "up": {
+          "uv": [
+            1,
+            0.5,
+            1.5,
+            0
+          ],
+          "texture": "#mincer"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            0,
+            1,
+            0.5
+          ],
+          "texture": "#mincer"
+        }
+      }
+    }
+  ]
+}

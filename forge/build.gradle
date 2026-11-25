@@ -1,0 +1,173 @@
+plugins {
+    id 'multiloader-loader'
+    id 'idea'
+    id 'net.neoforged.moddev.legacyforge'
+}
+
+legacyForge {
+    version = "${minecraft_version}-${forge_version}"
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        client {
+            client()
+            systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        gameTestServer {
+            type = 'gameTestServer'
+            // Own directory, with Diegesis in its mods folder (see syncDevMods).
+            gameDirectory = project.file('run/gametest')
+            systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.INFO
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+    // Diegesis is a mod with mixins from an included build: it runs from a mods folder, as in the playtest client.
+    devMods {
+        canBeConsumed = false
+        transitive = false
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+            attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, LibraryElements.JAR))
+        }
+    }
+}
+
+dependencies {
+    compileOnly "com.pockyl.diegesis:forge:${diegesis_version}"
+    devMods "com.pockyl.diegesis:forge:${diegesis_version}"
+    // Compiled against only: every Let's Do mod is optional. The game tests run with the set below.
+    modCompileOnly "maven.modrinth:lets-do-vinery:${vinery_version}"
+    modCompileOnly "maven.modrinth:lets-do-farm-charm:${farm_and_charm_version}"
+    modCompileOnly "maven.modrinth:lets-do-herbalbrews:${herbalbrews_version}"
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+// The Let's Do mods the game tests run with (Modrinth version ids in gradle.properties). -Pbare runs with none of them: the
+// mod must load and make no station. -Ponly=<mod id> runs with that one alone (and Architectury, which each of them needs).
+var bare = providers.gradleProperty('bare').isPresent()
+var only = providers.gradleProperty('only').getOrNull()
+if (!bare) {
+    var letsDo = [
+            vinery        : "lets-do-vinery:${vinery_version}",
+            farm_and_charm: "lets-do-farm-charm:${farm_and_charm_version}",
+            herbalbrews   : "lets-do-herbalbrews:${herbalbrews_version}",
+            candlelight   : "lets-do-candlelight-farmcharm-compat:${candlelight_version}",
+            bakery        : "lets-do-bakery-farmcharm-compat:${bakery_version}",
+            brewery       : "lets-do-brewery-farmcharm-compat:${brewery_version}",
+            meadow        : "lets-do-meadow:${meadow_version}",
+            nethervinery  : "lets-do-nethervinery:${nethervinery_version}",
+    ]
+    dependencies {
+        modRuntimeOnly "maven.modrinth:architectury-api:${architectury_version}"
+        letsDo.findAll { only == null || it.key == only }.each { modRuntimeOnly "maven.modrinth:${it.value}" }
+    }
+}
+
+var syncDevMods = tasks.register('syncDevMods', Sync) {
+    from(configurations.devMods)
+    into 'run/gametest/mods'
+}
+
+// Forge 1.20.1 runs the game tests on a dedicated server, in a world made from server.properties: a flat one.
+var prepareGameTestServer = tasks.register('prepareGameTestServer') {
+    var dir = project.file('run/gametest')
+    outputs.file(new File(dir, 'server.properties'))
+    outputs.upToDateWhen { false }
+    doLast {
+        dir.mkdirs()
+        new File(dir, 'server.properties').text = [
+                'level-type=minecraft:flat', 'generate-structures=false', 'spawn-protection=0'
+        ].join(System.lineSeparator()) + System.lineSeparator()
+        // One mod-loading thread: several of the series' mods fill the game's flammability map during the parallel setup, and
+        // now and then two of them break it at once and the server does not start.
+        new File(dir, 'config').mkdirs()
+        new File(dir, 'config/fml.toml').text = 'maxThreads = 1' + System.lineSeparator()
+        // A wine in ten seconds, not five minutes: one test waits for a wine made by hoppers and one made at the station.
+        // Vinery reads the key from its own config and writes the rest of the file itself.
+        new File(dir, 'config/vinery.toml').text = ['[Blocks]', 'totalFermentationTime = 200'].join(System.lineSeparator()) + System.lineSeparator()
+    }
+}
+tasks.named('runGameTestServer') { dependsOn syncDevMods, prepareGameTestServer }
+
+// The dev client runs in run/ with Diegesis in its mods folder too, and one mod-loading thread for the same reason.
+var syncClientMods = tasks.register('syncClientMods', Sync) {
+    var config = project.file('run/config')
+    from(configurations.devMods)
+    into 'run/mods'
+    doLast {
+        config.mkdirs()
+        new File(config, 'fml.toml').text = 'maxThreads = 1' + System.lineSeparator()
+    }
+}
+tasks.named('runClient') { dependsOn syncClientMods }
+
+// Refmaps translate the mixin targets to the SRG names Forge uses at runtime.
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
+}
+
+tasks.named('jar', Jar) {
+    // Forge 47 reads mixin configs from the manifest, not from mods.toml.
+    manifest.attributes('MixinConfigs': "${mod_id}.mixins.json")
+}
+
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version                : minecraft_version,
+            minecraft_version_range          : minecraft_version_range,
+            forge_version_range              : forge_version_range,
+            loader_version_range             : loader_version_range,
+            mod_id                           : mod_id,
+            mod_name                         : mod_name,
+            mod_license                      : mod_license,
+            mod_version                      : mod_version,
+            mod_authors                      : mod_authors,
+            mod_description                  : mod_description,
+            mod_url                          : mod_url,
+            diegesis_version_range           : diegesis_version_range,
+            vinery_min_version               : vinery_min_version,
+            farm_and_charm_min_version       : farm_and_charm_min_version,
+            herbalbrews_min_version          : herbalbrews_min_version,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+sourceSets.main.resources.srcDir generateModMetadata
+legacyForge.ideSyncTask generateModMetadata
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+publishMods {
+    // The reobfuscated (SRG) jar is the one that runs outside the development environment.
+    file = tasks.named('reobfJar').flatMap { it.archiveFile }
+    displayName = "${mod_name} ${mod_version}+${minecraft_version} (Forge)"
+    modLoaders.add('forge')
+}

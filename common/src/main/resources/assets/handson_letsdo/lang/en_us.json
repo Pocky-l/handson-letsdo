@@ -1,0 +1,18 @@
+{
+  "handson_letsdo.book.seconds": "%s s",
+  "handson_letsdo.book.minutes": "%s min",
+  "handson_letsdo.book.tab.all": "All recipes",
+  "handson_letsdo.book.tab.recent": "Made lately",
+  "handson_letsdo.book.only_ready": "Showing what you can make",
+  "handson_letsdo.book.showing_all": "Showing all",
+  "handson_letsdo.barrel.seconds": "%s in %s s",
+  "handson_letsdo.barrel.minutes": "%s in %s min",
+  "handson_letsdo.book.bonus": "+%s%%",
+  "handson_letsdo.pot.ready": "%s x %s",
+  "handson_letsdo.pot.cooking": "%s in %s s",
+  "tag.item.handson_letsdo.poured": "Poured Liquids",
+  "tag.item.handson_letsdo.cracked": "Foods Cracked Open",
+  "tag.item.handson_letsdo.dissolves": "Foods Dissolving in Soup",
+  "tag.item.handson_letsdo.strained": "Foods Strained from Soup",
+  "tag.item.handson_letsdo.grains": "Grains"
+}

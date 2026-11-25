@@ -1,0 +1,91 @@
+package com.pockyl.handson_letsdo.client;
+
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+import com.pockyl.diegesis.api.client.StationView;
+import com.pockyl.handson_letsdo.station.KitchenOven;
+import com.pockyl.handson_letsdo.station.OvenStation;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * An oven's book: what bakes of what, over what heat and for how long. The heat shows as the oven's usual fire: coal for an oven
+ * that burns fuel, a campfire for one that stands on its heat; the time in seconds. A pick fills the tray from the inventory.
+ */
+final class OvenBook implements RecipeBook.Source {
+
+    private static KitchenOven oven(StationView view) {
+        return KitchenOven.of(view.level().getBlockEntity(view.pos()));
+    }
+
+    @Override
+    public List<RecipeBook.Page> pages(StationView view) {
+        KitchenOven oven = oven(view);
+        List<RecipeBook.Page> pages = new ArrayList<>();
+        if (oven == null) {
+            return pages;
+        }
+        ItemStack heat = new ItemStack(oven.burnsFuel() ? Items.COAL : Items.CAMPFIRE);
+        for (KitchenOven.Baking recipe : oven.recipes(view.level())) {
+            if (recipe.needed().isEmpty() || recipe.needed().size() > oven.places()) {
+                continue;
+            }
+            List<ItemStack> foot = List.of(heat, new ItemStack(Items.CLOCK));
+            Component seconds = Component.translatable("handson_letsdo.book.seconds", Math.max(1, Math.round(recipe.ticks() / 20.0F)));
+            pages.add(new RecipeBook.Page(recipe.id(), recipe.result(), recipe.needed(), foot, seconds, false, recipe.kind()));
+        }
+        return pages;
+    }
+
+    @Override
+    public String memory() {
+        return "oven";
+    }
+
+    /** A recipe picked in the book goes in from the inventory: one, or as many as the tray takes with Shift. */
+    @Override
+    public void picked(StationView view, RecipeBook.Page page) {
+        CompoundTag fill = new CompoundTag();
+        fill.putString(OvenStation.DISH, page.key().toString());
+        fill.putBoolean(OvenStation.ALL, Screen.hasShiftDown());
+        view.sendAction(OvenStation.ACTION_FILL, fill);
+    }
+
+    @Override
+    public List<ItemStack> inStation(StationView view) {
+        return List.of(view.state().getItems(OvenStation.INGREDIENTS));
+    }
+
+    /** The book opens at what lies on the tray. */
+    @Override
+    public Object current(StationView view) {
+        KitchenOven oven = oven(view);
+        if (oven == null) {
+            return null;
+        }
+        List<KitchenOven.Baking> recipes = oven.recipes(view.level());
+        ItemStack[] onTray = view.state().getItems(OvenStation.INGREDIENTS);
+        if (oven.bakesEachPlace()) {
+            for (ItemStack stack : onTray) {
+                var baking = KitchenOven.bakingOf(recipes, stack);
+                if (baking.isPresent()) {
+                    return baking.get().id();
+                }
+            }
+            return null;
+        }
+        return KitchenOven.matching(recipes, onTray).map(KitchenOven.Baking::id).orElse(null);
+    }
+
+    /** An oven that bakes each place alone takes any of its recipes beside what lies there: a page picked stays open. */
+    @Override
+    public boolean fits(StationView view, Object key) {
+        KitchenOven oven = oven(view);
+        return oven != null && oven.bakesEachPlace() || RecipeBook.Source.super.fits(view, key);
+    }
+}

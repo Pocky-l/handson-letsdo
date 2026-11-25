@@ -1,0 +1,18 @@
+{
+  "handson_letsdo.book.seconds": "%s с",
+  "handson_letsdo.book.minutes": "%s мин",
+  "handson_letsdo.book.tab.all": "Все рецепты",
+  "handson_letsdo.book.tab.recent": "Недавние",
+  "handson_letsdo.book.only_ready": "Только то, что можно сделать",
+  "handson_letsdo.book.showing_all": "Показано всё",
+  "handson_letsdo.barrel.seconds": "%s через %s с",
+  "handson_letsdo.barrel.minutes": "%s через %s мин",
+  "handson_letsdo.book.bonus": "+%s%%",
+  "handson_letsdo.pot.ready": "%s x %s",
+  "handson_letsdo.pot.cooking": "%s через %s с",
+  "tag.item.handson_letsdo.poured": "Наливаемые жидкости",
+  "tag.item.handson_letsdo.cracked": "Еда, которую разбивают",
+  "tag.item.handson_letsdo.dissolves": "Еда, растворяемая в супе",
+  "tag.item.handson_letsdo.strained": "Еда, вынимаемая из супа",
+  "tag.item.handson_letsdo.grains": "Крупы"
+}

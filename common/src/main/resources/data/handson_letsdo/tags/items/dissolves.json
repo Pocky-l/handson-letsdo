@@ -1,0 +1,40 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:sugar",
+    "minecraft:cocoa_beans",
+    "minecraft:honey_bottle",
+    {
+      "id": "#forge:flour",
+      "required": false
+    },
+    {
+      "id": "#c:flour",
+      "required": false
+    },
+    {
+      "id": "#farm_and_charm:flour",
+      "required": false
+    },
+    {
+      "id": "#forge:butter",
+      "required": false
+    },
+    {
+      "id": "#c:butter",
+      "required": false
+    },
+    {
+      "id": "#farm_and_charm:butter",
+      "required": false
+    },
+    {
+      "id": "farm_and_charm:yeast",
+      "required": false
+    },
+    {
+      "id": "#bakery:chocolate",
+      "required": false
+    }
+  ]
+}

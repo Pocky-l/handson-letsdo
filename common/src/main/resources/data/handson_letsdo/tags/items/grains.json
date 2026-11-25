@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:wheat",
+    {
+      "id": "#farm_and_charm:barley",
+      "required": false
+    },
+    {
+      "id": "#farm_and_charm:oat",
+      "required": false
+    },
+    {
+      "id": "#forge:grain",
+      "required": false
+    },
+    {
+      "id": "#c:grains",
+      "required": false
+    },
+    {
+      "id": "#forge:seeds",
+      "required": false
+    },
+    {
+      "id": "#c:seeds",
+      "required": false
+    }
+  ]
+}

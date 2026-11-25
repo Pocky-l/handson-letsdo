@@ -1,0 +1,86 @@
+{
+  "textures": {
+    "stick": "farm_and_charm:block/cooking_pot_inner",
+    "particle": "farm_and_charm:block/cooking_pot_inner"
+  },
+  "elements": [
+    {
+      "name": "stick",
+      "from": [
+        7,
+        2,
+        7
+      ],
+      "to": [
+        8,
+        12,
+        8
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "z",
+        "origin": [
+          7.5,
+          2,
+          7.5
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            13,
+            3,
+            14,
+            13
+          ],
+          "texture": "#stick"
+        },
+        "east": {
+          "uv": [
+            13,
+            3,
+            14,
+            13
+          ],
+          "texture": "#stick"
+        },
+        "south": {
+          "uv": [
+            13,
+            3,
+            14,
+            13
+          ],
+          "texture": "#stick"
+        },
+        "west": {
+          "uv": [
+            13,
+            3,
+            14,
+            13
+          ],
+          "texture": "#stick"
+        },
+        "up": {
+          "uv": [
+            13,
+            3,
+            14,
+            4
+          ],
+          "texture": "#stick"
+        },
+        "down": {
+          "uv": [
+            13,
+            3,
+            14,
+            4
+          ],
+          "texture": "#stick"
+        }
+      }
+    }
+  ]
+}

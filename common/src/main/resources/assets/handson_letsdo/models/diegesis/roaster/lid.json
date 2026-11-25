@@ -1,0 +1,139 @@
+{
+  "textures": {
+    "lid": "farm_and_charm:block/roaster_parts",
+    "particle": "farm_and_charm:block/roaster_parts"
+  },
+  "elements": [
+    {
+      "name": "lid",
+      "from": [
+        3,
+        0,
+        4
+      ],
+      "to": [
+        13,
+        1,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            8,
+            16,
+            9
+          ],
+          "texture": "#lid"
+        },
+        "east": {
+          "uv": [
+            15,
+            8,
+            16,
+            16
+          ],
+          "texture": "#lid",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            6,
+            8,
+            16,
+            9
+          ],
+          "texture": "#lid"
+        },
+        "west": {
+          "uv": [
+            6,
+            8,
+            7,
+            16
+          ],
+          "texture": "#lid",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            16,
+            16,
+            6,
+            8
+          ],
+          "texture": "#lid"
+        },
+        "down": {
+          "uv": [
+            16,
+            16,
+            6,
+            8
+          ],
+          "texture": "#lid"
+        }
+      }
+    },
+    {
+      "name": "lid_top",
+      "from": [
+        7,
+        1,
+        7
+      ],
+      "to": [
+        9,
+        2,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            7,
+            14,
+            8
+          ],
+          "texture": "#lid"
+        },
+        "east": {
+          "uv": [
+            14,
+            7,
+            16,
+            8
+          ],
+          "texture": "#lid"
+        },
+        "south": {
+          "uv": [
+            8,
+            7,
+            10,
+            8
+          ],
+          "texture": "#lid"
+        },
+        "west": {
+          "uv": [
+            10,
+            7,
+            12,
+            8
+          ],
+          "texture": "#lid"
+        },
+        "up": {
+          "uv": [
+            10,
+            11,
+            12,
+            13
+          ],
+          "texture": "#lid"
+        }
+      }
+    }
+  ]
+}
