@@ -54,53 +54,28 @@
           }
         },
         {
-          "$comment": "The lid, shown on a pot that stands on something hot: it lies askew on the pot as the block has it, and the code sets it down behind the pot while somebody cooks, on what the pot stands on, leaning on its back wall.",
-          "id": "lid",
-          "pos": [
-            -1.123,
-            8,
-            2.685
-          ],
-          "rotation": [
-            0,
-            -22.5,
-            0
-          ],
-          "pickable": false,
-          "hidden": true,
-          "visual": {
-            "model": "handson_letsdo:diegesis/cooking_pot/lid",
-            "anchor": [
-              7.5,
-              0,
-              7.5
-            ],
-            "lit_as_block": true
-          }
-        },
-        {
-          "$comment": "The pot's own stick is the spoon: held by its handle above the rim only, under it the cursor belongs to what floats.",
+          "$comment": "The pot's own stick is the spoon, pivoted at its lower end as the block has it: held by its handle above the rim only, under it the cursor belongs to what floats.",
           "id": "ladle",
           "strokes": true,
           "visual": {
             "model": "handson_letsdo:diegesis/cooking_pot/ladle",
             "anchor": [
-              7.5,
+              9.7071,
               0,
-              7.5
+              9.0
             ],
             "lit_as_block": true
           },
           "collider": {
             "from": [
-              1.6,
+              -10.0,
               8.3,
-              -1.3
+              -1.4
             ],
             "to": [
-              5.4,
-              12.6,
-              1.3
+              -3.2,
+              13.0,
+              1.4
             ]
           }
         }
@@ -114,7 +89,7 @@
         "inner": {
           "from": [
             4,
-            1,
+            2,
             4
           ],
           "to": [
@@ -130,14 +105,14 @@
       "drop_zone": "ingredients",
       "collider": {
         "from": [
-          3,
+          2,
           4,
-          3
+          2
         ],
         "to": [
-          13,
+          14,
           12,
-          13
+          14
         ]
       }
     },
@@ -262,7 +237,7 @@
       "collider": {
         "from": [
           4,
-          1,
+          2,
           4
         ],
         "to": [

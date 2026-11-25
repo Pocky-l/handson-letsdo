@@ -749,11 +749,11 @@ public final class PotTests {
 
     /**
      * The pot's scene is one the library reads, with every part the station shows things on: a place for each ingredient and for
-     * the dish that is done, and no other slot (the soup is in the pot, bowls are dipped), the water, the spoon, the lid, the
-     * hands, the badge and the book.
+     * the dish that is done, and no other slot (the soup is in the pot, bowls are dipped), the water, the spoon, the
+     * hands, the badge and the book. No lid: Farm &amp; Charm's pot has none on 1.21.1.
      */
     public static void thePotsSceneIsRead(GameTestHelper helper) {
-        List<String> nodes = new java.util.ArrayList<>(List.of("pot", "support", "lid", "ladle", "broth", "mouth", "served", "scoop", "soup", "sunk",
+        List<String> nodes = new java.util.ArrayList<>(List.of("pot", "support", "ladle", "broth", "mouth", "served", "scoop", "soup", "sunk",
                 "badge", "dial_track", "dial", "preview", "book_open"));
         for (int i = 0; i < Pot.INGREDIENTS; i++) {
             nodes.addAll(List.of("item_" + i, "melt_" + i, "hand_" + i, "spill_" + i));

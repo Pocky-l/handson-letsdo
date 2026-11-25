@@ -71,9 +71,12 @@ public final class PotBehavior implements StationBehavior {
      */
     public record Shape(Pot.Kind kind, float floor, float depth, float spoonEnd, float rim, float lean, float homeX, float homeZ,
             boolean dry, String models, boolean lit, Vector3f lidOn, float lidOnYaw, LidRest lidRest, boolean worldLook) {
-        /** Farm &amp; Charm's cooking pot: walls and floor 1 px, rim at 8; its stick stands off the middle, to the front. */
-        public static final Shape COOKING_POT = new Shape(Pot.COOKING_POT, 1.0F, 5.5F, 2.0F, 8.0F, 22.5F, 0.87F, -2.0F, false,
-                "cooking_pot", true, new Vector3f(-1.123F, 8.0F, 2.685F), -22.5F, LidRest.COOKING_POT, true);
+        /**
+         * Farm &amp; Charm's cooking pot as 1.21.1 has it: walls and floor 2 px, rim at 8, no lid; its stick's end stands off the
+         * middle to the right and back, the stick leaning 45 degrees over the left rim (where the block's model puts it).
+         */
+        public static final Shape COOKING_POT = new Shape(Pot.COOKING_POT, 2.0F, 4.5F, 3.7071F, 8.0F, -45.0F, 1.7071F, 1.0F, false,
+                "cooking_pot", true, new Vector3f(0.0F, 8.0F, 0.0F), 0.0F, LidRest.COOKING_POT, true);
         /**
          * Farm &amp; Charm's roaster: a pan 10 by 8 inside, floor 1 px, rim at 6, under a lid that covers it whole.
          */
@@ -1397,7 +1400,8 @@ public final class PotBehavior implements StationBehavior {
         });
         float before = lid;
         lid = Mth.clamp(lid + (view.isInUse() ? dt : -dt) / LID_MOVE, 0.0F, 1.0F);
-        lidShown = open && (heated || !shape.lit());
+        // A pot without a lid in its scene (Farm & Charm's on 1.21.1) has none to set down.
+        lidShown = open && (heated || !shape.lit()) && view.node("lid").isPresent();
         if (lidShown && (before < 1.0F && lid >= 1.0F || before > 0.0F && lid <= 0.0F)) {
             view.playSound(SoundEvents.LANTERN_PLACE, "lid", 0.25F, 0.8F + view.level().getRandom().nextFloat() * 0.1F);
         }

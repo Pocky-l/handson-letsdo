@@ -4,6 +4,10 @@ All notable changes to this mod are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1+1.21.1] - 2026-11-25
+### Fixed
+- The cooking pot and the tea kettles showed broken textures with Farm & Charm and HerbalBrews for 1.21.1: they now look as those mods draw them.
+
 ## [1.0.0+1.21.1] - 2026-11-25
 ### Added
 - [Vinery](https://www.curseforge.com/minecraft/mc-mods/lets-do-vinery)'s fermentation barrel is a station: everything in it ferments together with the lid on, and the wine is drawn at the bung.

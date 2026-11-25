@@ -1,11 +1,12 @@
 {
   "textures": {
-    "lid": "herbalbrews:block/tea_kettle_cap",
-    "particle": "herbalbrews:block/tea_kettle_cap"
+    "0": "herbalbrews:block/tea_kettle_cap",
+    "3": "herbalbrews:block/tea_kettle_side",
+    "4": "herbalbrews:block/tea_kettle_top",
+    "particle": "herbalbrews:block/tea_kettle_top"
   },
   "elements": [
     {
-      "name": "lid",
       "from": [
         5,
         0,
@@ -16,53 +17,60 @@
         1,
         11
       ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          5,
+          0,
+          5
+        ]
+      },
       "faces": {
         "north": {
           "uv": [
-            0,
             5,
-            6,
-            6
+            10,
+            11,
+            11
           ],
-          "texture": "#lid"
+          "texture": "#3"
         },
         "east": {
           "uv": [
-            0,
-            0,
-            6,
-            1
+            5,
+            10,
+            11,
+            11
           ],
-          "texture": "#lid"
+          "texture": "#3"
         },
         "south": {
           "uv": [
-            0,
-            0,
-            1,
-            6
+            5,
+            10,
+            11,
+            11
           ],
-          "texture": "#lid",
-          "rotation": 90
+          "texture": "#3"
         },
         "west": {
           "uv": [
             5,
-            0,
-            6,
-            6
+            10,
+            11,
+            11
           ],
-          "texture": "#lid",
-          "rotation": 90
+          "texture": "#3"
         },
         "up": {
           "uv": [
-            0,
-            0,
-            6,
-            6
+            5,
+            5,
+            11,
+            11
           ],
-          "texture": "#lid"
+          "texture": "#4"
         },
         "down": {
           "uv": [
@@ -71,12 +79,12 @@
             6,
             6
           ],
-          "texture": "#lid"
+          "texture": "#0"
         }
-      }
+      },
+      "name": "lid"
     },
     {
-      "name": "lid_top",
       "from": [
         7,
         1,
@@ -90,50 +98,51 @@
       "faces": {
         "north": {
           "uv": [
-            14,
+            10,
+            8,
             12,
-            16,
-            13
+            9
           ],
-          "texture": "#lid"
+          "texture": "#0"
         },
         "east": {
           "uv": [
+            10,
+            8,
             12,
-            12,
-            14,
-            13
+            9
           ],
-          "texture": "#lid"
+          "texture": "#0"
         },
         "south": {
           "uv": [
-            14,
-            13,
-            16,
-            14
+            10,
+            8,
+            12,
+            9
           ],
-          "texture": "#lid"
+          "texture": "#0"
         },
         "west": {
           "uv": [
-            14,
+            10,
+            8,
             12,
-            16,
-            13
+            9
           ],
-          "texture": "#lid"
+          "texture": "#0"
         },
         "up": {
           "uv": [
-            14,
+            10,
+            6,
             12,
-            16,
-            14
+            8
           ],
-          "texture": "#lid"
+          "texture": "#0"
         }
-      }
+      },
+      "name": "lid_top"
     }
   ]
 }

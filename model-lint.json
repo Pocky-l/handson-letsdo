@@ -1,5 +1,5 @@
 {
-  "mc": "1.20.1",
+  "mc": "1.21.1",
   "allow": [
     {
       "model": "handson_letsdo:diegesis/stove/fire",
@@ -102,6 +102,15 @@
         "coplanar"
       ],
       "reason": "Farm & Charm's own whisk, kept as it has it: its loops are sheets seen from both sides, one 0.027 px off the grid and through the handle; where the other lies on the handle's side its pixels are clear"
+    },
+    {
+      "model": "handson_letsdo:diegesis/cooking_pot/support",
+      "element": "grate_leg",
+      "face": "up",
+      "flags": [
+        "H006"
+      ],
+      "reason": "Farm & Charm's own grate legs on 1.21.1, kept as it has them (their tops under the grate)"
     }
   ]
 }
