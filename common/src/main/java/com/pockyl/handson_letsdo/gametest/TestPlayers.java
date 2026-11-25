@@ -5,13 +5,14 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 import io.netty.channel.embedded.EmbeddedChannel;
-import io.netty.util.AttributeKey;
 import io.netty.util.ReferenceCountUtil;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.CommonListenerCookie;
 
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ final class TestPlayers {
     /** A player who joins the test's level as a real one does; {@link #leave} takes them out again. */
     static ServerPlayer join(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ServerPlayer player = new ServerPlayer(level.getServer(), level, new GameProfile(UUID.randomUUID(), "test-cook")) {
+        ServerPlayer player = new ServerPlayer(level.getServer(), level, new GameProfile(UUID.randomUUID(), "test-cook"), ClientInformation.createDefault()) {
             @Override
             public boolean isSpectator() {
                 return false;
@@ -49,10 +50,13 @@ final class TestPlayers {
             }
         });
         channel.pipeline().addLast("packet_handler", connection);
-        // Forge reads from the channel which kind of client joined: one without Forge, which is sent nothing of the mods'.
-        channel.attr(AttributeKey.<String>valueOf("fml:netversion")).set("NONE");
         channel.pipeline().fireChannelActive();
-        level.getServer().getPlayerList().placeNewPlayer(connection, player);
+        try {
+            level.getServer().getPlayerList().placeNewPlayer(connection, player, CommonListenerCookie.createInitial(player.getGameProfile(), false));
+        } catch (UnsupportedOperationException refused) {
+            // NeoForge refuses a mod's packet to a connection that agreed on no channels (Foundation sends one on joining): the
+            // player is in the list by then, which is all the tests need.
+        }
         return player;
     }
 

@@ -1,8 +1,10 @@
 package com.pockyl.handson_letsdo.client;
 
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.food.FoodProperties;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -32,9 +34,8 @@ final class CookedPieces {
     private static final int GRAINS = 3;
     private static final float GRAIN = 0.75F;
     /** Pasta floats in strands: Farm &amp; Charm's tag, which takes in the loaders' common ones. */
-    @SuppressWarnings("removal")
     private static final net.minecraft.tags.TagKey<net.minecraft.world.item.Item> PASTA = net.minecraft.tags.TagKey.create(
-            net.minecraft.core.registries.Registries.ITEM, new net.minecraft.resources.ResourceLocation("farm_and_charm", "pasta"));
+            net.minecraft.core.registries.Registries.ITEM, ResourceLocation.fromNamespaceAndPath("farm_and_charm", "pasta"));
     private static final float FAT_LIGHT = 0.55F;
     /** Fat floats on everything that is not clear: one drop for so many pieces of food. */
     private static final int PIECES_PER_DROP = 2;
@@ -75,10 +76,9 @@ final class CookedPieces {
 
     /** What a furnace makes of it, if that is still food: a steak of raw beef; a carrot stays a carrot. */
     private static ItemStack cooked(Level level, ItemStack raw) {
-        Container furnace = new SimpleContainer(raw);
-        return level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, furnace, level)
-                .map(recipe -> recipe.getResultItem(level.registryAccess()))
-                .filter(ItemStack::isEdible)
+        return level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(raw), level)
+                .map(recipe -> recipe.value().getResultItem(level.registryAccess()))
+                .filter(stack -> stack.has(DataComponents.FOOD))
                 .orElse(raw);
     }
 
@@ -103,8 +103,7 @@ final class CookedPieces {
             pieces.add(new Floater(Floater.SHRED, color, HERB));
             return;
         }
-        FoodProperties properties = food.getItem().getFoodProperties();
-        if (properties != null && properties.isMeat()) {
+        if (food.is(ItemTags.MEAT)) {
             pieces.add(new Floater(Floater.CHUNK, color, BIG));
             pieces.add(new Floater(Floater.NUGGET, color, SMALL));
         } else if (FoodColors.isGreen(color)) {

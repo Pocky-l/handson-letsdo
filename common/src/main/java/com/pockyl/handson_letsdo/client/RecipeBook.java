@@ -1143,7 +1143,7 @@ final class RecipeBook implements NodePainter {
     private void type(StationView view, String text) {
         StringBuilder added = new StringBuilder(query);
         for (char character : text.toCharArray()) {
-            if (net.minecraft.SharedConstants.isAllowedChatCharacter(character) && added.length() < QUERY_MOST) {
+            if (net.minecraft.util.StringUtil.isAllowedChatCharacter(character) && added.length() < QUERY_MOST) {
                 added.append(character);
             }
         }
@@ -2428,10 +2428,10 @@ final class RecipeBook implements NodePainter {
             int r = argb >> 16 & 0xFF;
             int g = argb >> 8 & 0xFF;
             int b = argb & 0xFF;
-            consumer.vertex(matrix, x0, y0, lift).color(r, g, b, a).uv(u0, v0).uv2(shade).endVertex();
-            consumer.vertex(matrix, x0, y1, lift).color(r, g, b, a).uv(u0, v1).uv2(shade).endVertex();
-            consumer.vertex(matrix, x1, y1, lift).color(r, g, b, a).uv(u1, v1).uv2(shade).endVertex();
-            consumer.vertex(matrix, x1, y0, lift).color(r, g, b, a).uv(u1, v0).uv2(shade).endVertex();
+            consumer.addVertex(matrix, x0, y0, lift).setColor(r, g, b, a).setUv(u0, v0).setLight(shade);
+            consumer.addVertex(matrix, x0, y1, lift).setColor(r, g, b, a).setUv(u0, v1).setLight(shade);
+            consumer.addVertex(matrix, x1, y1, lift).setColor(r, g, b, a).setUv(u1, v1).setLight(shade);
+            consumer.addVertex(matrix, x1, y0, lift).setColor(r, g, b, a).setUv(u1, v0).setLight(shade);
         }
 
         void item(ItemStack stack, float x, float y, float size) {

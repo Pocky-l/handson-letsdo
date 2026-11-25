@@ -8,8 +8,7 @@ import java.util.List;
 
 /** The crafting bowl's recipes as the live recipe manager has them: up to four ingredients, one a slot, and their result. */
 public final class BowlRecipes {
-    @SuppressWarnings("removal")
-    public static final ResourceLocation TYPE = new ResourceLocation(FarmCharmDishes.MOD_ID, "crafting_bowl");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, "crafting_bowl");
 
     private BowlRecipes() {
     }

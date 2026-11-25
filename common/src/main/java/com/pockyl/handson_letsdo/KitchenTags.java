@@ -1,5 +1,6 @@
 package com.pockyl.handson_letsdo;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -33,7 +34,7 @@ public final class KitchenTags {
      * it reads also hold crops that plant themselves (Farm &amp; Charm's onion, a potato): those are whole vegetables, thrown in.
      */
     public static boolean grains(ItemStack stack) {
-        return is(stack, GRAINS) && stack.getItem().getFoodProperties() == null;
+        return is(stack, GRAINS) && !stack.has(DataComponents.FOOD);
     }
 
     private static TagKey<Item> tag(String name) {

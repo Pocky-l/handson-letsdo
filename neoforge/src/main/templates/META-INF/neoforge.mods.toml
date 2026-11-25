@@ -14,22 +14,22 @@ description='''${mod_description}'''
 displayTest="IGNORE_ALL_VERSION"
 
 [[dependencies.${mod_id}]]
-    modId="forge"
-    mandatory=true
-    versionRange="${forge_version_range}"
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
     modId="minecraft"
-    mandatory=true
+    type="required"
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
     modId="diegesis"
-    mandatory=true
+    type="required"
     versionRange="${diegesis_version_range}"
     ordering="AFTER"
     side="BOTH"
@@ -37,21 +37,24 @@ displayTest="IGNORE_ALL_VERSION"
 # Every Let's Do mod is optional: its stations come with it.
 [[dependencies.${mod_id}]]
     modId="vinery"
-    mandatory=false
+    type="optional"
     versionRange="[${vinery_min_version},)"
     ordering="AFTER"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
     modId="farm_and_charm"
-    mandatory=false
+    type="optional"
     versionRange="[${farm_and_charm_min_version},)"
     ordering="AFTER"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
     modId="herbalbrews"
-    mandatory=false
+    type="optional"
     versionRange="[${herbalbrews_min_version},)"
     ordering="AFTER"
     side="BOTH"
+
+[[mixins]]
+config="${mod_id}.mixins.json"

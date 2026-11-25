@@ -1,5 +1,6 @@
 package com.pockyl.handson_letsdo.mixin;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
@@ -58,8 +59,8 @@ public abstract class FermentationBarrelMixin implements BrewingBarrel {
         }
     }
 
-    @Inject(method = "load", at = @At("TAIL"))
-    private void handson$load(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "loadAdditional", at = @At("TAIL"))
+    private void handson$load(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         CompoundTag own = tag.getCompound(HANDSON_TAG);
         handson$brewTime = own.getInt("Time");
         handson$wine = own.getString("Wine");
@@ -70,7 +71,7 @@ public abstract class FermentationBarrelMixin implements BrewingBarrel {
     }
 
     @Inject(method = "saveAdditional", at = @At("TAIL"))
-    private void handson$save(CompoundTag tag, CallbackInfo ci) {
+    private void handson$save(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         if (handson$brewTime <= 0 && handson$portions <= 0) {
             return;
         }

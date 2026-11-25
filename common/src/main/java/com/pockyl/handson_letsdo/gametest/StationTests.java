@@ -5,12 +5,13 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import io.netty.buffer.Unpooled;
+import net.minecraft.world.level.GameType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -58,9 +59,8 @@ public final class StationTests {
         helper.succeed();
     }
 
-    @SuppressWarnings("removal")
     private static Item vinery(String path) {
-        return BuiltInRegistries.ITEM.get(new ResourceLocation(BarrelStation.MOD_ID, path));
+        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(BarrelStation.MOD_ID, path));
     }
 
     private record Setup(TestStation station, BarrelLogic logic, Barrel barrel) {
@@ -143,7 +143,7 @@ public final class StationTests {
         }
         Setup setup = barrel(helper, new BlockPos(1, 2, 1));
         Container container = setup.barrel.container();
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         SlotRef first = SlotRef.of(BarrelStation.INGREDIENTS, 0);
         helper.assertFalse(setup.logic.mayPlace(setup.station, player, first, new ItemStack(Items.SUGAR)), "nothing goes in through the hatch");
         setup.logic.onCustomAction(setup.station, player, BarrelStation.ACTION_LID, lid(true));
@@ -186,7 +186,7 @@ public final class StationTests {
             return;
         }
         Setup setup = barrel(helper, new BlockPos(1, 2, 1));
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.station.users.add(player);
         helper.assertFalse(BarrelStation.isOpen(setup.station.state()), "the barrel comes shut");
         setup.logic.onCustomAction(setup.station, player, BarrelStation.ACTION_LID, lid(true));
@@ -214,7 +214,7 @@ public final class StationTests {
         }
         Setup setup = barrel(helper, new BlockPos(1, 2, 1));
         Container container = setup.barrel.container();
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.station.users.add(player);
         BlockPos side = new BlockPos(2, 2, 1);
         helper.setBlock(side, Blocks.HOPPER.defaultBlockState().setValue(HopperBlock.FACING, Direction.WEST));
@@ -265,7 +265,7 @@ public final class StationTests {
         }
         Setup setup = barrel(helper, new BlockPos(1, 2, 1));
         Container container = setup.barrel.container();
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         Wine red = wineMaking(helper, "red_wine");
         pour(setup, player, new ItemStack(vinery("red_grapejuice"), 4), true);
         container.setItem(Barrel.FIRST_INGREDIENT, new ItemStack(Items.SUGAR, 5));
@@ -306,7 +306,7 @@ public final class StationTests {
         }
         Setup setup = barrel(helper, new BlockPos(1, 2, 1));
         Container container = setup.barrel.container();
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         Item wine = vinery("red_wine");
         Item bottle = vinery("wine_bottle");
         setup.barrel.brew().handson$setWine(wineMaking(helper, "red_wine").id().toString(), 4);
@@ -347,7 +347,7 @@ public final class StationTests {
             return;
         }
         Setup setup = barrel(helper, new BlockPos(1, 2, 1));
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         pour(setup, player, new ItemStack(vinery("red_grapejuice"), 2), true);
         player.getInventory().clearContent();
         player.inventoryMenu.setCarried(new ItemStack(vinery("wine_bottle"), 3));
@@ -385,7 +385,7 @@ public final class StationTests {
         Container below = (Container) helper.getBlockEntity(alone.below());
 
         Setup setup = barrel(helper, new BlockPos(5, 2, 1));
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         pour(setup, player, new ItemStack(vinery("red_grapejuice")), false);
         setup.station.state().setItem(SlotRef.of(BarrelStation.INGREDIENTS, 0), new ItemStack(Items.SUGAR));
 
@@ -441,7 +441,7 @@ public final class StationTests {
             return;
         }
         Setup setup = barrel(helper, new BlockPos(1, 2, 1));
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         // A wine that takes a whole bottle of juice: the barrel is dry when it is done.
         Wine whole = VineryWines.all(helper.getLevel()).stream().filter(wine -> wine.bottle() && wine.juiceAmount() == VineryWines.perBottle()
                 && wine.juice().equals("red_general")).findFirst().orElse(null);
@@ -452,7 +452,7 @@ public final class StationTests {
         BlockEntity real = helper.getLevel().getBlockEntity(setup.station.pos());
         BlockEntity copy = ((EntityBlock) real.getBlockState().getBlock()).newBlockEntity(setup.station.pos(), real.getBlockState());
         helper.runAfterDelay(3, () -> {
-            copy.load(real.getUpdateTag());
+            copy.loadWithComponents(real.getUpdateTag(helper.getLevel().registryAccess()), helper.getLevel().registryAccess());
             Barrel seen = Barrel.of(copy);
             helper.assertTrue(seen != null && seen.level() == VineryWines.perBottle() && !seen.container().isEmpty(),
                     "the client's copy shows the juice and what lies in it");
@@ -460,10 +460,10 @@ public final class StationTests {
         });
         helper.runAfterDelay(6, () -> {
             setup.logic.tick(setup.station);
-            copy.load(real.getUpdateTag());
+            copy.loadWithComponents(real.getUpdateTag(helper.getLevel().registryAccess()), helper.getLevel().registryAccess());
             helper.assertTrue(setup.barrel.portions() == 1 && Barrel.of(copy).portions() == 1, "the wine is done and the client's copy shows it");
             draw(setup, player, false);
-            copy.load(real.getUpdateTag());
+            copy.loadWithComponents(real.getUpdateTag(helper.getLevel().registryAccess()), helper.getLevel().registryAccess());
             Barrel seen = Barrel.of(copy);
             helper.assertTrue(seen.container().isEmpty() && seen.portions() == 0, "nothing lies in the client's copy");
             helper.assertTrue(seen.level() == 0 && seen.juice().isEmpty(), "and no juice stands in it, got " + seen.level());
@@ -505,7 +505,7 @@ public final class StationTests {
         }
         List<Wine> wines = VineryWines.all(helper.getLevel());
         BlockPos at = new BlockPos(1, 2, 1);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         Setup[] setup = new Setup[1];
         int step = 6;
         helper.onEachTick(() -> {
@@ -560,13 +560,13 @@ public final class StationTests {
         container.setItem(Barrel.FIRST_INGREDIENT + 2, new ItemStack(Items.BLAZE_ROD, 64));
         container.setItem(Barrel.BOTTLE_SLOT, new ItemStack(vinery("wine_bottle"), 16));
         container.setItem(Barrel.WINE_SLOT, new ItemStack(vinery("red_wine"), 16));
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         pour(setup, player, new ItemStack(vinery("red_grapejuice"), 4), true);
         helper.runAfterDelay(3, () -> {
             container.setItem(Barrel.JUICE_SLOT, new ItemStack(vinery("red_grapejuice"), 16));
             setup.logic.tick(setup.station);
             setup.station.state().markAllDirty();
-            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+            RegistryFriendlyByteBuf buffer = new RegistryFriendlyByteBuf(Unpooled.buffer(), helper.getLevel().registryAccess());
             setup.station.state().writeChanges(buffer, true);
             int bytes = buffer.readableBytes();
             helper.assertTrue(bytes > 0 && bytes < 32 * 1024, "the station's whole data is " + bytes + " bytes");

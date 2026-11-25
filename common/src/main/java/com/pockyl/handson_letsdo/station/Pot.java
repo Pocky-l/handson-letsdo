@@ -11,7 +11,8 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import com.pockyl.handson_letsdo.HandsOnConfig;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
@@ -47,8 +49,7 @@ public final class Pot {
     public static final int UPSTREAM_TIME = 900;
 
     /** What a pot stands on to cook: Farm &amp; Charm's own tag. */
-    @SuppressWarnings("removal")
-    public static final TagKey<Block> HEAT = TagKey.create(Registries.BLOCK, new ResourceLocation(FarmCharmDishes.MOD_ID, "allows_cooking"));
+    public static final TagKey<Block> HEAT = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, "allows_cooking"));
 
     /**
      * One kind of pot: its block, the recipes it cooks, the block state it shows while it cooks, and what the config says of its
@@ -56,9 +57,8 @@ public final class Pot {
      */
     public record Kind(String name, ResourceLocation block, ResourceLocation recipes, String cookingState, BooleanSupplier on,
             Supplier<Float> time) {
-        @SuppressWarnings("removal")
         static Kind of(String block, String recipes, String cookingState, BooleanSupplier on, Supplier<Float> time) {
-            return new Kind(block, new ResourceLocation(FarmCharmDishes.MOD_ID, block), new ResourceLocation(FarmCharmDishes.MOD_ID, recipes),
+            return new Kind(block, ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, block), ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, recipes),
                     cookingState, on, time);
         }
 
@@ -138,22 +138,55 @@ public final class Pot {
 
     /**
      * What the food in {@code food} (a pot's slots, the ingredients first) makes in a pot of {@code kind}, as Farm &amp; Charm's
-     * own lookup reads it: the first of its recipes that takes exactly these stacks. Null for nothing.
+     * own lookup reads it: the first of its recipes whose every ingredient takes one of the ingredient slots' items, with nothing
+     * left there that no ingredient takes. Null for nothing.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static Dish making(Level level, Kind kind, Container food) {
         RecipeType<?> type = BuiltInRegistries.RECIPE_TYPE.get(kind.recipes());
         if (type == null) {
             return null;
         }
-        ResourceLocation id = level.getRecipeManager().getRecipeFor((RecipeType<Recipe<Container>>) type, food, level).map(Recipe::getId)
-                .orElse(null);
+        ResourceLocation id = null;
+        for (RecipeHolder<?> holder : (List<RecipeHolder<?>>) level.getRecipeManager().getAllRecipesFor((RecipeType) type)) {
+            if (takes(holder.value().getIngredients(), food)) {
+                id = holder.id();
+                break;
+            }
+        }
         for (Dish dish : kind.dishes(level)) {
             if (dish.id().equals(id)) {
                 return dish;
             }
         }
         return null;
+    }
+
+    /** Farm &amp; Charm's {@code matchesInventory} of its pot and roaster, over the ingredient slots. */
+    private static boolean takes(List<Ingredient> ingredients, Container food) {
+        List<ItemStack> left = new ArrayList<>();
+        for (int i = 0; i < INGREDIENTS; i++) {
+            left.add(food.getItem(i).copy());
+        }
+        for (Ingredient ingredient : ingredients) {
+            boolean matched = false;
+            for (ItemStack stack : left) {
+                if (!stack.isEmpty() && ingredient.test(stack)) {
+                    stack.shrink(1);
+                    matched = true;
+                    break;
+                }
+            }
+            if (!matched) {
+                return false;
+            }
+        }
+        for (ItemStack stack : left) {
+            if (!stack.isEmpty() && ingredients.stream().noneMatch(ingredient -> ingredient.test(stack))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** Whether this is a pot in the world, not the stand-in of {@link #orEmpty}. */

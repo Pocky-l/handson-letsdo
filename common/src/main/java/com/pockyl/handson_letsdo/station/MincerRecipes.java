@@ -8,8 +8,7 @@ import java.util.List;
 
 /** The mincer's recipes as the live recipe manager has them: one ingredient each, the result of one item. */
 public final class MincerRecipes {
-    @SuppressWarnings("removal")
-    public static final ResourceLocation TYPE = new ResourceLocation(FarmCharmDishes.MOD_ID, "mincer");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, "mincer");
 
     private MincerRecipes() {
     }

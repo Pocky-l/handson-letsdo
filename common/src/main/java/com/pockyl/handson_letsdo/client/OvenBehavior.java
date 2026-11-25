@@ -56,8 +56,7 @@ public final class OvenBehavior implements StationBehavior {
     private static final int PLACES = 9;
     /** The badge's own flame over the icon, lit while the fire burns, beside the shared parts ({@link StepBadge}). */
     private static final String FLAME = "flame_lit";
-    @SuppressWarnings("removal")
-    private static final ResourceLocation BADGE_TEXTURE = new ResourceLocation("minecraft", "block/white_concrete");
+    private static final ResourceLocation BADGE_TEXTURE = ResourceLocation.fromNamespaceAndPath("minecraft", "block/white_concrete");
     /** The tray starts out once the door is this far open. */
     private static final float TRAY_AFTER = 0.7F;
     /**

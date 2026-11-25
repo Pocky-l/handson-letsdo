@@ -1,9 +1,9 @@
 package com.pockyl.handson_letsdo.client;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -42,12 +42,11 @@ final class KitchenLooks {
      * What an egg looks like out of its shell: Farmer's Delight's fried egg where that mod is, drawn raw by {@link #RAW_EGG};
      * anything else as it is.
      */
-    @SuppressWarnings("removal")
     static ItemStack opened(ItemStack stack) {
         if (!isCracked(stack)) {
             return stack;
         }
-        Item fried = BuiltInRegistries.ITEM.get(new net.minecraft.resources.ResourceLocation("farmersdelight", "fried_egg"));
+        Item fried = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("farmersdelight", "fried_egg"));
         return fried == Items.AIR ? stack : new ItemStack(fried);
     }
 
@@ -94,8 +93,7 @@ final class KitchenLooks {
             float b = to >> shift & 0xFF;
             target |= Math.round(Math.min(1.0F, b / a) * 255.0F) << shift;
         }
-        FoodProperties food = raw.getItem().getFoodProperties();
-        if (food != null && food.isMeat() || raw.is(ItemTags.FISHES)) {
+        if (raw.is(ItemTags.MEAT) || raw.is(ItemTags.FISHES)) {
             target = mix(target, seared, 0.4F);
         }
         return mix(0xFFFFFFFF, target, done * sear);

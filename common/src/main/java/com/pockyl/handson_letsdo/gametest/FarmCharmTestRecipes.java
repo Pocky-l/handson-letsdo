@@ -8,10 +8,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.satisfy.farm_and_charm.core.block.entity.MincerBlockEntity;
 import net.satisfy.farm_and_charm.core.recipe.CookingPotRecipe;
-import net.satisfy.farm_and_charm.core.recipe.RecipeUnlockManager;
+import net.satisfy.foundation.recipe.RecipeUnlockManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,24 +32,35 @@ final class FarmCharmTestRecipes {
         for (Item input : inputs) {
             ingredients.add(Ingredient.of(input));
         }
-        List<Recipe<?>> all = without(level, id);
-        all.add(new CookingPotRecipe(id, ingredients, true, new ItemStack(Items.BOWL), result, true));
+        List<RecipeHolder<?>> all = without(level, id);
+        all.add(new RecipeHolder<>(id, new CookingPotRecipe(ingredients, true, new ItemStack(Items.BOWL), result, true, 0.0F)));
         level.getRecipeManager().replaceRecipes(all);
     }
 
-    /** {@code player} learns the recipe {@code id}, as Farm &amp; Charm's recipe book teaches it. */
+    /** {@code player} learns the recipe {@code id}, as Farm &amp; Charm's recipe book teaches it (on 1.21.1: every recipe of its type). */
     static void teach(ServerPlayer player, ServerLevel level, ResourceLocation id) {
-        level.getRecipeManager().byKey(id).ifPresent(recipe -> RecipeUnlockManager.unlockRecipes(player, List.of(recipe)));
+        try {
+            level.getRecipeManager().byKey(id).ifPresent(recipe -> RecipeUnlockManager.unlockRecipes(player, List.of(recipe.value())));
+        } catch (UnsupportedOperationException refused) {
+            // Learned and saved; only the packet that tells the client is refused to a test player's connection (TestPlayers).
+        }
+    }
+
+    /** A player cranks the mincer Farm &amp; Charm's way, by its own use with an empty hand. */
+    static void crankMincer(BlockEntity entity) {
+        if (entity instanceof MincerBlockEntity mincer) {
+            mincer.crank();
+        }
     }
 
     static void remove(ServerLevel level, ResourceLocation id) {
         level.getRecipeManager().replaceRecipes(without(level, id));
     }
 
-    private static List<Recipe<?>> without(ServerLevel level, ResourceLocation id) {
+    private static List<RecipeHolder<?>> without(ServerLevel level, ResourceLocation id) {
         RecipeManager recipes = level.getRecipeManager();
-        List<Recipe<?>> all = new ArrayList<>(recipes.getRecipes());
-        all.removeIf(recipe -> recipe.getId().equals(id));
+        List<RecipeHolder<?>> all = new ArrayList<>(recipes.getRecipes());
+        all.removeIf(recipe -> recipe.id().equals(id));
         return all;
     }
 }

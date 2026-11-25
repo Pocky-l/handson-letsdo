@@ -10,28 +10,20 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Farm &amp; Charm's crafting bowl, as the station sees it: its own container (four ingredients and the result) and what the station
- * adds to it ({@link BowlHand}). Nothing of Farm &amp; Charm is named here; the bowl's own tick makes every set, run once a set through
- * vanilla's ticker with its stirring on the last tick of a set.
+ * adds to it ({@link BowlHand}). Nothing of Farm &amp; Charm is named here; the bowl's own making makes every set
+ * ({@link BowlHand#handson$stirOnce}).
  */
 public final class Bowl {
     public static final int INGREDIENTS = 4;
     public static final int RESULT_SLOT = 4;
     public static final int SLOTS = 5;
-    /** The bowl's stirring, ticks it still goes on, and how far a set has got; a set takes this many ticks of stirring. */
-    private static final String STIRRING = "stirring";
-    private static final String STIRRED = "stirred";
-    private static final int SET_TICKS = 50;
-    @SuppressWarnings("removal")
-    private static final ResourceLocation BLOCK = new ResourceLocation(FarmCharmDishes.MOD_ID, "crafting_bowl");
+    private static final ResourceLocation BLOCK = ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, "crafting_bowl");
 
     private final BlockEntity entity;
     private final Container container;
@@ -89,21 +81,9 @@ public final class Bowl {
         return stacks;
     }
 
-    /**
-     * One set of the bowl's own tick: the tick runs once with the stirring on the last tick of a set, so the bowl takes one of each
-     * ingredient and lays its result into the result slot itself, as its recipe and its rules say. Server only.
-     */
-    @SuppressWarnings("unchecked")
+    /** One set of the bowl's own making ({@link BowlHand#handson$stirOnce}). Server only. */
     public void stirOnce() {
-        Level level = entity.getLevel();
-        BlockState state = entity.getBlockState();
-        IntegerProperty stirring = number(state, STIRRING);
-        IntegerProperty stirred = number(state, STIRRED);
-        if (level == null || stirring == null || stirred == null) {
-            return;
-        }
-        BlockState going = state.setValue(stirring, 1).setValue(stirred, SET_TICKS - 1);
-        ((BlockEntityTicker<BlockEntity>) entity).tick(level, entity.getBlockPos(), going, entity);
+        hand.handson$stirOnce();
     }
 
     /**
@@ -115,19 +95,6 @@ public final class Bowl {
         if (level == null || level.isClientSide() || !container.getItem(RESULT_SLOT).isEmpty()) {
             return;
         }
-        BlockState state = entity.getBlockState();
-        IntegerProperty stirred = number(state, STIRRED);
-        if (stirred != null && state.getValue(stirred) >= SET_TICKS) {
-            level.setBlock(entity.getBlockPos(), state.setValue(stirred, 0), Block.UPDATE_ALL);
-        }
-    }
-
-    private static IntegerProperty number(BlockState state, String name) {
-        for (Property<?> property : state.getProperties()) {
-            if (property instanceof IntegerProperty number && property.getName().equals(name)) {
-                return number;
-            }
-        }
-        return null;
+        hand.handson$resetStirring();
     }
 }

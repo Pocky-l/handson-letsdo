@@ -22,6 +22,12 @@ public interface MincerHand {
     /** While the station makes a load through the mincer's own tick: it throws nothing out meanwhile. */
     void handson$setMaking(boolean making);
 
+    /**
+     * One result of the mincer's own tick: it takes one of the input and lays its result into the output slot itself, as its recipe
+     * and its rules say, with its crank left as it was. Nothing is thrown out meanwhile. Server only.
+     */
+    void handson$mince();
+
     /** Tells the clients what the mincer holds now. Server only. */
     void handson$tell();
 

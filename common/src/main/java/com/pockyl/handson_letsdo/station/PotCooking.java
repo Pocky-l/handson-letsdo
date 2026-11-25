@@ -267,7 +267,7 @@ public final class PotCooking {
         boolean stirred = isStirred(now);
         boolean ownWay = !stirred && (!byHand || !attended() || !HandsOnConfig.stirringRequired() || isInMenu(level));
         Dish dish = ownWay ? null : making(level, pot);
-        if (dish != null && dish.learned() && FarmCharmDishes.isLocked(cook == null ? null : level.getPlayerByUUID(cook), dish.id())) {
+        if (dish != null && dish.learned() && FarmCharmDishes.isLocked(cook == null ? null : level.getPlayerByUUID(cook), pot.kind().recipes())) {
             dish = null;
         }
         int batch = dish == null ? 0 : batch(pot, dish);
@@ -352,7 +352,7 @@ public final class PotCooking {
     public Dish making(Level level, Pot pot) {
         boolean same = madeWith == level.getRecipeManager();
         for (int slot = 0; slot < Pot.INGREDIENTS && same; slot++) {
-            same = madeFor[slot] != null && ItemStack.isSameItemSameTags(madeFor[slot], pot.ingredient(slot));
+            same = madeFor[slot] != null && ItemStack.isSameItemSameComponents(madeFor[slot], pot.ingredient(slot));
         }
         if (same) {
             return made;
@@ -489,7 +489,7 @@ public final class PotCooking {
             pot.container().setItem(Pot.OUTPUT_SLOT, dish);
             return true;
         }
-        if (!ItemStack.isSameItemSameTags(out, dish) || out.getCount() + dish.getCount() > out.getMaxStackSize()) {
+        if (!ItemStack.isSameItemSameComponents(out, dish) || out.getCount() + dish.getCount() > out.getMaxStackSize()) {
             return false;
         }
         pot.container().setItem(Pot.OUTPUT_SLOT, out.copyWithCount(out.getCount() + dish.getCount()));
@@ -555,8 +555,8 @@ public final class PotCooking {
         for (int slot = 0; slot < Pot.INGREDIENTS; slot++) {
             ItemStack after = container.getItem(slot);
             ItemStack was = before[slot];
-            boolean used = done && !spared && !was.isEmpty() && (after.isEmpty() || !ItemStack.isSameItemSameTags(after, was));
-            if (done && !spared && !after.isEmpty() && (was.isEmpty() || !ItemStack.isSameItemSameTags(after, was))) {
+            boolean used = done && !spared && !was.isEmpty() && (after.isEmpty() || !ItemStack.isSameItemSameComponents(after, was));
+            if (done && !spared && !after.isEmpty() && (was.isEmpty() || !ItemStack.isSameItemSameComponents(after, was))) {
                 left.add(after.copy());
             }
             container.setItem(slot, !used ? was : was.getCount() > 1 ? was.copyWithCount(was.getCount() - 1) : ItemStack.EMPTY);
@@ -599,7 +599,7 @@ public final class PotCooking {
                 container.setItem(slot, stack);
                 return;
             }
-            if (ItemStack.isSameItemSameTags(there, stack) && there.getCount() + stack.getCount() <= there.getMaxStackSize()) {
+            if (ItemStack.isSameItemSameComponents(there, stack) && there.getCount() + stack.getCount() <= there.getMaxStackSize()) {
                 container.setItem(slot, there.copyWithCount(there.getCount() + stack.getCount()));
                 return;
             }

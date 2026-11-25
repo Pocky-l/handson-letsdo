@@ -282,7 +282,7 @@ public final class OvenLogic implements StationLogic {
 
     private static int sourceOf(Inventory inventory, ItemStack kind) {
         for (int slot = 0; slot < Inventory.INVENTORY_SIZE; slot++) {
-            if (ItemStack.isSameItemSameTags(inventory.getItem(slot), kind)) {
+            if (ItemStack.isSameItemSameComponents(inventory.getItem(slot), kind)) {
                 return slot;
             }
         }
@@ -293,7 +293,7 @@ public final class OvenLogic implements StationLogic {
         int place = -1;
         for (int slot = 0; slot < oven.places() && place < 0; slot++) {
             ItemStack there = oven.place(slot);
-            if (ItemStack.isSameItemSameTags(there, stack) && there.getCount() < Math.min(oven.perPlace(), there.getMaxStackSize())) {
+            if (ItemStack.isSameItemSameComponents(there, stack) && there.getCount() < Math.min(oven.perPlace(), there.getMaxStackSize())) {
                 place = slot;
             }
         }
@@ -357,7 +357,7 @@ public final class OvenLogic implements StationLogic {
         } else {
             stack = player.inventoryMenu.getCarried();
         }
-        if (stack.isEmpty() || !oven.isFuel(stack) || !there.isEmpty() && !ItemStack.isSameItemSameTags(there, stack)) {
+        if (stack.isEmpty() || !oven.isFuel(stack) || !there.isEmpty() && !ItemStack.isSameItemSameComponents(there, stack)) {
             return;
         }
         int moved = Math.min(one ? 1 : stack.getCount(), stack.getMaxStackSize() - there.getCount());
@@ -384,7 +384,7 @@ public final class OvenLogic implements StationLogic {
             if (there.isEmpty()) {
                 return slot;
             }
-            if (ItemStack.isSameItemSameTags(there, stack)) {
+            if (ItemStack.isSameItemSameComponents(there, stack)) {
                 return there.getCount() < there.getMaxStackSize() ? slot : -1;
             }
             first = first < 0 ? slot : first;
@@ -520,7 +520,7 @@ public final class OvenLogic implements StationLogic {
     private int room(KitchenOven.Baking recipe) {
         ItemStack output = oven.output(0);
         return output.isEmpty() ? recipe.result().getMaxStackSize()
-                : ItemStack.isSameItemSameTags(output, recipe.result()) ? output.getMaxStackSize() - output.getCount() : 0;
+                : ItemStack.isSameItemSameComponents(output, recipe.result()) ? output.getMaxStackSize() - output.getCount() : 0;
     }
 
     /**
@@ -596,7 +596,7 @@ public final class OvenLogic implements StationLogic {
         }
         for (int slot = 0; slot < Inventory.INVENTORY_SIZE; slot++) {
             ItemStack stack = inventory.getItem(slot);
-            if (stack.isEmpty() || !ingredient.test(stack) || !there.isEmpty() && !ItemStack.isSameItemSameTags(there, stack)) {
+            if (stack.isEmpty() || !ingredient.test(stack) || !there.isEmpty() && !ItemStack.isSameItemSameComponents(there, stack)) {
                 continue;
             }
             int wanted = 1;

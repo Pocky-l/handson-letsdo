@@ -12,8 +12,7 @@ import com.pockyl.handson_letsdo.station.HerbalTeas;
  * registry entry is needed.
  */
 final class KettleSounds {
-    @SuppressWarnings("removal")
-    static final SoundEvent BOIL = SoundEvent.createVariableRangeEvent(new ResourceLocation(HerbalTeas.MOD_ID, "tea_kettle_boiling"));
+    static final SoundEvent BOIL = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(HerbalTeas.MOD_ID, "tea_kettle_boiling"));
     static final SoundEvent WHISTLE = SoundEvent.createVariableRangeEvent(HandsOnLetsDo.id("kettle.whistle"));
 
     private KettleSounds() {

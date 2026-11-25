@@ -1,5 +1,6 @@
 package com.pockyl.handson_letsdo.gametest;
 
+import net.minecraft.world.level.GameType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -15,7 +16,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.AABB;
 
 import com.pockyl.diegesis.api.Diegesis;
@@ -43,9 +43,8 @@ public final class MincerTests {
     private MincerTests() {
     }
 
-    @SuppressWarnings("removal")
     private static Item farmCharm(String path) {
-        return BuiltInRegistries.ITEM.get(new ResourceLocation(FarmCharmDishes.MOD_ID, path));
+        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, path));
     }
 
     /** A mincer with the logic the station makes for it, and the crank's angle as the cook's hand last reported it. */
@@ -74,7 +73,7 @@ public final class MincerTests {
     }
 
     private static Player cook(GameTestHelper helper, Setup setup) {
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.station.users.add(player);
         setup.logic.onOpen(setup.station, player);
         return player;
@@ -255,15 +254,10 @@ public final class MincerTests {
             helper.assertTrue(setup.container().getItem(Mincer.OUTPUT_SLOT).getCount() == 3, "the minced beef still lies under the spout");
             helper.assertTrue(helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(3.0)).isEmpty(), "nothing was thrown out");
             BlockEntity entity = helper.getLevel().getBlockEntity(pos);
-            CompoundTag told = entity.getUpdateTag();
+            CompoundTag told = entity.getUpdateTag(helper.getLevel().registryAccess());
             helper.assertTrue(told.getCompound("HandsOnMincer").getBoolean("Kept") && told.contains("Items"),
                     "the clients are told what lies there, got " + told);
-            BlockState state = helper.getLevel().getBlockState(pos);
-            for (var property : state.getProperties()) {
-                if (property instanceof IntegerProperty number && property.getName().equals("crank")) {
-                    helper.getLevel().setBlock(pos, state.setValue(number, 10), 3);
-                }
-            }
+            FarmCharmTestRecipes.crankMincer(entity);
         });
         helper.runAfterDelay(16, () -> {
             helper.assertTrue(setup.container().getItem(Mincer.OUTPUT_SLOT).isEmpty(), "cranked Farm & Charm's way, the mincer throws it out");
@@ -296,7 +290,7 @@ public final class MincerTests {
         if (withoutFarmCharm(helper)) {
             return;
         }
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         for (Dish recipe : MincerRecipes.all(helper.getLevel())) {
             helper.setBlock(AT, Blocks.AIR);
             Setup setup = mincer(helper, AT);

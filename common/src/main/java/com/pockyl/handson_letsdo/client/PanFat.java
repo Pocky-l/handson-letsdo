@@ -74,7 +74,7 @@ final class PanFat implements NodePainter {
     }
 
     private static void vertex(VertexConsumer consumer, Matrix4f pose, Matrix3f normal, float x, float z, float u, float v, int alpha, int light) {
-        consumer.vertex(pose, x, 0.0F, z).color(GOLDEN >> 16 & 0xFF, GOLDEN >> 8 & 0xFF, GOLDEN & 0xFF, alpha).uv(u, v)
-                .overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+        consumer.addVertex(pose, x, 0.0F, z).setColor(GOLDEN >> 16 & 0xFF, GOLDEN >> 8 & 0xFF, GOLDEN & 0xFF, alpha).setUv(u, v)
+                .setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(normal.m10(), normal.m11(), normal.m12());
     }
 }

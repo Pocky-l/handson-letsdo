@@ -115,10 +115,8 @@ public final class BarrelStation {
     public static final String MOUTH = "mouth";
     public static final String TAP = "tap";
 
-    @SuppressWarnings("removal")
-    public static final Supplier<Block> BARREL = () -> BuiltInRegistries.BLOCK.get(new ResourceLocation(MOD_ID, "fermentation_barrel"));
-    @SuppressWarnings("removal")
-    private static final ResourceLocation WINE_BOTTLE = new ResourceLocation(MOD_ID, "wine_bottle");
+    public static final Supplier<Block> BARREL = () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(MOD_ID, "fermentation_barrel"));
+    private static final ResourceLocation WINE_BOTTLE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "wine_bottle");
 
     public static final StationSchema SCHEMA = StationSchema.builder()
             .slots(WAITING, 1, SlotRules.DEFAULT.kept().accepts(stack -> false))
@@ -189,7 +187,7 @@ public final class BarrelStation {
             return 0;
         }
         ItemStack waiting = state.getItem(WAITING_SLOT);
-        if (!waiting.isEmpty() && !ItemStack.isSameItemSameTags(waiting, stack)) {
+        if (!waiting.isEmpty() && !ItemStack.isSameItemSameComponents(waiting, stack)) {
             return 0;
         }
         var data = state.data();

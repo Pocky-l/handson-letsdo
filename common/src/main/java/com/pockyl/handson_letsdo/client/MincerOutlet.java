@@ -1,11 +1,11 @@
 package com.pockyl.handson_letsdo.client;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
@@ -52,8 +52,7 @@ final class MincerOutlet {
     private static final float CRUMB_RATE = 7.0F;
     private static final float DROP_RATE = 2.5F;
     private static final float DUST_RATE = 6.0F;
-    @SuppressWarnings("removal")
-    private static final ResourceLocation PLAIN = new ResourceLocation("minecraft", "block/white_concrete");
+    private static final ResourceLocation PLAIN = ResourceLocation.fromNamespaceAndPath("minecraft", "block/white_concrete");
 
     private final RandomSource random = RandomSource.create();
     private final Map<Item, Integer> perItem = new HashMap<>();
@@ -112,8 +111,7 @@ final class MincerOutlet {
     private void comeOut(StationView view, int index, Item what, boolean quiet) {
         item[index] = what;
         ItemStack stack = new ItemStack(what);
-        FoodProperties food = what.getFoodProperties();
-        meat[index] = food != null && food.isMeat();
+        meat[index] = stack.is(ItemTags.MEAT);
         yaw[index] = random.nextFloat() * 360.0F;
         age[index] = quiet ? Float.NaN : 0.0F;
         Optional<ItemVoxels.Icon> icon = ItemVoxels.icon(stack);
@@ -208,8 +206,7 @@ final class MincerOutlet {
      * comes out next is turned; they break off when it comes out.
      */
     private void strand(StationView view, ItemStack making, int load, float turned, String kind) {
-        boolean pressed = !making.isEmpty() && load > 0 && "MEAT".equals(kind) && making.getItem().getFoodProperties() != null
-                && making.getItem().getFoodProperties().isMeat();
+        boolean pressed = !making.isEmpty() && load > 0 && "MEAT".equals(kind) && making.is(ItemTags.MEAT);
         float within = pressed ? turned * load - Mth.floor(turned * load) : 0.0F;
         int bits = pressed ? Mth.floor(within * STRAND / STRAND_BIT) : 0;
         if (bits == strandBits) {

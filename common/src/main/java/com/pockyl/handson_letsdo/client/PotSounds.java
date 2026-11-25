@@ -26,8 +26,7 @@ final class PotSounds {
         return SoundEvent.createVariableRangeEvent(HandsOnLetsDo.id(name));
     }
 
-    @SuppressWarnings("removal")
     private static SoundEvent farmCharm(String name) {
-        return SoundEvent.createVariableRangeEvent(new ResourceLocation("farm_and_charm", name));
+        return SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("farm_and_charm", name));
     }
 }

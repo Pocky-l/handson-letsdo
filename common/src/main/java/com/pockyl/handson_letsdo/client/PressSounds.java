@@ -12,10 +12,9 @@ import com.pockyl.handson_letsdo.station.BarrelStation;
  * bottle filling under it. Played on the client by name: no registry entry is needed.
  */
 final class PressSounds {
-    @SuppressWarnings("removal")
-    static final SoundEvent SQUEEZE = SoundEvent.createVariableRangeEvent(new ResourceLocation(BarrelStation.MOD_ID,
+    static final SoundEvent SQUEEZE = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(BarrelStation.MOD_ID,
             "block.grapevine_pot.squeeze"));
-    static final SoundEvent CREAK = SoundEvents.CROSSBOW_LOADING_MIDDLE;
+    static final SoundEvent CREAK = SoundEvents.CROSSBOW_LOADING_MIDDLE.value();
     static final SoundEvent RELEASE = SoundEvents.WOODEN_TRAPDOOR_OPEN;
     static final SoundEvent DROP = SoundEvents.POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON;
     static final SoundEvent DROP_ON_WOOD = SoundEvents.POINTED_DRIPSTONE_DRIP_WATER;

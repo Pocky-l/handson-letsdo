@@ -1,5 +1,6 @@
 package com.pockyl.handson_letsdo.gametest;
 
+import net.minecraft.world.level.GameType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -38,9 +39,8 @@ public final class RoasterTests {
     private RoasterTests() {
     }
 
-    @SuppressWarnings("removal")
     private static Item farm(String path) {
-        return BuiltInRegistries.ITEM.get(new ResourceLocation(FarmCharmDishes.MOD_ID, path));
+        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, path));
     }
 
     private record Setup(TestStation station, PotLogic logic, Pot pot, PotCooking cooking) {
@@ -139,7 +139,7 @@ public final class RoasterTests {
             return;
         }
         Setup setup = roaster(helper, new BlockPos(1, 2, 1));
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.container().setItem(Pot.VESSEL_SLOT, new ItemStack(Items.BOWL));
         baconAndEggs(setup, 2);
@@ -231,7 +231,7 @@ public final class RoasterTests {
         List<Dish> dishes = Pot.ROASTER.dishes(helper.getLevel()).stream().filter(dish -> !dish.learned() && Cookable.all(dish.ingredients()))
                 .toList();
         BlockPos at = new BlockPos(1, 2, 1);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         Setup[] setup = new Setup[1];
         int step = 8;
         helper.onEachTick(() -> {

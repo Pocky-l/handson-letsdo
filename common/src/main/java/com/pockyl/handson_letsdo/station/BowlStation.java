@@ -106,8 +106,7 @@ public final class BowlStation {
     /** Played for everybody who sees it: a poured liquid was drawn back. Data: {@link #ITEM}, the liquid in its container. */
     public static final ResourceLocation EFFECT_DRAWN = HandsOnLetsDo.id("bowl_drawn");
 
-    @SuppressWarnings("removal")
-    public static final Supplier<Block> BOWL = () -> BuiltInRegistries.BLOCK.get(new ResourceLocation(FarmCharmDishes.MOD_ID, "crafting_bowl"));
+    public static final Supplier<Block> BOWL = () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, "crafting_bowl"));
 
     public static final StationSchema SCHEMA = StationSchema.builder()
             .slots(INGREDIENTS, Bowl.INGREDIENTS, SlotRules.DEFAULT.kept())

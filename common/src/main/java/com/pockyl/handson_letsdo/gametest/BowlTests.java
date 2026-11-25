@@ -1,5 +1,6 @@
 package com.pockyl.handson_letsdo.gametest;
 
+import net.minecraft.world.level.GameType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
@@ -74,7 +75,7 @@ public final class BowlTests {
     }
 
     private static Player cook(GameTestHelper helper, Setup setup) {
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.station.users.add(player);
         setup.logic.onOpen(setup.station, player);
         return player;
@@ -459,7 +460,7 @@ public final class BowlTests {
         if (withoutFarmCharm(helper)) {
             return;
         }
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         for (Dish recipe : BowlRecipes.all(helper.getLevel())) {
             if (!Cookable.all(recipe.ingredients())) {
                 continue;

@@ -97,8 +97,7 @@ public final class PressStation {
     public static final String BASKET = "basket";
     public static final String LIP = "lip";
 
-    @SuppressWarnings("removal")
-    public static final Supplier<Block> PRESS = () -> BuiltInRegistries.BLOCK.get(new ResourceLocation(BarrelStation.MOD_ID, "apple_press"));
+    public static final Supplier<Block> PRESS = () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(BarrelStation.MOD_ID, "apple_press"));
 
     public static final StationSchema SCHEMA = StationSchema.builder()
             .slots(FRUIT, 1, SlotRules.DEFAULT.kept())

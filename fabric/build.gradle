@@ -12,11 +12,12 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
     // The API is in Diegesis' common jar, in Mojang names like this project; the Fabric jar of the library plays in
-    // the playtest client (playtest-1.20.1-fabric).
+    // the playtest client (playtest-1.21.1-fabric).
     compileOnly "com.pockyl.diegesis:common:${diegesis_version}"
     modCompileOnly "maven.modrinth:lets-do-vinery:${vinery_fabric_version}"
     modCompileOnly "maven.modrinth:lets-do-farm-charm:${farm_and_charm_fabric_version}"
     modCompileOnly "maven.modrinth:lets-do-herbalbrews:${herbalbrews_fabric_version}"
+    modCompileOnly "maven.modrinth:lets-do-foundation:${foundation_fabric_version}"
 }
 
 loom {
@@ -42,6 +43,7 @@ configurations {
 dependencies {
     if (!providers.gradleProperty('bare').isPresent()) {
         gameTestMods "maven.modrinth:architectury-api:${architectury_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-foundation:${foundation_fabric_version}"
         gameTestMods "maven.modrinth:lets-do-vinery:${vinery_fabric_version}"
         gameTestMods "maven.modrinth:lets-do-farm-charm:${farm_and_charm_fabric_version}"
         gameTestMods "maven.modrinth:lets-do-herbalbrews:${herbalbrews_fabric_version}"
@@ -49,11 +51,11 @@ dependencies {
         gameTestMods "maven.modrinth:lets-do-bakery-farmcharm-compat:${bakery_fabric_version}"
         gameTestMods "maven.modrinth:lets-do-brewery-farmcharm-compat:${brewery_fabric_version}"
         gameTestMods "maven.modrinth:lets-do-meadow:${meadow_fabric_version}"
-        gameTestMods "maven.modrinth:lets-do-nethervinery:${nethervinery_fabric_version}"
+        gameTestMods "maven.modrinth:cloth-config:${cloth_config_fabric_version}"
     }
     gameTestMods "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
     // Not in the fabric-api jar: the module that runs the tests (the version fabric-api's POM names).
-    gameTestMods 'net.fabricmc.fabric-api:fabric-gametest-api-v1:1.2.15+1802ada577'
+    gameTestMods 'net.fabricmc.fabric-api:fabric-gametest-api-v1:2.0.5+6fc22b9919'
 }
 
 // The game tests of common on a production Fabric server with the release jars of this mod, Diegesis and the Let's Do mods:
@@ -99,11 +101,6 @@ tasks.named('processResources', ProcessResources) {
     inputs.properties replaceProperties
     filesMatching('fabric.mod.json') {
         expand replaceProperties
-    }
-    // Forge finds its SRG names through the refmap the mixin config names; Loom remaps the mixins in the jar itself
-    // and writes none, so the Fabric jar leaves the line out.
-    filesMatching('handson_letsdo.mixins.json') {
-        filter { String line -> line.contains('"refmap"') ? null : line }
     }
 }
 

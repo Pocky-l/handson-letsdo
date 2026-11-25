@@ -1,20 +1,19 @@
 package com.pockyl.handson_letsdo.mixin;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.satisfy.herbalbrews.core.blocks.entity.TeaKettleBlockEntity;
+import net.satisfy.herbalbrews.core.recipe.TeaKettleRecipe;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,7 +28,7 @@ import com.pockyl.handson_letsdo.station.Kettle;
 import com.pockyl.handson_letsdo.station.KettleDrinks;
 import com.pockyl.handson_letsdo.station.KettleStation;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
  * HerbalBrews' kettle brews into itself while the station is on ({@link KettleDrinks}): with no bottle in its bottle slot, its
@@ -73,29 +72,33 @@ public abstract class TeaKettleMixin implements KettleDrinks {
     @Unique
     private int handson$told;
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    @Redirect(method = "tick", remap = false, at = @At(value = "INVOKE", remap = true,
-            target = "Lnet/minecraft/world/item/crafting/RecipeManager;getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;"
-                    + "Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"))
-    private Optional handson$find(RecipeManager manager, RecipeType type, Container container, Level level) {
+    @Shadow(remap = false)
+    private TeaKettleRecipe getRecipe(List<RecipeHolder<TeaKettleRecipe>> recipes, NonNullList<ItemStack> items) {
+        throw new AssertionError();
+    }
+
+    /** By name only: the kettle's own lookup, whose arguments are named alike on every loader. */
+    @Redirect(method = "tick", remap = false, at = @At(value = "INVOKE", remap = false,
+            target = "Lnet/satisfy/herbalbrews/core/blocks/entity/TeaKettleBlockEntity;getRecipe"))
+    private TeaKettleRecipe handson$find(TeaKettleBlockEntity self, List<RecipeHolder<TeaKettleRecipe>> recipes, NonNullList<ItemStack> items) {
         handson$intoItself = false;
         if (!KettleStation.brewsIntoItself() || !inventory.get(Kettle.BOTTLE_SLOT).isEmpty()) {
-            return manager.getRecipeFor(type, container, level);
+            return getRecipe(recipes, items);
         }
         inventory.set(Kettle.BOTTLE_SLOT, new ItemStack(Items.GLASS_BOTTLE));
-        Optional found;
+        TeaKettleRecipe found;
         try {
-            found = manager.getRecipeFor(type, container, level);
+            found = getRecipe(recipes, items);
         } finally {
             inventory.set(Kettle.BOTTLE_SLOT, ItemStack.EMPTY);
         }
-        if (found.isEmpty()) {
-            return found;
+        if (found == null) {
+            return null;
         }
-        ItemStack made = ((Recipe<?>) found.get()).getResultItem(level.registryAccess());
+        ItemStack made = found.getResultItem(((BlockEntity) (Object) this).getLevel().registryAccess());
         if (!handson$drink.isEmpty() && (!ItemStack.isSameItem(handson$drink, made) || handson$drink.getCount() >= MOST)) {
             // Another drink waits in the kettle, or it is full: it brews again once they are poured.
-            return Optional.empty();
+            return null;
         }
         handson$intoItself = true;
         return found;
@@ -170,15 +173,15 @@ public abstract class TeaKettleMixin implements KettleDrinks {
      * HerbalBrews' own flag.
      */
     @Inject(method = "getUpdateTag", at = @At("RETURN"))
-    private void handson$updateTag(CallbackInfoReturnable<CompoundTag> info) {
+    private void handson$updateTag(HolderLookup.Provider registries, CallbackInfoReturnable<CompoundTag> info) {
         if (KettleStation.brewsIntoItself()) {
-            info.getReturnValue().merge(((BlockEntity) (Object) this).saveWithoutMetadata());
+            info.getReturnValue().merge(((BlockEntity) (Object) this).saveWithoutMetadata(registries));
         }
     }
 
     /** The slots it reads are only those that hold something: an emptied one must not keep what it held on a client's copy. */
-    @Inject(method = "load", at = @At("HEAD"))
-    private void handson$clear(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "loadAdditional", at = @At("HEAD"))
+    private void handson$clear(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         if (tag.contains("Items", Tag.TAG_LIST)) {
             for (int i = 0; i < inventory.size(); i++) {
                 inventory.set(i, ItemStack.EMPTY);
@@ -186,16 +189,16 @@ public abstract class TeaKettleMixin implements KettleDrinks {
         }
     }
 
-    @Inject(method = "load", at = @At("TAIL"))
-    private void handson$load(CompoundTag tag, CallbackInfo ci) {
-        handson$drink = tag.contains(HANDSON_TAG) ? ItemStack.of(tag.getCompound(HANDSON_TAG).getCompound("Drink")) : ItemStack.EMPTY;
+    @Inject(method = "loadAdditional", at = @At("TAIL"))
+    private void handson$load(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
+        handson$drink = tag.contains(HANDSON_TAG) ? ItemStack.parseOptional(registries, tag.getCompound(HANDSON_TAG).getCompound("Drink")) : ItemStack.EMPTY;
     }
 
     @Inject(method = "saveAdditional", at = @At("TAIL"))
-    private void handson$save(CompoundTag tag, CallbackInfo ci) {
+    private void handson$save(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         if (!handson$drink.isEmpty()) {
             CompoundTag own = new CompoundTag();
-            own.put("Drink", handson$drink.save(new CompoundTag()));
+            own.put("Drink", handson$drink.save(registries));
             tag.put(HANDSON_TAG, own);
         }
     }

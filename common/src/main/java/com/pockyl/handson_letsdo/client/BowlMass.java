@@ -1,8 +1,8 @@
 package com.pockyl.handson_letsdo.client;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -34,10 +34,8 @@ enum BowlMass {
     BATTER("batter", 0xFFFFFFFF, true, 0.08F, 0.55F, 0);
 
     /** The finished bowlful's top, which the cook clicks to take the result; the liquid under the colour of what was poured, plain. */
-    @SuppressWarnings("removal")
-    static final ResourceLocation SHEET = new ResourceLocation(HandsOnLetsDo.MOD_ID, "crafting_bowl/mass");
-    @SuppressWarnings("removal")
-    static final ResourceLocation LIQUID = new ResourceLocation(HandsOnLetsDo.MOD_ID, "bowl_mixture");
+    static final ResourceLocation SHEET = ResourceLocation.fromNamespaceAndPath(HandsOnLetsDo.MOD_ID, "crafting_bowl/mass");
+    static final ResourceLocation LIQUID = ResourceLocation.fromNamespaceAndPath(HandsOnLetsDo.MOD_ID, "bowl_mixture");
     /** How big what a porridge or a salad holds is drawn, pixels: a leaf, a ring of onion, a slice, a chunk, an oat flake. */
     private static final float LEAF_SIZE = 2.0F;
     private static final float SHRED_SIZE = 1.5F;
@@ -65,9 +63,8 @@ enum BowlMass {
      */
     private final int heldEach;
 
-    @SuppressWarnings("removal")
     BowlMass(String texture, int color, boolean tinted, float firmness, float heaviness, int heldEach) {
-        this.texture = new ResourceLocation(HandsOnLetsDo.MOD_ID, "block/bowl/" + texture);
+        this.texture = ResourceLocation.fromNamespaceAndPath(HandsOnLetsDo.MOD_ID, "block/bowl/" + texture);
         this.color = color;
         this.tinted = tinted;
         this.firmness = firmness;
@@ -205,8 +202,7 @@ enum BowlMass {
     }
 
     private static boolean meat(ItemStack stack) {
-        FoodProperties food = stack.getItem().getFoodProperties();
-        return food != null && food.isMeat();
+        return stack.is(ItemTags.MEAT);
     }
 
     private static String path(ItemStack stack) {

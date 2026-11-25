@@ -2,12 +2,13 @@ package com.pockyl.handson_letsdo.gametest;
 
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
+import net.minecraft.world.level.GameType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -38,7 +39,6 @@ import com.pockyl.handson_letsdo.station.PotLogic;
 import com.pockyl.handson_letsdo.station.StirredPot;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The cooking pot's rules against a real pot of Farm &amp; Charm, the same on every loader; each loader's holder class calls them.
@@ -51,9 +51,8 @@ public final class PotTests {
     private PotTests() {
     }
 
-    @SuppressWarnings("removal")
     private static Item item(String id) {
-        return BuiltInRegistries.ITEM.get(new ResourceLocation(id));
+        return BuiltInRegistries.ITEM.get(ResourceLocation.parse(id));
     }
 
     private static Item farm(String path) {
@@ -155,7 +154,7 @@ public final class PotTests {
         int dishes = Pot.COOKING_POT.dishes(helper.getLevel()).size();
         helper.assertTrue(dishes >= 10, "Farm & Charm's dishes are read, got " + dishes);
         helper.assertTrue(setup.pot.isHeated(), "a magma block under the pot heats it, as Farm & Charm's tag says");
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.logic.onOpen(setup.station, player);
         helper.assertTrue(player.getUUID().equals(BlockOwner.get(setup.pot.entity())), "the pot is told who cooks at it");
         setup.logic.tick(setup.station);
@@ -176,7 +175,7 @@ public final class PotTests {
             return;
         }
         Setup setup = pot(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         SlotRef first = SlotRef.of(CookingPotStation.INGREDIENTS, 0);
         helper.assertTrue(setup.logic.mayPlace(setup.station, player, first, new ItemStack(Items.POTATO)), "a potato is in a soup: it goes in");
         helper.assertFalse(setup.logic.mayPlace(setup.station, player, first, new ItemStack(Items.COBBLESTONE)), "no dish takes cobblestone");
@@ -203,7 +202,7 @@ public final class PotTests {
             return;
         }
         Setup setup = pot(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.container().setItem(Pot.VESSEL_SLOT, new ItemStack(Items.BOWL));
         putIn(setup, 0, new ItemStack(Items.POTATO));
@@ -252,7 +251,7 @@ public final class PotTests {
             return;
         }
         Setup setup = pot(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         cookPotatoSoup(helper, setup, player, 4, 4);
         Item soup = farm("potato_soup");
         helper.runAfterDelay(8, () -> {
@@ -299,7 +298,7 @@ public final class PotTests {
             return;
         }
         Setup setup = pot(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         cookPotatoSoup(helper, setup, player, 5, 3);
         helper.runAfterDelay(8, () -> {
             helper.assertTrue(setup.cooking.servings() == 3, "three onions make three soups, got " + setup.cooking.servings());
@@ -326,7 +325,7 @@ public final class PotTests {
             return;
         }
         Setup setup = pot(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         putIn(setup, 0, new ItemStack(Items.SUGAR));
         putIn(setup, 1, new ItemStack(Items.WATER_BUCKET));
@@ -358,7 +357,8 @@ public final class PotTests {
         }
         Setup setup = pot(helper);
         Item soup = farm("potato_soup");
-        ServerPlayer player = new ServerPlayer(helper.getLevel().getServer(), helper.getLevel(), new GameProfile(UUID.randomUUID(), "cook"));
+        ServerPlayer player = new ServerPlayer(helper.getLevel().getServer(), helper.getLevel(), new GameProfile(java.util.UUID.randomUUID(), "cook"),
+                net.minecraft.server.level.ClientInformation.createDefault());
         player.awardStat(Stats.ITEM_CRAFTED.get(soup), 40);
         attend(helper, setup, player);
         putIn(setup, 0, new ItemStack(Items.POTATO, 2));
@@ -427,7 +427,7 @@ public final class PotTests {
         }
         BlockPos at = new BlockPos(1, 2, 1);
         Setup setup = pot(helper, at, true);
-        attend(helper, setup, helper.makeMockPlayer());
+        attend(helper, setup, helper.makeMockPlayer(GameType.CREATIVE));
         setup.container().setItem(Pot.VESSEL_SLOT, new ItemStack(Items.BOWL));
         helper.setBlock(at.above(), Blocks.HOPPER.defaultBlockState().setValue(HopperBlock.FACING, Direction.DOWN));
         Container above = (Container) helper.getBlockEntity(at.above());
@@ -450,7 +450,7 @@ public final class PotTests {
             return;
         }
         Setup setup = pot(helper);
-        attend(helper, setup, helper.makeMockPlayer());
+        attend(helper, setup, helper.makeMockPlayer(GameType.CREATIVE));
         setup.container().setItem(Pot.VESSEL_SLOT, new ItemStack(Items.BOWL));
         putIn(setup, 0, new ItemStack(Items.POTATO));
         putIn(setup, 1, new ItemStack(farm("onion")));
@@ -485,7 +485,7 @@ public final class PotTests {
             return;
         }
         Setup setup = pot(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.container().setItem(Pot.VESSEL_SLOT, new ItemStack(Items.BOWL));
         putIn(setup, 0, new ItemStack(Items.POTATO));
@@ -518,7 +518,7 @@ public final class PotTests {
             return;
         }
         Setup setup = pot(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         int slot = 0;
         for (Ingredient ingredient : goulash.ingredients()) {
@@ -551,7 +551,7 @@ public final class PotTests {
             return;
         }
         Setup setup = pot(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         putIn(setup, 0, new ItemStack(farm("tomato"), 2));
         putIn(setup, 1, new ItemStack(Items.SUGAR));
@@ -598,7 +598,7 @@ public final class PotTests {
         List<Dish> dishes = Pot.COOKING_POT.dishes(helper.getLevel()).stream().filter(dish -> !dish.learned() && Cookable.all(dish.ingredients()))
                 .toList();
         BlockPos at = new BlockPos(1, 2, 1);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         Setup[] setup = new Setup[1];
         int step = 8;
         helper.onEachTick(() -> {
@@ -698,7 +698,7 @@ public final class PotTests {
             return;
         }
         Setup setup = pot(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         cookPotatoSoup(helper, setup, player, 3, 2);
         helper.runAfterDelay(8, () -> {
             helper.assertTrue(setup.cooking.servings() == 2, "two servings wait in the pot, got " + setup.cooking.servings());
@@ -706,9 +706,9 @@ public final class PotTests {
             BlockEntity copy = ((EntityBlock) state.getBlock()).newBlockEntity(setup.station.pos(), state);
             helper.assertTrue(copy instanceof StirredPot, "the pot's block entity has the station's part");
             StirredPot seen = (StirredPot) copy;
-            copy.load(setup.pot.entity().saveWithoutMetadata());
+            copy.loadWithComponents(setup.pot.entity().saveWithoutMetadata(helper.getLevel().registryAccess()), helper.getLevel().registryAccess());
             helper.assertFalse(seen.handson$told(), "what the pot saves does not say it was told");
-            copy.load(setup.pot.entity().getUpdateTag());
+            copy.loadWithComponents(setup.pot.entity().getUpdateTag(helper.getLevel().registryAccess()), helper.getLevel().registryAccess());
             helper.assertTrue(seen.handson$told(), "what it sends says so");
             Container held = (Container) copy;
             helper.assertTrue(held.getItem(0).is(Items.POTATO) && held.getItem(0).getCount() == 3 && held.getItem(1).getCount() == 2,
@@ -717,7 +717,7 @@ public final class PotTests {
                     "and the soup that waits in it");
             setup.container().clearContent();
             setup.cooking.load(new CompoundTag());
-            copy.load(setup.pot.entity().getUpdateTag());
+            copy.loadWithComponents(setup.pot.entity().getUpdateTag(helper.getLevel().registryAccess()), helper.getLevel().registryAccess());
             helper.assertTrue(held.isEmpty() && seen.handson$cooking().servings() == 0, "and nothing once it is emptied");
             helper.succeed();
         });
@@ -739,7 +739,7 @@ public final class PotTests {
         setup.logic.tick(setup.station);
         setup.station.state().pollStorages();
         setup.station.state().markAllDirty();
-        FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+        RegistryFriendlyByteBuf buffer = new RegistryFriendlyByteBuf(Unpooled.buffer(), helper.getLevel().registryAccess());
         setup.station.state().writeChanges(buffer, true);
         int bytes = buffer.readableBytes();
         helper.assertTrue(bytes > 0 && bytes < 32 * 1024, "the station's whole data is " + bytes + " bytes");

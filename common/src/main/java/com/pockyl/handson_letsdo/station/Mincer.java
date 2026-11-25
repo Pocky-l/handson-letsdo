@@ -4,26 +4,18 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.WorldlyContainer;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 
 /**
  * Farm &amp; Charm's mincer, as the station sees it: its own container (the hopper's slot and the output, which the mincer throws
  * out on every tick) and what the station adds to it ({@link MincerHand}). Nothing of Farm &amp; Charm is named here; the mincer's
- * own tick makes every result, run once a result through vanilla's ticker with its crank turned the last tick of a result.
+ * own tick makes every result ({@link MincerHand#handson$mince}).
  */
 public final class Mincer {
     public static final int INPUT_SLOT = 0;
     public static final int OUTPUT_SLOT = 1;
     public static final int SLOTS = 2;
-    /** The mincer's crank, ticks it still turns for, and how far one result has got, ticks; one result takes this many. */
-    private static final String CRANK = "crank";
-    private static final String CRANKED = "cranked";
-    private static final int RESULT_TICKS = 20;
 
     private final BlockEntity entity;
     private final Container container;
@@ -71,34 +63,10 @@ public final class Mincer {
     }
 
     /**
-     * One result of the mincer's own tick: the tick runs once with the crank on the last tick of a result, so the mincer takes one
-     * of the input and lays its result into the output slot itself, as its recipe and its rules say. What lay in the output slot
-     * is not thrown out meanwhile ({@link MincerHand#handson$setMaking}). Server only.
+     * One result of the mincer's own tick ({@link MincerHand#handson$mince}): it takes one of the input and lays its result into the
+     * output slot itself, as its recipe and its rules say. Server only.
      */
-    @SuppressWarnings("unchecked")
     public void mince() {
-        Level level = entity.getLevel();
-        BlockState state = entity.getBlockState();
-        IntegerProperty crank = number(state, CRANK);
-        IntegerProperty cranked = number(state, CRANKED);
-        if (level == null || crank == null || cranked == null) {
-            return;
-        }
-        hand.handson$setMaking(true);
-        try {
-            BlockState turning = state.setValue(crank, 1).setValue(cranked, RESULT_TICKS - 1);
-            ((BlockEntityTicker<BlockEntity>) entity).tick(level, entity.getBlockPos(), turning, entity);
-        } finally {
-            hand.handson$setMaking(false);
-        }
-    }
-
-    private static IntegerProperty number(BlockState state, String name) {
-        for (Property<?> property : state.getProperties()) {
-            if (property instanceof IntegerProperty number && property.getName().equals(name)) {
-                return number;
-            }
-        }
-        return null;
+        hand.handson$mince();
     }
 }

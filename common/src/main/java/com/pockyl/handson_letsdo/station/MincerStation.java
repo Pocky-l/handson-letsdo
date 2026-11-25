@@ -76,8 +76,7 @@ public final class MincerStation {
     public static final String KIND = "kind";
     public static final String DIE = "die";
 
-    @SuppressWarnings("removal")
-    public static final Supplier<Block> MINCER = () -> BuiltInRegistries.BLOCK.get(new ResourceLocation(FarmCharmDishes.MOD_ID, "mincer"));
+    public static final Supplier<Block> MINCER = () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, "mincer"));
 
     public static final StationSchema SCHEMA = StationSchema.builder()
             .slots(INPUT, 1, SlotRules.DEFAULT.kept())

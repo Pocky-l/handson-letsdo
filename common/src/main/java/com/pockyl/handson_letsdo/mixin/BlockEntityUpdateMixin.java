@@ -1,5 +1,6 @@
 package com.pockyl.handson_letsdo.mixin;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -21,11 +22,11 @@ import com.pockyl.handson_letsdo.station.StirredPot;
 @Mixin(BlockEntity.class)
 abstract class BlockEntityUpdateMixin {
     @Inject(method = "getUpdateTag", at = @At("HEAD"), cancellable = true)
-    private void handson$tag(CallbackInfoReturnable<CompoundTag> info) {
+    private void handson$tag(HolderLookup.Provider registries, CallbackInfoReturnable<CompoundTag> info) {
         if (this instanceof PressBasket) {
-            info.setReturnValue(((BlockEntity) (Object) this).saveWithoutMetadata());
+            info.setReturnValue(((BlockEntity) (Object) this).saveWithoutMetadata(registries));
         } else if (this instanceof StirredPot pot) {
-            info.setReturnValue(pot.handson$updateTag());
+            info.setReturnValue(pot.handson$updateTag(registries));
         }
     }
 

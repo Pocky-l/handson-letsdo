@@ -42,8 +42,7 @@ import java.util.Optional;
  * nobody at it.
  */
 public final class MincerBehavior implements StationBehavior {
-    @SuppressWarnings("removal")
-    private static final SoundEvent CRANKING = SoundEvent.createVariableRangeEvent(new ResourceLocation(FarmCharmDishes.MOD_ID,
+    private static final SoundEvent CRANKING = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID,
             "mincer_cranking"));
     /** A press shorter than this takes the crank in hand until the next click. */
     private static final float TAKE_CLICK = 0.3F;
@@ -312,7 +311,7 @@ public final class MincerBehavior implements StationBehavior {
                 || view.node("input").map(NodeView::isHovered).orElse(false));
         ItemStack lying = view.state().getItem(MincerStation.INPUT_SLOT);
         boolean takes = over && MincerRecipes.taking(recipes, carried) != null
-                && (lying.isEmpty() || ItemStack.isSameItemSameTags(lying, carried) && lying.getCount() < lying.getMaxStackSize());
+                && (lying.isEmpty() || ItemStack.isSameItemSameComponents(lying, carried) && lying.getCount() < lying.getMaxStackSize());
         view.setCarriedHidden(takes);
         view.node("input_ghost").ifPresent(node -> {
             node.setVisible(takes);

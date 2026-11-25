@@ -1,5 +1,6 @@
 package com.pockyl.handson_letsdo.gametest;
 
+import net.minecraft.world.level.GameType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -36,9 +37,8 @@ public final class PressTests {
     private PressTests() {
     }
 
-    @SuppressWarnings("removal")
     private static Item vinery(String path) {
-        return BuiltInRegistries.ITEM.get(new ResourceLocation(BarrelStation.MOD_ID, path));
+        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(BarrelStation.MOD_ID, path));
     }
 
     private record Setup(TestStation station, PressLogic logic, Press press) {
@@ -130,7 +130,7 @@ public final class PressTests {
         helper.assertTrue(setup.station.state().getItem(PressStation.SERVED_SLOT).is(juice), "what the press bottled is what the station shows");
         setup.container().setItem(Press.MASH_SLOT, new ItemStack(vinery("apple_mash")));
         helper.assertTrue(setup.station.state().getItem(PressStation.MASH_SLOT).is(vinery("apple_mash")), "and its mash");
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         helper.assertFalse(setup.logic.mayPlace(setup.station, player, PressStation.FRUIT_SLOT, new ItemStack(Items.APPLE)),
                 "nothing goes into the basket while its front is shut");
         open(setup, player, true);
@@ -160,7 +160,7 @@ public final class PressTests {
         }
         Item mash = vinery("apple_mash");
         Setup eight = press(helper, AT);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         eight.station.users.add(player);
         eight.logic.onOpen(eight.station, player);
         open(eight, player, true);
@@ -203,7 +203,7 @@ public final class PressTests {
             return;
         }
         Setup setup = press(helper, AT);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.station.users.add(player);
         setup.logic.onOpen(setup.station, player);
         helper.onEachTick(() -> setup.logic.tick(setup.station));
@@ -232,7 +232,7 @@ public final class PressTests {
             return;
         }
         Setup setup = press(helper, AT);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         Item juice = vinery("apple_juice");
         setup.container().setItem(Press.FRUIT_SLOT, new ItemStack(Items.APPLE, 8));
@@ -260,7 +260,7 @@ public final class PressTests {
             return;
         }
         Setup setup = press(helper, AT);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         Item juice = vinery("apple_juice");
         put(setup, PressStation.FRUIT_SLOT, new ItemStack(Items.APPLE, 2));
@@ -293,7 +293,7 @@ public final class PressTests {
             return;
         }
         Setup setup = press(helper, AT);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         Item juice = vinery("apple_juice");
         put(setup, PressStation.FRUIT_SLOT, new ItemStack(Items.APPLE));
@@ -309,7 +309,7 @@ public final class PressTests {
                     "no bottle stands in the press");
             helper.assertTrue(setup.station.effects.contains(PressStation.EFFECT_BOTTLED), "everybody saw the tub fill");
             helper.assertTrue(setup.station.state().getTank(PressStation.TUB).amount() == 1, "the station shows a bottle's worth in the tub");
-            CompoundTag saved = helper.getLevel().getBlockEntity(helper.absolutePos(AT)).getUpdateTag();
+            CompoundTag saved = helper.getLevel().getBlockEntity(helper.absolutePos(AT)).getUpdateTag(helper.getLevel().registryAccess());
             helper.assertTrue(saved.getCompound("HandsOnPress").contains("Tub"), "the clients are told what the tub holds");
             player.containerMenu.setCarried(ItemStack.EMPTY);
             player.inventoryMenu.setCarried(new ItemStack(BarrelStation.wineBottle(), 2));
@@ -336,7 +336,7 @@ public final class PressTests {
             return;
         }
         Setup setup = press(helper, AT);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         Item juice = vinery("apple_juice");
         setup.press.basket().handson$setTub(new ItemStack(juice, Press.TUB_MOST));
@@ -372,7 +372,7 @@ public final class PressTests {
             return;
         }
         Setup setup = press(helper, AT);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         open(setup, player, true);
         put(setup, PressStation.FRUIT_SLOT, new ItemStack(Items.APPLE, 2));
         helper.runAfterDelay(6, () -> {
@@ -387,11 +387,11 @@ public final class PressTests {
             setup.logic.tick(setup.station);
             helper.assertTrue(setup.station.state().data().contains(PressStation.MASH_STARTED), "and the station tells since when");
             var entity = helper.getLevel().getBlockEntity(helper.absolutePos(AT));
-            CompoundTag told = entity.getUpdateTag();
+            CompoundTag told = entity.getUpdateTag(helper.getLevel().registryAccess());
             helper.assertTrue(told.getCompound("HandsOnPress").contains("MashSince") && told.contains("Items"),
                     "the clients are told what it holds and since when it presses, got " + told);
             open(setup, player, true);
-            CompoundTag saved = entity.saveWithoutMetadata();
+            CompoundTag saved = entity.saveWithoutMetadata(helper.getLevel().registryAccess());
             helper.assertTrue(saved.getCompound("HandsOnPress").getBoolean("Open"), "the open front is kept with the block");
         });
         helper.runAfterDelay(18, () -> {
@@ -415,7 +415,7 @@ public final class PressTests {
             return;
         }
         Setup setup = press(helper, AT);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         helper.runAfterDelay(3, () -> put(setup, PressStation.MASH_SLOT, new ItemStack(vinery("apple_mash"), 2)));
         helper.runAfterDelay(8, () -> {
@@ -434,7 +434,7 @@ public final class PressTests {
             return;
         }
         List<VineryPressing.Step> mashing = VineryPressing.mashing(helper.getLevel());
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         for (VineryPressing.Step bottled : VineryPressing.bottling(helper.getLevel())) {
             helper.setBlock(AT, Blocks.AIR);
             Setup setup = press(helper, AT);

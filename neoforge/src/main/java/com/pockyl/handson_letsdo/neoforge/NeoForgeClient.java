@@ -1,12 +1,12 @@
-package com.pockyl.handson_letsdo.forge;
+package com.pockyl.handson_letsdo.neoforge;
 
 import net.minecraft.world.item.ItemDisplayContext;
 
 import com.pockyl.handson_letsdo.client.HandsOnLetsDoClient;
 
-/** Forge client entry point, loaded on a client only. */
-final class ForgeClient {
-    private ForgeClient() {
+/** NeoForge client entry point, loaded on a client only. */
+final class NeoForgeClient {
+    private NeoForgeClient() {
     }
 
     static void init() {

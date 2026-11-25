@@ -1,12 +1,13 @@
 package com.pockyl.handson_letsdo.gametest;
 
 import io.netty.buffer.Unpooled;
+import net.minecraft.world.level.GameType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -48,9 +49,8 @@ public final class StoveTests {
     private StoveTests() {
     }
 
-    @SuppressWarnings("removal")
     private static Item farm(String path) {
-        return BuiltInRegistries.ITEM.get(new ResourceLocation(FarmCharmDishes.MOD_ID, path));
+        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, path));
     }
 
     private record Setup(TestStation station, OvenLogic logic, FarmCharmStove stove, ContainerData numbers) {
@@ -153,7 +153,7 @@ public final class StoveTests {
         helper.assertTrue(recipes >= 9, "Farm & Charm's bakings are read, got " + recipes);
         helper.assertTrue(setup.stove.isFuel(new ItemStack(Items.COAL)) && !setup.stove.isFuel(new ItemStack(Items.COBBLESTONE)),
                 "it burns what a furnace burns");
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.logic.onOpen(setup.station, player);
         helper.assertTrue(player.getUUID().equals(BlockOwner.get(setup.stove.blockEntity())), "the stove is told who cooks at it");
         helper.assertTrue(OvenLogic.isOpen(setup.station), "the mouth opens for a cook who comes to a stove where nothing bakes");
@@ -170,7 +170,7 @@ public final class StoveTests {
             return;
         }
         Setup setup = stove(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.station.users.add(player);
         setup.logic.onOpen(setup.station, player);
         SlotRef first = SlotRef.of(OvenStation.INGREDIENTS, 0);
@@ -215,7 +215,7 @@ public final class StoveTests {
         ContainerData aloneNumbers = BlockNumbers.of(aloneEntity);
 
         Setup setup = stove(helper, new BlockPos(5, 2, 1));
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         player.getInventory().add(new ItemStack(farm("dough")));
         player.getInventory().add(new ItemStack(Items.WATER_BUCKET));
@@ -268,7 +268,7 @@ public final class StoveTests {
             return;
         }
         Setup setup = stove(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.stove.setPlace(0, new ItemStack(farm("corn"), 2));
         setup.stove.setPlace(1, new ItemStack(farm("corn"), 2));
@@ -299,7 +299,7 @@ public final class StoveTests {
             return;
         }
         Setup setup = stove(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.station.users.add(player);
         setup.logic.onOpen(setup.station, player);
         player.getInventory().add(new ItemStack(farm("corn"), 6));
@@ -349,7 +349,7 @@ public final class StoveTests {
         Setup[] setup = {stove(helper, at)};
         List<KitchenOven.Baking> recipes = setup[0].stove.recipes(helper.getLevel()).stream()
                 .filter(recipe -> Cookable.all(recipe.ingredients())).toList();
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         int step = 8;
         helper.onEachTick(() -> {
             int tick = (int) helper.getTick();
@@ -397,7 +397,7 @@ public final class StoveTests {
             return;
         }
         Setup setup = stove(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.stove.setPlace(0, new ItemStack(farm("corn")));
         setup.stove.setPlace(1, new ItemStack(farm("corn")));
@@ -407,14 +407,14 @@ public final class StoveTests {
         BlockEntity real = setup.stove.blockEntity();
         BlockEntity copy = ((EntityBlock) real.getBlockState().getBlock()).newBlockEntity(setup.station.pos(), real.getBlockState());
         helper.runAfterDelay(3, () -> {
-            copy.load(real.getUpdateTag());
+            copy.loadWithComponents(real.getUpdateTag(helper.getLevel().registryAccess()), helper.getLevel().registryAccess());
             helper.assertTrue(copy instanceof Container seen && !seen.isEmpty(), "the client's copy shows what lies on the tray");
             nearlyBaked(setup);
         });
         helper.runAfterDelay(8, () -> {
             helper.assertTrue(setup.stove.output(0).is(farm("roasted_corn")), "the corn is roasted, got " + setup.stove.output(0));
             setup.station.state().setItem(SlotRef.of(OvenStation.SERVED, 0), ItemStack.EMPTY);
-            copy.load(real.getUpdateTag());
+            copy.loadWithComponents(real.getUpdateTag(helper.getLevel().registryAccess()), helper.getLevel().registryAccess());
             helper.assertTrue(copy instanceof Container seen && seen.isEmpty(), "nothing lies in the client's copy");
             helper.succeed();
         });
@@ -429,7 +429,7 @@ public final class StoveTests {
             return;
         }
         Setup setup = stove(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.logic.onCustomAction(setup.station, player, OvenStation.ACTION_DOOR, door(true));
         setup.stove.setPlace(0, new ItemStack(farm("corn")));
@@ -466,7 +466,7 @@ public final class StoveTests {
             return;
         }
         Setup setup = stove(helper);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.station.users.add(player);
         setup.logic.onOpen(setup.station, player);
         setup.logic.onCustomAction(setup.station, player, OvenStation.ACTION_DOOR, door(false));
@@ -505,7 +505,7 @@ public final class StoveTests {
         setup.logic.tick(setup.station);
         setup.station.state().pollStorages();
         setup.station.state().markAllDirty();
-        FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+        RegistryFriendlyByteBuf buffer = new RegistryFriendlyByteBuf(Unpooled.buffer(), helper.getLevel().registryAccess());
         setup.station.state().writeChanges(buffer, true);
         int bytes = buffer.readableBytes();
         helper.assertTrue(bytes > 0 && bytes < 32 * 1024, "the station's whole data is " + bytes + " bytes");

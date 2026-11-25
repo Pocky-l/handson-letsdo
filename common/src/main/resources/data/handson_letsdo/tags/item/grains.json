@@ -25,6 +25,10 @@
     {
       "id": "#c:seeds",
       "required": false
+    },
+    {
+      "id": "#c:crops/grain",
+      "required": false
     }
   ]
 }

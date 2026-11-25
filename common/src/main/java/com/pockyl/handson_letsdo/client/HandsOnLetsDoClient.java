@@ -82,29 +82,28 @@ public final class HandsOnLetsDoClient {
     }
 
     /** Called by each loader after the common setup: only the stations that were made get their looks. */
-    @SuppressWarnings("removal")
     public static void init(GuiModels models) {
         guiModels = models;
         // The crafting bowl's liquid: our own still surface, coloured by what was poured in.
         DiegesisClient.registerLiquid(BowlMass.LIQUID, new LiquidLook(0xFFFFFFFF, LiquidLook.LIQUID_SPRITE, false, 0.0F));
-        DiegesisClient.registerParticle(GRAIN, ParticleStyle.builder(new ResourceLocation("minecraft", "generic_0")).color(0xFFFFFFFF)
+        DiegesisClient.registerParticle(GRAIN, ParticleStyle.builder(ResourceLocation.fromNamespaceAndPath("minecraft", "generic_0")).color(0xFFFFFFFF)
                 .size(0.28F, 0.42F).life(0.35F, 0.6F).gravity(55.0F).drag(0.2F).pop().build());
-        DiegesisClient.registerParticle(FAT, ParticleStyle.builder(new ResourceLocation("minecraft", "drip_fall")).color(0xFFFFE7A8)
+        DiegesisClient.registerParticle(FAT, ParticleStyle.builder(ResourceLocation.fromNamespaceAndPath("minecraft", "drip_fall")).color(0xFFFFE7A8)
                 .size(0.3F, 0.45F).life(0.3F, 0.6F).gravity(75.0F).drag(0.05F).stretch().pop().build());
         for (int i = 0; i < JUICE_DROPS; i++) {
             float fall = juiceDropFall(i);
-            DiegesisClient.registerParticle(juiceDrop(i), ParticleStyle.builder(new ResourceLocation("minecraft", "drip_fall"))
+            DiegesisClient.registerParticle(juiceDrop(i), ParticleStyle.builder(ResourceLocation.fromNamespaceAndPath("minecraft", "drip_fall"))
                     .color(0xFFD9A441).size(0.3F, 0.45F).life(fall, fall).gravity(JUICE_DROP_GRAVITY).drag(0.0F).stretch().pop().build());
         }
-        List<ResourceLocation> popping = new ArrayList<>(List.of(new ResourceLocation("diegesis", "bubble"), new ResourceLocation("diegesis", "bubble")));
+        List<ResourceLocation> popping = new ArrayList<>(List.of(ResourceLocation.fromNamespaceAndPath("diegesis", "bubble"), ResourceLocation.fromNamespaceAndPath("diegesis", "bubble")));
         for (int i = 0; i < 5; i++) {
-            popping.add(new ResourceLocation("diegesis", "bubble_pop_" + i));
+            popping.add(ResourceLocation.fromNamespaceAndPath("diegesis", "bubble_pop_" + i));
         }
         DiegesisClient.registerParticle(OIL_POP, ParticleStyle.builder(popping).color(0xE6F7C27A).size(0.8F, 1.3F).life(0.25F, 0.5F)
                 .drag(1.0F).grow(0.4F).pop().build());
         List<ResourceLocation> steam = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
-            steam.add(new ResourceLocation("diegesis", "steam_" + i));
+            steam.add(ResourceLocation.fromNamespaceAndPath("diegesis", "steam_" + i));
         }
         DiegesisClient.registerParticle(PAN_SMOKE, ParticleStyle.builder(steam).color(0x58C8C6C2).size(1.8F, 2.6F).life(1.6F, 2.4F)
                 .gravity(-4.0F).drag(0.75F).grow(3.0F).wobble(1.0F).fadeIn(0.3F).build());

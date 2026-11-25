@@ -44,8 +44,7 @@ import java.util.stream.IntStream;
  */
 public final class BowlBehavior implements StationBehavior {
     private static final String[] ITEM_NODES = {"item_0", "item_1", "item_2", "item_3"};
-    @SuppressWarnings("removal")
-    private static final SoundEvent STIRRING = SoundEvent.createVariableRangeEvent(new ResourceLocation(FarmCharmDishes.MOD_ID,
+    private static final SoundEvent STIRRING = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID,
             "crafting_bowl_stirring"));
     private static final float TAKE_CLICK = 0.3F;
 
@@ -290,7 +289,7 @@ public final class BowlBehavior implements StationBehavior {
             return false;
         }
         for (ItemStack in : ingredientsOf(view)) {
-            if (!in.isEmpty() && ItemStack.isSameItemSameTags(BowlStation.containerOf(in), stack.copyWithCount(1))) {
+            if (!in.isEmpty() && ItemStack.isSameItemSameComponents(BowlStation.containerOf(in), stack.copyWithCount(1))) {
                 return true;
             }
         }

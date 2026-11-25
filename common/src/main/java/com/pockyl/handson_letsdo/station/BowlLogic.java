@@ -199,7 +199,7 @@ public final class BowlLogic implements StationLogic {
             container.setItem(Bowl.RESULT_SLOT, ItemStack.EMPTY);
             if (made.isEmpty()) {
                 made = out.copy();
-            } else if (ItemStack.isSameItemSameTags(made, out) && made.getCount() + out.getCount() <= made.getMaxStackSize()) {
+            } else if (ItemStack.isSameItemSameComponents(made, out) && made.getCount() + out.getCount() <= made.getMaxStackSize()) {
                 made.grow(out.getCount());
             } else {
                 player.getInventory().placeItemBackInInventory(out.copy());
@@ -256,7 +256,7 @@ public final class BowlLogic implements StationLogic {
         for (int i = Bowl.INGREDIENTS - 1; i >= 0; i--) {
             ItemStack in = ingredients.get(i);
             ItemStack container = in.isEmpty() ? ItemStack.EMPTY : BowlStation.containerOf(in);
-            if (container.isEmpty() || !ItemStack.isSameItemSameTags(container, held)) {
+            if (container.isEmpty() || !ItemStack.isSameItemSameComponents(container, held)) {
                 continue;
             }
             int count = Math.min(all ? in.getCount() : 1, held.getCount());

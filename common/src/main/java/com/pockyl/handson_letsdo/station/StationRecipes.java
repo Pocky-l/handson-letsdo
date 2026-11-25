@@ -98,7 +98,7 @@ public final class StationRecipes {
             if (held < had) {
                 return 0;
             }
-            if (ItemStack.isSameItemSameTags(with.get(kind), offered)) {
+            if (ItemStack.isSameItemSameComponents(with.get(kind), offered)) {
                 at = kind;
             }
         }
@@ -139,7 +139,7 @@ public final class StationRecipes {
             return;
         }
         for (ItemStack kind : kinds) {
-            if (ItemStack.isSameItemSameTags(kind, stack)) {
+            if (ItemStack.isSameItemSameComponents(kind, stack)) {
                 kind.grow(stack.getCount());
                 return;
             }
@@ -382,7 +382,7 @@ public final class StationRecipes {
         for (int slot = 0; slot < size; slot++) {
             ItemStack there = slots.get(slot);
             for (int kind = 0; kind < kinds.size() && !there.isEmpty(); kind++) {
-                if (placed[kind] < parts[kind] && ItemStack.isSameItemSameTags(there, kinds.get(kind))) {
+                if (placed[kind] < parts[kind] && ItemStack.isSameItemSameComponents(there, kinds.get(kind))) {
                     kindAt[slot] = kind;
                     placed[kind]++;
                     break;
@@ -495,7 +495,7 @@ public final class StationRecipes {
             if (stack.getCount() < wanted) {
                 continue;
             }
-            if (held.stream().anyMatch(kind -> ItemStack.isSameItemSameTags(kind, stack))) {
+            if (held.stream().anyMatch(kind -> ItemStack.isSameItemSameComponents(kind, stack))) {
                 return slot;
             }
             if (any < 0) {

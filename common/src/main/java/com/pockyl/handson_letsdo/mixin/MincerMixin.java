@@ -1,11 +1,13 @@
 package com.pockyl.handson_letsdo.mixin;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.satisfy.farm_and_charm.core.block.MincerBlock;
 import net.satisfy.farm_and_charm.core.block.entity.MincerBlockEntity;
@@ -33,6 +35,18 @@ public abstract class MincerMixin implements MincerHand {
 
     @Shadow(remap = false)
     private NonNullList<ItemStack> stacks;
+    @Shadow(remap = false)
+    private float crankAngle;
+    @Shadow(remap = false)
+    private float crankAnglePrev;
+    @Shadow(remap = false)
+    private float crankSpeed;
+    @Shadow(remap = false)
+    private float crankTargetSpeed;
+    @Shadow(remap = false)
+    private int crankTicks;
+    @Shadow(remap = false)
+    private float cranked;
 
     @Unique
     private boolean handson$kept;
@@ -62,9 +76,7 @@ public abstract class MincerMixin implements MincerHand {
         if (handson$making || level == null || level.isClientSide()) {
             return;
         }
-        BlockState state = self.getBlockState();
-        if (handson$kept && (stacks.get(HANDSON_OUTPUT).isEmpty()
-                || state.hasProperty(MincerBlock.CRANK) && state.getValue(MincerBlock.CRANK) > 0)) {
+        if (handson$kept && (stacks.get(HANDSON_OUTPUT).isEmpty() || crankTicks > 0)) {
             // Taken, or cranked Farm & Charm's way by a player without the station: the mincer is as that mod made it again.
             handson$kept = false;
             self.setChanged();
@@ -84,8 +96,8 @@ public abstract class MincerMixin implements MincerHand {
         return seen == 0 ? 1 : seen;
     }
 
-    @Inject(method = "load", at = @At("TAIL"))
-    private void handson$load(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "loadAdditional", at = @At("TAIL"))
+    private void handson$load(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         CompoundTag own = tag.getCompound(HANDSON_TAG);
         handson$heard |= tag.contains(HANDSON_TAG);
         handson$kept = own.getBoolean("Kept");
@@ -93,7 +105,7 @@ public abstract class MincerMixin implements MincerHand {
     }
 
     @Inject(method = "saveAdditional", at = @At("TAIL"))
-    private void handson$save(CompoundTag tag, CallbackInfo ci) {
+    private void handson$save(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         CompoundTag own = new CompoundTag();
         if (handson$kept) {
             own.putBoolean("Kept", true);
@@ -133,6 +145,41 @@ public abstract class MincerMixin implements MincerHand {
     @Override
     public void handson$setMaking(boolean making) {
         handson$making = making;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void handson$mince() {
+        BlockEntity self = (BlockEntity) (Object) this;
+        Level level = self.getLevel();
+        if (level == null) {
+            return;
+        }
+        // Its own tick makes a result once the crank has gone round enough and still turns: so it does once, and its crank is left
+        // as it was (the station turns its own).
+        float angle = crankAngle;
+        float anglePrev = crankAnglePrev;
+        float speed = crankSpeed;
+        float targetSpeed = crankTargetSpeed;
+        int ticks = crankTicks;
+        float done = cranked;
+        handson$making = true;
+        try {
+            crankTicks = 1;
+            crankSpeed = MincerBlockEntity.CRANK_MAX_SPEED;
+            cranked = MincerBlock.CRANKS_NEEDED;
+            ((BlockEntityTicker<BlockEntity>) (Object) this).tick(level, self.getBlockPos(), self.getBlockState(), self);
+        } finally {
+            handson$making = false;
+            crankAngle = angle;
+            crankAnglePrev = anglePrev;
+            crankSpeed = speed;
+            crankTargetSpeed = targetSpeed;
+            crankTicks = ticks;
+            if (cranked != 0.0F) {
+                cranked = done;
+            }
+        }
     }
 
     @Override

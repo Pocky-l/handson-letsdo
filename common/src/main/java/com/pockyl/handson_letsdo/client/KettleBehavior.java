@@ -57,8 +57,7 @@ public final class KettleBehavior implements StationBehavior {
     private static final String[] GAUGES = {"gauge_water", "gauge_heat", "gauge_marks"};
     /** The scene's kettle and what stands round it, drawn while the scene stands in for the block: the world's kettle has none. */
     private static final String[] SHOWN_IN_USE = {"body", "water", "served", "embers"};
-    @SuppressWarnings("removal")
-    private static final ResourceLocation GAUGE_TEXTURE = new ResourceLocation("minecraft", "block/white_concrete");
+    private static final ResourceLocation GAUGE_TEXTURE = ResourceLocation.fromNamespaceAndPath("minecraft", "block/white_concrete");
     /**
      * The lid lies on the kettle as the block has it. The cook takes it off with a click and puts it back with another, as at
      * Hands-On Delight's kettle: slid out from under the copper kettle's bail, lifted, carried and set on its edge on the stove

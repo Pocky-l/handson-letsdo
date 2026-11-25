@@ -1,5 +1,7 @@
 package com.pockyl.handson_letsdo.mixin;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.pockyl.handson_letsdo.station.Bowl;
 import com.pockyl.handson_letsdo.station.BowlHand;
 
 /**
@@ -28,6 +31,17 @@ public abstract class CraftingBowlMixin implements BowlHand {
 
     @Shadow(remap = false)
     private NonNullList<ItemStack> stacks;
+
+    @Shadow(remap = false)
+    private void finish(Level level, BlockPos pos) {
+        throw new AssertionError();
+    }
+
+    @Shadow(remap = false)
+    public abstract void resetStirring();
+
+    @Shadow(remap = false)
+    private Boolean hasRecipe;
 
     @Unique
     private float handson$stirred;
@@ -56,14 +70,14 @@ public abstract class CraftingBowlMixin implements BowlHand {
         return seen == 0 ? 1 : seen;
     }
 
-    @Inject(method = "load", at = @At("TAIL"))
-    private void handson$load(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "loadAdditional", at = @At("TAIL"))
+    private void handson$load(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         handson$heard |= tag.contains(HANDSON_TAG);
         handson$stirred = tag.getCompound(HANDSON_TAG).getFloat("Stirred");
     }
 
     @Inject(method = "saveAdditional", at = @At("TAIL"))
-    private void handson$save(CompoundTag tag, CallbackInfo ci) {
+    private void handson$save(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         CompoundTag own = new CompoundTag();
         if (handson$stirred != 0.0F) {
             own.putFloat("Stirred", handson$stirred);
@@ -82,6 +96,45 @@ public abstract class CraftingBowlMixin implements BowlHand {
             handson$stirred = stirred;
             ((BlockEntity) (Object) this).setChanged();
         }
+    }
+
+    /**
+     * Farm &amp; Charm 1.1.x holds one of each ingredient and puts what it leaves in its place: a set here takes one of each of what
+     * lies in the bowl, as on 1.20.1, and what an ingredient leaves is thrown out beside the bowl.
+     */
+    @Override
+    public void handson$stirOnce() {
+        BlockEntity self = (BlockEntity) (Object) this;
+        Level level = self.getLevel();
+        if (level == null || level.isClientSide() || !stacks.get(Bowl.RESULT_SLOT).isEmpty()) {
+            return;
+        }
+        ItemStack[] before = new ItemStack[Bowl.INGREDIENTS];
+        for (int i = 0; i < Bowl.INGREDIENTS; i++) {
+            before[i] = stacks.get(i);
+            stacks.set(i, before[i].isEmpty() ? ItemStack.EMPTY : before[i].copyWithCount(1));
+        }
+        hasRecipe = null;
+        finish(level, self.getBlockPos());
+        boolean made = !stacks.get(Bowl.RESULT_SLOT).isEmpty();
+        for (int i = 0; i < Bowl.INGREDIENTS; i++) {
+            ItemStack left = stacks.get(i);
+            if (!made) {
+                stacks.set(i, before[i]);
+                continue;
+            }
+            stacks.set(i, before[i].isEmpty() ? ItemStack.EMPTY : before[i].copyWithCount(before[i].getCount() - 1));
+            if (!left.isEmpty()) {
+                Block.popResource(level, self.getBlockPos(), left);
+            }
+        }
+        hasRecipe = null;
+        self.setChanged();
+    }
+
+    @Override
+    public void handson$resetStirring() {
+        resetStirring();
     }
 
     @Override

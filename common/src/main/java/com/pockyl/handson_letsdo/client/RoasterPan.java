@@ -1,5 +1,6 @@
 package com.pockyl.handson_letsdo.client;
 
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -8,7 +9,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -117,7 +117,7 @@ final class RoasterPan {
      * colour; how deep a full layer stands, of the pan's inside (5 px); how patchy it looks, how long trails stay on it and how
      * clearly; how hard it seethes along the walls while it roasts and while it only stands hot.
      */
-    private static final ResourceLocation OIL = new ResourceLocation("minecraft", "water");
+    private static final ResourceLocation OIL = ResourceLocation.fromNamespaceAndPath("minecraft", "water");
     private static final int OIL_RGB = 0xE8A93A;
     private static final float OIL_DEPTH = 0.04F;
     private static final float OIL_MOTTLE = 0.45F;
@@ -326,8 +326,7 @@ final class RoasterPan {
     /** Draws slot {@code index}'s thing as a piece cut from its icon, or as itself where it has none (a block). */
     private void look(StationView view, int index) {
         ItemStack stack = raw[index];
-        FoodProperties food = stack.getItem().getFoodProperties();
-        meat[index] = food != null && food.isMeat() || stack.is(ItemTags.FISHES);
+        meat[index] = stack.is(ItemTags.MEAT) || stack.is(ItemTags.FISHES);
         Optional<ItemVoxels.Icon> icon = ItemVoxels.icon(stack);
         blockLike[index] = icon.isEmpty();
         lastTint[index] = -1.0F;
@@ -791,8 +790,8 @@ final class RoasterPan {
     /** What the furnace makes of {@code stack}: the look it browns towards. */
     private static ItemStack cooked(StationView view, ItemStack stack) {
         return COOKED.computeIfAbsent(stack.getItem(), it -> view.level().getRecipeManager()
-                .getRecipeFor(RecipeType.SMELTING, new SimpleContainer(new ItemStack(it)), view.level())
-                .map(recipe -> recipe.getResultItem(view.level().registryAccess()).copy()).orElse(ItemStack.EMPTY));
+                .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(new ItemStack(it)), view.level())
+                .map(recipe -> recipe.value().getResultItem(view.level().registryAccess()).copy()).orElse(ItemStack.EMPTY));
     }
 
     /**

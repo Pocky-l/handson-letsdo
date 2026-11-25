@@ -12,6 +12,15 @@ public interface BowlHand {
     /** Sets how far the whisk has gone round; kept with the block. */
     void handson$setStirred(float stirred);
 
+    /**
+     * One set of the bowl's own making: it takes one of each ingredient and lays its result into the result slot itself, as its
+     * recipe and its rules say; nothing while a result waits there. Server only.
+     */
+    void handson$stirOnce();
+
+    /** Sets the bowl's own count of a set back to nothing, as its own use does when a player takes the result. Server only. */
+    void handson$resetStirring();
+
     /** Tells the clients what the bowl holds now. Server only. */
     void handson$tell();
 

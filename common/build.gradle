@@ -2,11 +2,11 @@
 // use a loader API: that goes through the loader projects.
 plugins {
     id 'multiloader-common'
-    id 'net.neoforged.moddev.legacyforge'
+    id 'net.neoforged.moddev'
 }
 
-legacyForge {
-    mcpVersion = minecraft_version
+neoForge {
+    neoFormVersion = neo_form_version
     parchment {
         mappingsVersion = parchment_mappings_version
         minecraftVersion = parchment_minecraft_version
@@ -19,10 +19,12 @@ dependencies {
     // The mixin plugin's interface names ASM's class node; the loaders bring ASM at runtime.
     compileOnly 'org.ow2.asm:asm-tree:9.5'
     compileOnly "com.pockyl.diegesis:common:${diegesis_version}"
-    // The Forge builds stand for both loaders: a Let's Do mod's own classes have the same names and members in its Fabric build.
-    modCompileOnly "maven.modrinth:lets-do-vinery:${vinery_version}"
-    modCompileOnly "maven.modrinth:lets-do-farm-charm:${farm_and_charm_version}"
-    modCompileOnly "maven.modrinth:lets-do-herbalbrews:${herbalbrews_version}"
+    // The NeoForge builds stand for both loaders (they are in Mojang names like this project): a Let's Do mod's own classes have
+    // the same names and members in its Fabric build.
+    compileOnly "maven.modrinth:lets-do-vinery:${vinery_version}"
+    compileOnly "maven.modrinth:lets-do-farm-charm:${farm_and_charm_version}"
+    compileOnly "maven.modrinth:lets-do-herbalbrews:${herbalbrews_version}"
+    compileOnly "maven.modrinth:lets-do-foundation:${foundation_version}"
 }
 
 configurations {

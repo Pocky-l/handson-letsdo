@@ -47,6 +47,22 @@
     {
       "id": "#candlelight:white_effect",
       "required": false
+    },
+    {
+      "id": "#c:drinks/milk",
+      "required": false
+    },
+    {
+      "id": "#c:buckets/milk",
+      "required": false
+    },
+    {
+      "id": "#c:drinks/water",
+      "required": false
+    },
+    {
+      "id": "#c:buckets/water",
+      "required": false
     }
   ]
 }

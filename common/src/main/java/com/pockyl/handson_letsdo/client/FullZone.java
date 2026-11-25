@@ -34,7 +34,7 @@ final class FullZone {
         }
         for (int i = 0; i < slots.size(); i++) {
             ItemStack there = view.state().getItem(slots.ref(i));
-            if (there.isEmpty() || ItemStack.isSameItemSameTags(there, stack) && there.getCount() < slots.rules().limitFor(there)) {
+            if (there.isEmpty() || ItemStack.isSameItemSameComponents(there, stack) && there.getCount() < slots.rules().limitFor(there)) {
                 return false;
             }
         }

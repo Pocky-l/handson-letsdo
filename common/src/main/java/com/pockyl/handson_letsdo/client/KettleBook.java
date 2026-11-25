@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -38,7 +38,7 @@ final class KettleBook implements RecipeBook.Source {
         for (Holder<Item> holder : BuiltInRegistries.ITEM.getTagOrEmpty(HerbalTeas.LARGE_WATER)) {
             vessels.add(new ItemStack(holder.value()));
         }
-        vessels.add(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER));
+        vessels.add(PotionContents.createItemStack(Items.POTION, Potions.WATER));
         return vessels;
     }
 

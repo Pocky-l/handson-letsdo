@@ -35,8 +35,7 @@ final class StepBadge {
     static final int MORE_COLOR = 0xC8FFF2DC;
     /** A step that waits for something besides the cook's hand (a hatch, a door) stands still, greyed. */
     static final int WAITING_COLOR = 0xFFA8A49C;
-    @SuppressWarnings("removal")
-    private static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "block/white_concrete");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("minecraft", "block/white_concrete");
     private static final Vector3f ICON_MIDDLE = new Vector3f(8.0F, 8.0F, 8.0F);
     private static final int BAR_LEFT = -7;
     private static final int BAR_TOP = 10;

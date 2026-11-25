@@ -168,9 +168,8 @@ public final class KettleStation {
         return state.getControl(LID) > 0.5F;
     }
 
-    @SuppressWarnings("removal")
     private static Supplier<Block> block(String path) {
-        return () -> BuiltInRegistries.BLOCK.get(new ResourceLocation(HerbalTeas.MOD_ID, path));
+        return () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(HerbalTeas.MOD_ID, path));
     }
 
     public static boolean isBottle(ItemStack stack) {

@@ -1,6 +1,9 @@
 package com.pockyl.handson_letsdo.gametest;
 
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.level.GameType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
@@ -10,7 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
@@ -42,9 +45,8 @@ public final class KettleTests {
     private KettleTests() {
     }
 
-    @SuppressWarnings("removal")
     private static Item herbal(String path) {
-        return BuiltInRegistries.ITEM.get(new ResourceLocation(HerbalTeas.MOD_ID, path));
+        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(HerbalTeas.MOD_ID, path));
     }
 
     private record Setup(TestStation station, KettleLogic logic, Kettle kettle, BlockEntity entity) {
@@ -54,9 +56,8 @@ public final class KettleTests {
     }
 
     /** An iron kettle at {@code at}, on HerbalBrews' stove when {@code heated}, with the logic the station would make for it. */
-    @SuppressWarnings("removal")
     private static Setup kettle(GameTestHelper helper, BlockPos at, boolean heated) {
-        helper.setBlock(at.below(), heated ? BuiltInRegistries.BLOCK.get(new ResourceLocation(HerbalTeas.MOD_ID, "stove")) : Blocks.STONE);
+        helper.setBlock(at.below(), heated ? BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(HerbalTeas.MOD_ID, "stove")) : Blocks.STONE);
         helper.setBlock(at, KettleStation.IRON.get());
         BlockPos pos = helper.absolutePos(at);
         TestStation station = new TestStation(helper.getLevel(), pos, KettleStation.TYPE);
@@ -122,13 +123,13 @@ public final class KettleTests {
         setup.kettle.setWater(50);
         BlockEntity copy = ((EntityBlock) iron.getBlock()).newBlockEntity(setup.station.pos(), iron);
         helper.assertTrue(copy != null, "the kettle has a block entity");
-        copy.load(setup.entity.getUpdateTag());
+        copy.loadWithComponents(setup.entity.getUpdateTag(helper.getLevel().registryAccess()), helper.getLevel().registryAccess());
         Kettle seen = Kettle.of(copy);
         helper.assertTrue(seen != null && seen.container().getItem(Kettle.FIRST_INGREDIENT).is(Items.SUGAR) && seen.water() == 50,
                 "a client's copy shows what lies in the kettle and its water");
         setup.container().clearContent();
         setup.kettle.setWater(0);
-        copy.load(setup.entity.getUpdateTag());
+        copy.loadWithComponents(setup.entity.getUpdateTag(helper.getLevel().registryAccess()), helper.getLevel().registryAccess());
         helper.assertTrue(seen.container().isEmpty() && seen.water() == 0, "and nothing once it is emptied");
         helper.runAfterDelay(4, () -> {
             helper.assertTrue(setup.kettle.isHeated() && setup.kettle.heat() == HerbalTeas.HEAT_OF_A_FIRE,
@@ -171,7 +172,7 @@ public final class KettleTests {
             return;
         }
         Setup setup = kettle(helper, AT, false);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         player.inventoryMenu.setCarried(new ItemStack(Items.WATER_BUCKET));
         pour(setup, player);
@@ -182,7 +183,7 @@ public final class KettleTests {
             helper.assertTrue(setup.kettle.water() == HerbalTeas.LARGE_AMOUNT, "a bucket fills it by half, got " + setup.kettle.water());
             helper.assertTrue(player.inventoryMenu.getCarried().is(Items.BUCKET) && setup.container().getItem(Kettle.WATER_SLOT).isEmpty(),
                     "the empty bucket is back in the hand, got " + player.inventoryMenu.getCarried());
-            player.inventoryMenu.setCarried(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER));
+            player.inventoryMenu.setCarried(PotionContents.createItemStack(Items.POTION, Potions.WATER));
             pour(setup, player);
         });
         helper.runAfterDelay(8, () -> {
@@ -211,7 +212,7 @@ public final class KettleTests {
             return;
         }
         Setup setup = kettle(helper, AT, false);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.container().setItem(Kettle.WATER_SLOT, new ItemStack(Items.BUCKET));
         player.inventoryMenu.setCarried(new ItemStack(Items.WATER_BUCKET));
@@ -233,7 +234,7 @@ public final class KettleTests {
             return;
         }
         Setup setup = kettle(helper, AT, true);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         Item drink = herbal("green_tea");
         Tea tea = teaOf(helper, drink);
@@ -258,7 +259,7 @@ public final class KettleTests {
         });
         helper.runAfterDelay(22, () -> {
             ItemStack made = setup.container().getItem(Kettle.DRINK_SLOT);
-            helper.assertTrue(made.is(drink) && made.getCount() == 1 && made.hasTag() && made.getTag().contains("Effect"),
+            helper.assertTrue(made.is(drink) && made.getCount() == 1 && !made.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).customEffects().isEmpty(),
                     "one green tea with its effect, got " + made);
             helper.assertTrue(setup.kettle.water() == HerbalTeas.LARGE_AMOUNT - tea.water(), "its water is gone, left " + setup.kettle.water());
             helper.assertTrue(setup.container().getItem(Kettle.BOTTLE_SLOT).getCount() == 1 && setup.container().getItem(Kettle.FIRST_INGREDIENT).getCount() == 1,
@@ -279,7 +280,7 @@ public final class KettleTests {
             return;
         }
         Setup setup = kettle(helper, AT, true);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         Item drink = herbal("green_tea");
         Tea tea = teaOf(helper, drink);
@@ -300,7 +301,7 @@ public final class KettleTests {
         });
         helper.runAfterDelay(12, () -> {
             ItemStack waiting = setup.kettle.waiting();
-            helper.assertTrue(waiting.is(drink) && waiting.getCount() == 1 && waiting.hasTag() && waiting.getTag().contains("Effect"),
+            helper.assertTrue(waiting.is(drink) && waiting.getCount() == 1 && !waiting.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).customEffects().isEmpty(),
                     "one green tea waits in the kettle, with its effect, got " + waiting);
             helper.assertTrue(setup.container().getItem(Kettle.DRINK_SLOT).isEmpty() && setup.container().getItem(Kettle.BOTTLE_SLOT).isEmpty(),
                     "nothing in its drink and bottle slots");
@@ -347,7 +348,7 @@ public final class KettleTests {
             return;
         }
         List<Tea> teas = HerbalTeas.all(helper.getLevel()).stream().filter(tea -> Cookable.all(tea.ingredients())).toList();
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
         Setup[] setup = new Setup[1];
         int step = 12;
         helper.onEachTick(() -> {

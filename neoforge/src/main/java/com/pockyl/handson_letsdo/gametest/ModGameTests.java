@@ -2,12 +2,12 @@ package com.pockyl.handson_letsdo.gametest;
 
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
+import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import com.pockyl.handson_letsdo.HandsOnLetsDo;
 
-/** {@link StationTests}, {@link PotTests}, {@link StoveTests}, {@link RoasterTests}, {@link KettleTests}, {@link PressTests}, {@link MincerTests} and {@link BowlTests} on Forge. */
+/** {@link StationTests}, {@link PotTests}, {@link StoveTests}, {@link RoasterTests}, {@link KettleTests}, {@link PressTests}, {@link MincerTests} and {@link BowlTests} on NeoForge. */
 @GameTestHolder(HandsOnLetsDo.MOD_ID)
 @PrefixGameTestTemplate(false)
 public final class ModGameTests {

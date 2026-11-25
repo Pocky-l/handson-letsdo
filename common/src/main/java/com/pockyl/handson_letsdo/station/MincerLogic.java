@@ -84,7 +84,7 @@ public final class MincerLogic implements StationLogic {
             return false;
         }
         ItemStack there = input.get(0);
-        return MincerRecipes.taking(recipes, stack) != null && (there.isEmpty() || ItemStack.isSameItemSameTags(there, stack));
+        return MincerRecipes.taking(recipes, stack) != null && (there.isEmpty() || ItemStack.isSameItemSameComponents(there, stack));
     }
 
     /** What the mincer's own output does for a player who takes it. */
@@ -181,14 +181,14 @@ public final class MincerLogic implements StationLogic {
             container.setItem(Mincer.OUTPUT_SLOT, ItemStack.EMPTY);
             if (made.isEmpty()) {
                 made = out.copy();
-            } else if (ItemStack.isSameItemSameTags(made, out)) {
+            } else if (ItemStack.isSameItemSameComponents(made, out)) {
                 made.grow(out.getCount());
             } else {
                 give(player, out);
             }
             count++;
         }
-        if (!lying.isEmpty() && !made.isEmpty() && !ItemStack.isSameItemSameTags(lying, made)) {
+        if (!lying.isEmpty() && !made.isEmpty() && !ItemStack.isSameItemSameComponents(lying, made)) {
             give(player, lying);
             lying = ItemStack.EMPTY;
         }
@@ -227,7 +227,7 @@ public final class MincerLogic implements StationLogic {
         for (int index = 0; index < Inventory.INVENTORY_SIZE && moved < most; index++) {
             ItemStack stack = inventory.getItem(index);
             ItemStack there = input.get(0);
-            if (stack.isEmpty() || !recipe.ingredients().get(0).test(stack) || !there.isEmpty() && !ItemStack.isSameItemSameTags(there, stack)) {
+            if (stack.isEmpty() || !recipe.ingredients().get(0).test(stack) || !there.isEmpty() && !ItemStack.isSameItemSameComponents(there, stack)) {
                 continue;
             }
             int count = Math.min(most - moved, Math.min(stack.getCount(), stack.getMaxStackSize() - there.getCount()));

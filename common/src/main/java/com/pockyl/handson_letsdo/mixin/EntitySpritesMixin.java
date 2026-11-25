@@ -1,6 +1,6 @@
 package com.pockyl.handson_letsdo.mixin;
 
-import net.minecraft.client.renderer.texture.atlas.SpriteResourceLoader;
+import net.minecraft.client.renderer.texture.atlas.SpriteSourceList;
 import net.minecraft.client.renderer.texture.atlas.sources.SingleFile;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -19,25 +19,23 @@ import java.util.Optional;
  * has it: an atlas file would name them for every player, and the game would log a missing sprite for each where Farm &amp; Charm
  * is not installed.
  */
-@Mixin(SpriteResourceLoader.class)
+@Mixin(SpriteSourceList.class)
 abstract class EntitySpritesMixin {
     @Unique
-    @SuppressWarnings("removal")
-    private static final ResourceLocation HANDSON_BLOCKS = new ResourceLocation("minecraft", "blocks");
+    private static final ResourceLocation HANDSON_BLOCKS = ResourceLocation.fromNamespaceAndPath("minecraft", "blocks");
     @Unique
-    @SuppressWarnings("removal")
-    private static final List<ResourceLocation> HANDSON_SPRITES = List.of(new ResourceLocation("farm_and_charm", "entity/mincer"),
-            new ResourceLocation("farm_and_charm", "entity/crafting_bowl"), new ResourceLocation("farm_and_charm", "entity/crafting_bowl_full"));
+    private static final List<ResourceLocation> HANDSON_SPRITES = List.of(ResourceLocation.fromNamespaceAndPath("farm_and_charm", "entity/mincer"),
+            ResourceLocation.fromNamespaceAndPath("farm_and_charm", "entity/crafting_bowl"), ResourceLocation.fromNamespaceAndPath("farm_and_charm", "entity/crafting_bowl_full"));
 
     @Inject(method = "load", at = @At("RETURN"))
     private static void handson$addEntitySprites(ResourceManager resources, ResourceLocation atlas,
-            CallbackInfoReturnable<SpriteResourceLoader> info) {
+            CallbackInfoReturnable<SpriteSourceList> info) {
         if (!HANDSON_BLOCKS.equals(atlas)) {
             return;
         }
         for (ResourceLocation sprite : HANDSON_SPRITES) {
             if (resources.getResource(sprite.withPrefix("textures/").withSuffix(".png")).isPresent()) {
-                ((SpriteResourceLoaderAccessor) info.getReturnValue()).handson$sources().add(new SingleFile(sprite, Optional.empty()));
+                ((SpriteSourceListAccessor) info.getReturnValue()).handson$sources().add(new SingleFile(sprite, Optional.empty()));
             }
         }
     }

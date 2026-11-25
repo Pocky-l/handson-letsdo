@@ -49,10 +49,8 @@ public final class FarmCharmStove implements KitchenOven {
     /** Ticks the stove bakes one dish for. */
     public static final int BAKE_TIME = 240;
 
-    @SuppressWarnings("removal")
-    public static final ResourceLocation BLOCK_ID = new ResourceLocation(FarmCharmDishes.MOD_ID, "stove");
-    @SuppressWarnings("removal")
-    private static final ResourceLocation RECIPES = new ResourceLocation(FarmCharmDishes.MOD_ID, "stove");
+    public static final ResourceLocation BLOCK_ID = ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, "stove");
+    private static final ResourceLocation RECIPES = ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, "stove");
     public static final Supplier<Block> BLOCK = () -> BuiltInRegistries.BLOCK.get(BLOCK_ID);
 
     /** What burns and for how long, as furnaces know it; read again every few seconds, as tags may change. */
@@ -314,40 +312,105 @@ public final class FarmCharmStove implements KitchenOven {
     }
 
     /**
-     * The stove takes each ingredient of a dish from the first place that holds it: of two alike it empties one place twice as fast
-     * and stops baking with the other still full. So what lies on the tray alike is laid the way the stove takes it: all but one of
-     * it on the first of its places, one on each other. It then bakes to the last set, also with nobody there. Only the counts
-     * change, which the stove does not take for a change of what bakes.
+     * Farm &amp; Charm 1.1.x bakes a dish only with as many places taken as the dish has ingredients, and takes each ingredient from
+     * the smallest pile that fits: of two alike one place runs empty first, and the stove would stop with the other still full. So
+     * while nothing on the tray bakes and a place stands empty, one of a pile is moved onto it where that makes the tray a dish. It
+     * then bakes to the last set, also with nobody there ({@code StoveMixin}). Only counts move, between places of one kind.
      */
     private void layAlike() {
-        boolean[] seen = new boolean[PLACES];
-        for (int first = 0; first < PLACES; first++) {
-            ItemStack kind = place(first);
-            if (seen[first] || kind.isEmpty()) {
+        Level level = entity.getLevel();
+        if (level == null || level.isClientSide()) {
+            return;
+        }
+        ItemStack[] tray = new ItemStack[PLACES];
+        boolean empty = false;
+        boolean pile = false;
+        for (int i = 0; i < PLACES; i++) {
+            tray[i] = place(i);
+            empty |= tray[i].isEmpty();
+            pile |= tray[i].getCount() > 1;
+        }
+        if (!empty || !pile) {
+            return;
+        }
+        List<Baking> recipes = recipesOf(level);
+        if (bakesAny(recipes, tray)) {
+            return;
+        }
+        for (int to = 0; to < PLACES; to++) {
+            if (!tray[to].isEmpty()) {
                 continue;
             }
-            List<Integer> alike = new ArrayList<>();
-            int total = 0;
-            for (int place = first; place < PLACES; place++) {
-                if (ItemStack.isSameItemSameTags(place(place), kind)) {
-                    seen[place] = true;
-                    alike.add(place);
-                    total += place(place).getCount();
+            for (int from = 0; from < PLACES; from++) {
+                if (tray[from].getCount() < 2) {
+                    continue;
                 }
-            }
-            if (alike.size() < 2) {
-                continue;
-            }
-            int most = Math.min(perPlace(), kind.getMaxStackSize());
-            int left = total;
-            for (int i = 0; i < alike.size(); i++) {
-                int others = alike.size() - 1 - i;
-                int count = Math.max(1, Math.min(most, left - others));
-                left -= count;
-                if (place(alike.get(i)).getCount() != count) {
-                    container.setItem(FIRST_PLACE + alike.get(i), kind.copyWithCount(count));
+                ItemStack[] tried = tray.clone();
+                tried[from] = tray[from].copyWithCount(tray[from].getCount() - 1);
+                tried[to] = tray[from].copyWithCount(1);
+                if (bakesAny(recipes, tried)) {
+                    container.setItem(FIRST_PLACE + from, tried[from]);
+                    container.setItem(FIRST_PLACE + to, tried[to]);
+                    container.setChanged();
+                    return;
                 }
             }
         }
+    }
+
+    /** {@link #layAlike} for the stove of {@code entity}, before its own tick; nothing for any other block entity. Server only. */
+    public static void layAlike(BlockEntity entity) {
+        FarmCharmStove stove = of(entity);
+        if (stove != null) {
+            stove.layAlike();
+        }
+    }
+
+    private static boolean bakesAny(List<Baking> recipes, ItemStack[] tray) {
+        for (Baking recipe : recipes) {
+            if (bakes(recipe.needed(), tray)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Whether the stove bakes a dish of {@code needed} from {@code tray}, as Farm &amp; Charm 1.1.x reads it: one place taken for each
+     * ingredient, and each ingredient (those that fit fewer places first) found on the smallest pile left that fits it.
+     */
+    static boolean bakes(List<Ingredient> needed, ItemStack[] tray) {
+        int taken = 0;
+        int[] left = new int[tray.length];
+        for (int i = 0; i < tray.length; i++) {
+            left[i] = tray[i].getCount();
+            taken += tray[i].isEmpty() ? 0 : 1;
+        }
+        if (taken != needed.size()) {
+            return false;
+        }
+        List<Ingredient> order = new ArrayList<>(needed);
+        order.sort(java.util.Comparator.comparingInt(ingredient -> fits(ingredient, tray, left)));
+        for (Ingredient ingredient : order) {
+            int best = -1;
+            for (int i = 0; i < tray.length; i++) {
+                if (left[i] > 0 && ingredient.test(tray[i]) && (best < 0 || left[i] < left[best])) {
+                    best = i;
+                }
+            }
+            if (best < 0) {
+                return false;
+            }
+            left[best]--;
+        }
+        return true;
+    }
+
+    private static int fits(Ingredient ingredient, ItemStack[] tray, int[] left) {
+        int count = 0;
+        for (int i = 0; i < tray.length; i++) {
+            count += left[i] > 0 && ingredient.test(tray[i]) ? 1 : 0;
+        }
+        return count;
     }
 }

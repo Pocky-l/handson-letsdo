@@ -2,9 +2,9 @@ package com.pockyl.handson_letsdo.station;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -12,8 +12,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.satisfy.vinery.core.block.entity.FermentationBarrelBlockEntity;
 import net.satisfy.vinery.core.recipe.FermentationBarrelRecipe;
-import net.satisfy.vinery.core.util.JuiceUtil;
-import net.satisfy.vinery.core.util.WineYears;
+import net.satisfy.vinery.core.wine.JuiceUtil;
+import net.satisfy.vinery.core.wine.WineYears;
 import net.satisfy.vinery.platform.PlatformHelper;
 
 import java.util.ArrayList;
@@ -27,8 +27,7 @@ import java.util.WeakHashMap;
  * names them, used only where Vinery is installed.
  */
 public final class VineryWines {
-    @SuppressWarnings("removal")
-    private static final ResourceLocation TYPE = new ResourceLocation(BarrelStation.MOD_ID, "wine_fermentation");
+    private static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath(BarrelStation.MOD_ID, "wine_fermentation");
 
     /**
      * The wines read from each recipe manager (the server's and a client's), with the recipes they were read from: a server makes
@@ -36,8 +35,8 @@ public final class VineryWines {
      */
     private static final Map<RecipeManager, Read> READ = new WeakHashMap<>();
 
-    private record Read(List<Recipe<Container>> from, List<Wine> wines) {
-        boolean isOf(List<Recipe<Container>> recipes) {
+    private record Read(List<RecipeHolder<?>> from, List<Wine> wines) {
+        boolean isOf(List<RecipeHolder<?>> recipes) {
             if (recipes.size() != from.size()) {
                 return false;
             }
@@ -56,13 +55,13 @@ public final class VineryWines {
     }
 
     /** Every wine the barrel makes now, read from the game's recipes as they are: datapacks and scripts change them. */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static synchronized List<Wine> all(Level level) {
         RecipeType<?> type = BuiltInRegistries.RECIPE_TYPE.get(TYPE);
         if (type == null) {
             return List.of();
         }
-        List<Recipe<Container>> recipes = level.getRecipeManager().getAllRecipesFor((RecipeType<Recipe<Container>>) type);
+        List<RecipeHolder<?>> recipes = level.getRecipeManager().getAllRecipesFor((RecipeType) type);
         Read known = READ.get(level.getRecipeManager());
         if (known == null || !known.isOf(recipes)) {
             known = new Read(List.copyOf(recipes), List.copyOf(readAll(level, recipes)));
@@ -85,11 +84,12 @@ public final class VineryWines {
         return null;
     }
 
-    private static List<Wine> readAll(Level level, List<Recipe<Container>> recipes) {
+    private static List<Wine> readAll(Level level, List<RecipeHolder<?>> recipes) {
         List<Wine> wines = new ArrayList<>();
-        for (Recipe<?> recipe : recipes) {
+        for (RecipeHolder<?> holder : recipes) {
+            Recipe<?> recipe = holder.value();
             if (recipe instanceof FermentationBarrelRecipe wine) {
-                wines.add(new Wine(recipe.getId(), List.copyOf(recipe.getIngredients()), wine.getJuiceType(), wine.getJuiceAmount(),
+                wines.add(new Wine(holder.id(), List.copyOf(recipe.getIngredients()), wine.getJuiceData().type(), wine.getJuiceData().amount(),
                         wine.isWineBottleRequired(), recipe.getResultItem(level.registryAccess())));
             }
         }

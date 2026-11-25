@@ -1,5 +1,6 @@
 package com.pockyl.handson_letsdo.mixin;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -94,8 +95,8 @@ public abstract class StirredPotMixin implements StirredPot {
     }
 
     /** The pot reads only the slots that hold something: an emptied one must not keep what it held on a client's copy. */
-    @Inject(method = "load", at = @At("HEAD"), require = 0)
-    private void handson$clear(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "loadAdditional", at = @At("HEAD"), require = 0)
+    private void handson$clear(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         if (tag.contains("Items", Tag.TAG_LIST)) {
             for (int i = 0; i < inventory.size(); i++) {
                 inventory.set(i, ItemStack.EMPTY);
@@ -103,21 +104,21 @@ public abstract class StirredPotMixin implements StirredPot {
         }
     }
 
-    @Inject(method = "load", at = @At("TAIL"), require = 0)
-    private void handson$load(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "loadAdditional", at = @At("TAIL"), require = 0)
+    private void handson$load(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         handson$cooking().load(tag);
         handson$told |= tag.getBoolean(HANDSON_TOLD);
     }
 
     @Inject(method = "saveAdditional", at = @At("TAIL"), require = 0)
-    private void handson$save(CompoundTag tag, CallbackInfo ci) {
+    private void handson$save(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         handson$cooking().save(tag);
     }
 
     /** What the clients are sent of the pot: everything it saves, and that this server has the station. */
     @Override
-    public CompoundTag handson$updateTag() {
-        CompoundTag tag = ((BlockEntity) (Object) this).saveWithoutMetadata();
+    public CompoundTag handson$updateTag(HolderLookup.Provider registries) {
+        CompoundTag tag = ((BlockEntity) (Object) this).saveWithoutMetadata(registries);
         tag.putBoolean(HANDSON_TOLD, true);
         return tag;
     }

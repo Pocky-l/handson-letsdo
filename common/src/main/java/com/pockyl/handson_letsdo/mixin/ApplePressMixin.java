@@ -1,5 +1,6 @@
 package com.pockyl.handson_letsdo.mixin;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -8,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.satisfy.vinery.core.block.entity.ApplePressBlockEntity;
 import net.satisfy.vinery.core.recipe.ApplePressFermentingRecipe;
 import net.satisfy.vinery.core.recipe.ApplePressMashingRecipe;
@@ -126,7 +128,7 @@ public abstract class ApplePressMixin implements PressBasket {
         if (step == null) {
             return null;
         }
-        Recipe<?> recipe = level.getRecipeManager().byKey(step.id()).orElse(null);
+        Recipe<?> recipe = level.getRecipeManager().byKey(step.id()).map(RecipeHolder::value).orElse(null);
         return type.isInstance(recipe) ? type.cast(recipe) : null;
     }
 
@@ -141,7 +143,7 @@ public abstract class ApplePressMixin implements PressBasket {
         if (!step.bottle() || !inventory.get(HANDSON_BOTTLE_SLOT).isEmpty()) {
             return true;
         }
-        return handson$tub.getCount() < Press.TUB_MOST && (handson$tub.isEmpty() || ItemStack.isSameItemSameTags(handson$tub, step.result()));
+        return handson$tub.getCount() < Press.TUB_MOST && (handson$tub.isEmpty() || ItemStack.isSameItemSameComponents(handson$tub, step.result()));
     }
 
     /**
@@ -253,7 +255,7 @@ public abstract class ApplePressMixin implements PressBasket {
         }
         ItemStack mash = inventory.get(1);
         VineryPressing.Step step = mash.isEmpty() ? null : VineryPressing.taking(VineryPressing.bottling(level), mash);
-        if (step == null || !step.bottle() || !handson$tub.isEmpty() && !ItemStack.isSameItemSameTags(handson$tub, step.result())) {
+        if (step == null || !step.bottle() || !handson$tub.isEmpty() && !ItemStack.isSameItemSameComponents(handson$tub, step.result())) {
             return;
         }
         handson$lent = true;
@@ -279,7 +281,7 @@ public abstract class ApplePressMixin implements PressBasket {
             return;
         }
         ItemStack result = inventory.get(HANDSON_RESULT_SLOT);
-        int made = result.getCount() - (ItemStack.isSameItemSameTags(result, handson$resultBefore) ? handson$resultBefore.getCount() : 0);
+        int made = result.getCount() - (ItemStack.isSameItemSameComponents(result, handson$resultBefore) ? handson$resultBefore.getCount() : 0);
         if (made <= 0) {
             return;
         }
@@ -302,8 +304,8 @@ public abstract class ApplePressMixin implements PressBasket {
     }
 
     /** The slots it reads are only those that hold something: an emptied one must not keep what it held on a client's copy. */
-    @Inject(method = "load", at = @At("HEAD"))
-    private void handson$clear(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "loadAdditional", at = @At("HEAD"))
+    private void handson$clear(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         if (tag.contains("Items", Tag.TAG_LIST)) {
             for (int i = 0; i < inventory.size(); i++) {
                 inventory.set(i, ItemStack.EMPTY);
@@ -311,14 +313,14 @@ public abstract class ApplePressMixin implements PressBasket {
         }
     }
 
-    @Inject(method = "load", at = @At("TAIL"))
-    private void handson$load(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "loadAdditional", at = @At("TAIL"))
+    private void handson$load(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         CompoundTag own = tag.getCompound(HANDSON_TAG);
         handson$heard |= tag.contains(HANDSON_TAG);
         handson$open = own.getBoolean("Open");
         handson$mashSince = own.contains("MashSince") ? own.getLong("MashSince") : -1L;
         handson$bottleSince = own.contains("BottleSince") ? own.getLong("BottleSince") : -1L;
-        handson$tub = own.contains("Tub") ? ItemStack.of(own.getCompound("Tub")) : ItemStack.EMPTY;
+        handson$tub = own.contains("Tub") ? ItemStack.parseOptional(registries, own.getCompound("Tub")) : ItemStack.EMPTY;
         handson$presses = own.getInt("Presses");
         handson$squeezed = Math.min(own.getInt("Squeezed"), inventory.get(1).getCount());
         handson$run = own.getInt("Quick");
@@ -332,7 +334,7 @@ public abstract class ApplePressMixin implements PressBasket {
     }
 
     @Inject(method = "saveAdditional", at = @At("TAIL"))
-    private void handson$save(CompoundTag tag, CallbackInfo ci) {
+    private void handson$save(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         CompoundTag own = new CompoundTag();
         if (handson$open) {
             own.putBoolean("Open", true);
@@ -344,7 +346,7 @@ public abstract class ApplePressMixin implements PressBasket {
             own.putLong("BottleSince", handson$bottleSince);
         }
         if (!handson$tub.isEmpty()) {
-            own.put("Tub", handson$tub.save(new CompoundTag()));
+            own.put("Tub", handson$tub.save(registries));
         }
         if (handson$presses > 0) {
             own.putInt("Presses", handson$presses);

@@ -273,7 +273,7 @@ public final class PressLogic implements StationLogic {
         for (int index = 0; index < Inventory.INVENTORY_SIZE && moved < most; index++) {
             ItemStack stack = inventory.getItem(index);
             ItemStack there = slot.get(0);
-            if (stack.isEmpty() || !wanted.test(stack) || !there.isEmpty() && !ItemStack.isSameItemSameTags(there, stack)) {
+            if (stack.isEmpty() || !wanted.test(stack) || !there.isEmpty() && !ItemStack.isSameItemSameComponents(there, stack)) {
                 continue;
             }
             int count = Math.min(most - moved, Math.min(stack.getCount(), stack.getMaxStackSize() - there.getCount()));

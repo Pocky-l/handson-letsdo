@@ -1,6 +1,7 @@
 package com.pockyl.handson_letsdo.station;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -80,7 +81,7 @@ public final class PotLogic implements StationLogic {
                 int soup = Math.min(reserved(), real.getCount());
                 if (soup <= 0) {
                     container.setItem(index, stack);
-                } else if (stack.isEmpty() || ItemStack.isSameItemSameTags(stack, real)) {
+                } else if (stack.isEmpty() || ItemStack.isSameItemSameComponents(stack, real)) {
                     // What is soup already stays under whatever of its kind still floats.
                     container.setItem(index, real.copyWithCount(soup + stack.getCount()));
                 }
@@ -453,7 +454,7 @@ public final class PotLogic implements StationLogic {
     private void layVessels(Player player) {
         ItemStack carried = player.inventoryMenu.getCarried();
         ItemStack there = vessels.get(0);
-        if (carried.isEmpty() || !isVessel(carried) || !there.isEmpty() && !ItemStack.isSameItemSameTags(there, carried)) {
+        if (carried.isEmpty() || !isVessel(carried) || !there.isEmpty() && !ItemStack.isSameItemSameComponents(there, carried)) {
             return;
         }
         int moved = Math.min(carried.getCount(), carried.getMaxStackSize() - there.getCount());

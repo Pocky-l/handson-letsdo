@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.joml.Vector3f;
@@ -398,7 +397,7 @@ final class BowlMix {
         heldChanged = true;
         int arriving = 0;
         for (int i = 0; i < now.length; i++) {
-            if (!quiet && !now[i].isEmpty() && (shown[i].isEmpty() || ItemStack.isSameItemSameTags(now[i], shown[i])
+            if (!quiet && !now[i].isEmpty() && (shown[i].isEmpty() || ItemStack.isSameItemSameComponents(now[i], shown[i])
                     && now[i].getCount() > shown[i].getCount())) {
                 arriving++;
             }
@@ -411,10 +410,10 @@ final class BowlMix {
         for (int i = 0; i < now.length; i++) {
             ItemStack before = shown[i];
             ItemStack stack = now[i];
-            if (ItemStack.isSameItemSameTags(before, stack) && before.getCount() == stack.getCount()) {
+            if (ItemStack.isSameItemSameComponents(before, stack) && before.getCount() == stack.getCount()) {
                 continue;
             }
-            boolean same = !before.isEmpty() && ItemStack.isSameItemSameTags(before, stack);
+            boolean same = !before.isEmpty() && ItemStack.isSameItemSameComponents(before, stack);
             shown[i] = stack.copy();
             if (!same) {
                 leave(view, i);
@@ -626,8 +625,7 @@ final class BowlMix {
         String node = copy == 0 ? slotNodes[slot] : copyNode(slot, copy);
         Body piece = new Body(slot, copy, node, Kind.PIECE);
         piece.stack = stack.copy();
-        FoodProperties food = stack.getItem().getFoodProperties();
-        piece.meat = food != null && food.isMeat() || stack.is(ItemTags.FISHES);
+        piece.meat = stack.is(ItemTags.MEAT) || stack.is(ItemTags.FISHES);
         Optional<ItemVoxels.Icon> icon = ItemVoxels.icon(stack);
         piece.blockLike = icon.isEmpty();
         piece.height = piece.blockLike ? SIZE * 0.5F : itemThickness();
@@ -1013,8 +1011,7 @@ final class BowlMix {
     }
 
     private static boolean isMeat(ItemStack stack) {
-        FoodProperties food = stack.getItem().getFoodProperties();
-        return food != null && food.isMeat();
+        return stack.is(ItemTags.MEAT);
     }
 
     /**

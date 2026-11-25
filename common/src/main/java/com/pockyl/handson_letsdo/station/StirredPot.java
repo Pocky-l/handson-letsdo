@@ -1,5 +1,6 @@
 package com.pockyl.handson_letsdo.station;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 
 /**
@@ -14,5 +15,5 @@ public interface StirredPot {
     boolean handson$told();
 
     /** What the clients are sent of the pot: everything it saves, and the word that this server has the station. */
-    CompoundTag handson$updateTag();
+    CompoundTag handson$updateTag(HolderLookup.Provider registries);
 }

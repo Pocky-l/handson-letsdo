@@ -26,9 +26,8 @@ public final class HandsOnLetsDo {
     private HandsOnLetsDo() {
     }
 
-    @SuppressWarnings("removal")
     public static ResourceLocation id(String path) {
-        return new ResourceLocation(MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
     /** Whether the mod with this id is installed: every mod of the series is optional and brings its stations with it. */

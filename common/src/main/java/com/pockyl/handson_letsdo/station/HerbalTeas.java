@@ -4,11 +4,11 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -26,8 +26,7 @@ import java.util.WeakHashMap;
  */
 public final class HerbalTeas {
     public static final String MOD_ID = "herbalbrews";
-    @SuppressWarnings("removal")
-    private static final ResourceLocation RECIPES = new ResourceLocation(MOD_ID, "kettle_brewing");
+    private static final ResourceLocation RECIPES = ResourceLocation.fromNamespaceAndPath(MOD_ID, "kettle_brewing");
 
     /** What the kettle's bottle place takes, what feeds its heat, and the two measures of water: a bottle's and a bucket's. */
     public static final TagKey<Item> BOTTLES = tag("container_items");
@@ -48,8 +47,8 @@ public final class HerbalTeas {
      */
     private static final Map<RecipeManager, Read> READ = new WeakHashMap<>();
 
-    private record Read(List<Recipe<Container>> from, List<Tea> teas) {
-        boolean isOf(List<Recipe<Container>> recipes) {
+    private record Read(List<RecipeHolder<?>> from, List<Tea> teas) {
+        boolean isOf(List<RecipeHolder<?>> recipes) {
             if (recipes.size() != from.size()) {
                 return false;
             }
@@ -65,9 +64,8 @@ public final class HerbalTeas {
     private HerbalTeas() {
     }
 
-    @SuppressWarnings("removal")
     private static TagKey<Item> tag(String path) {
-        return TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, path));
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, path));
     }
 
     /** How much water pouring {@code stack} into the kettle gives; 0 for anything that is no water to it. */
@@ -76,13 +74,13 @@ public final class HerbalTeas {
     }
 
     /** Every drink of the kettle now, read from the game's recipes as they are: datapacks and scripts change them. */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static synchronized List<Tea> all(Level level) {
         RecipeType<?> type = BuiltInRegistries.RECIPE_TYPE.get(RECIPES);
         if (type == null) {
             return List.of();
         }
-        List<Recipe<Container>> recipes = level.getRecipeManager().getAllRecipesFor((RecipeType<Recipe<Container>>) type);
+        List<RecipeHolder<?>> recipes = level.getRecipeManager().getAllRecipesFor((RecipeType) type);
         Read known = READ.get(level.getRecipeManager());
         if (known == null || !known.isOf(recipes)) {
             known = new Read(List.copyOf(recipes), List.copyOf(read(level, recipes)));
@@ -91,9 +89,10 @@ public final class HerbalTeas {
         return known.teas();
     }
 
-    private static List<Tea> read(Level level, List<Recipe<Container>> recipes) {
+    private static List<Tea> read(Level level, List<RecipeHolder<?>> recipes) {
         List<Tea> teas = new ArrayList<>();
-        for (Recipe<?> recipe : recipes) {
+        for (RecipeHolder<?> holder : recipes) {
+            Recipe<?> recipe = holder.value();
             ItemStack result = recipe.getResultItem(level.registryAccess());
             if (result.isEmpty() || !(recipe instanceof TeaKettleRecipe brewing)) {
                 continue;
@@ -105,7 +104,7 @@ public final class HerbalTeas {
                     (isBottle(ingredient) ? bottles : ingredients).add(ingredient);
                 }
             }
-            teas.add(new Tea(recipe.getId(), List.copyOf(ingredients), List.copyOf(bottles), result, Math.max(0, brewing.getRequiredWater()),
+            teas.add(new Tea(holder.id(), List.copyOf(ingredients), List.copyOf(bottles), result, Math.max(0, brewing.getRequiredWater()),
                     Math.max(0, brewing.getRequiredHeat()), Math.max(1, brewing.getRequiredDuration())));
         }
         return teas;
