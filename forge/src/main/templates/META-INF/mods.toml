@@ -9,7 +9,6 @@ version="${mod_version}"
 displayName="${mod_name}"
 authors="${mod_authors}"
 displayURL="${mod_url}"
-logoFile="logo.png"
 description='''${mod_description}'''
 # Adds nothing to the registries: a client without the mod joins a server with it, and keeps the Let's Do menus there.
 displayTest="IGNORE_ALL_VERSION"
