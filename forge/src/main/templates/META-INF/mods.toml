@@ -55,3 +55,10 @@ displayTest="IGNORE_ALL_VERSION"
     versionRange="[${herbalbrews_min_version},)"
     ordering="AFTER"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="candlelight"
+    mandatory=false
+    versionRange="[${candlelight_min_version},)"
+    ordering="AFTER"
+    side="BOTH"

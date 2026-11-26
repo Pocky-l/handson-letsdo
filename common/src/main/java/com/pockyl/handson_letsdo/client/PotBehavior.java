@@ -78,6 +78,12 @@ public final class PotBehavior implements StationBehavior {
          */
         public static final Shape ROASTER = new Shape(Pot.ROASTER, 1.0F, 0.0F, 1.0F, 6.0F, 0.0F, 0.0F, 0.0F, true,
                 "roaster", false, new Vector3f(0.0F, 6.0F, 0.0F), 0.0F, LidRest.ROASTER, false);
+        /**
+         * Candlelight's cooking pot: Farm &amp; Charm's pot 4 px taller, walls and floor 1 px, rim at 12; its longer stick stands on
+         * the floor off the middle, to the back, and its lid lies askew the other way round.
+         */
+        public static final Shape CANDLELIGHT_POT = new Shape(Pot.CANDLELIGHT_POT, 1.0F, 9.5F, 1.0F, 12.0F, 22.5F, -1.05F, 2.0F, false,
+                "candlelight_cooking_pot", true, new Vector3f(-2.364F, 12.0F, 2.158F), 22.5F, LidRest.CANDLELIGHT_POT, true);
     }
 
     /** Arrays are as long as the biggest pot needs; a pot uses its own {@link Shape#slots} of them. */

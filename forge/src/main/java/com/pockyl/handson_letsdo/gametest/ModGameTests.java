@@ -170,6 +170,96 @@ public final class ModGameTests {
     }
 
     @GameTest(template = "room")
+    public static void candlelightsPotIsAStationOnlyWithCandlelight(GameTestHelper helper) {
+        PotTests.thePotIsAStationOnlyWithFarmAndCharm(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightThePotsSlotsAreItsOwn(GameTestHelper helper) {
+        PotTests.thePotsSlotsAreItsOwn(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void candlelightAStirredPotCooksAndAnUnstirredOneWaits(GameTestHelper helper) {
+        PotTests.aStirredPotCooksAndAnUnstirredOneWaits(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightTheSoupIsFilledIntoBowls(GameTestHelper helper) {
+        PotTests.theSoupIsFilledIntoBowls(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightUnevenStacksMakeNoServingsFromNothing(GameTestHelper helper) {
+        PotTests.unevenStacksMakeNoServingsFromNothing(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightWhatAnIngredientLeavesGoesToTheCook(GameTestHelper helper) {
+        PotTests.whatAnIngredientLeavesGoesToTheCook(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 400)
+    public static void candlelightStarsGiveBonusServings(GameTestHelper helper) {
+        PotTests.starsGiveBonusServings(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = PotTests.OWN_TIMEOUT)
+    public static void candlelightAHopperFedPotCooksUpstreamsWay(GameTestHelper helper) {
+        PotTests.aHopperFedPotCooksUpstreamsWay(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void candlelightAHopperFeedsThePotByItselfBesideACook(GameTestHelper helper) {
+        PotTests.aHopperFeedsThePotByItselfBesideACook(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void candlelightACookInTheMenuCooksUpstreamsWay(GameTestHelper helper) {
+        PotTests.aCookInTheMenuCooksUpstreamsWay(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 300)
+    public static void candlelightAPotLeftMidStirGoesBackToUpstreamsTick(GameTestHelper helper) {
+        PotTests.aPotLeftMidStirGoesBackToUpstreamsTick(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightADishThatNeedsNoBowlComesOutWhole(GameTestHelper helper) {
+        PotTests.aDishThatNeedsNoBowlComesOutWhole(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightTwoAlikeThrownInMakeTheirDish(GameTestHelper helper) {
+        PotTests.twoAlikeThrownInMakeTheirDish(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 600)
+    public static void candlelightEveryDishIsLaidFromTheBookAndCooks(GameTestHelper helper) {
+        PotTests.everyDishIsLaidFromTheBookAndCooks(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightALearnedDishCooksForTheCookWhoLearnedIt(GameTestHelper helper) {
+        PotTests.aLearnedDishCooksForTheCookWhoLearnedIt(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightThePotTellsItsClientsWhatItHolds(GameTestHelper helper) {
+        PotTests.thePotTellsItsClientsWhatItHolds(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightThePotsDataStaysSmall(GameTestHelper helper) {
+        PotTests.thePotsDataStaysSmall(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "empty")
+    public static void candlelightThePotsSceneIsRead(GameTestHelper helper) {
+        PotTests.thePotsSceneIsRead(helper, PotTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
     public static void theStoveIsAStationOnlyWithFarmAndCharm(GameTestHelper helper) {
         StoveTests.theStoveIsAStationOnlyWithFarmAndCharm(helper);
     }

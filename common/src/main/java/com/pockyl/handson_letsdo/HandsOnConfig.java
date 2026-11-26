@@ -23,6 +23,8 @@ public final class HandsOnConfig {
             "fermentation_barrel: Vinery's fermentation barrel as a station, when that mod is there. Off, it keeps its own",
             "  menu. The wine takes the time Vinery's own config gives it either way.",
             "cooking_pot: Farm & Charm's cooking pot as a station, when that mod is there. Off, it keeps its own menu.",
+            "candlelight_cooking_pot: Candlelight's cooking pot as a station, when that mod is there. Off, it keeps its own",
+            "  menu. It is stirred as Farm & Charm's pot is, in the time cooking_pot_time gives.",
             "roaster: Farm & Charm's roaster as a station, when that mod is there. Off, it keeps its own menu.",
             "stove: Farm & Charm's stove as a station, when that mod is there. Off, it keeps its own menu. It bakes in its own",
             "  time with its own fuel either way.",
@@ -39,13 +41,14 @@ public final class HandsOnConfig {
             "  it also cooks unstirred, Farm & Charm's way; stirring still cooks the whole pot at once and earns stars.",
             "recipe_book: the recipe book beside the stations. Each player's own: read on their client.",
             "Those are true or false. The cooking times are numbers from 0.1 to 10:",
-            "cooking_pot_time: how long a pot stirred at the station takes, as a multiple of the usual time: 1.0 as it is, 2.0",
-            "  twice as long, 0.5 half. Food left alone, fed by a hopper or cooked in Farm & Charm's menu keeps that mod's own",
-            "  time.",
+            "cooking_pot_time: how long a pot stirred at the station takes (Farm & Charm's and Candlelight's), as a multiple of",
+            "  the usual time: 1.0 as it is, 2.0 twice as long, 0.5 half. Food left alone, fed by a hopper or cooked in the pot's",
+            "  own menu keeps its own mod's time.",
             "roaster_time: the same for a roaster worked at the station.");
 
     private static boolean fermentationBarrel = true;
     private static boolean cookingPot = true;
+    private static boolean candlelightCookingPot = true;
     private static boolean stove = true;
     private static boolean roaster = true;
     private static boolean teaKettle = true;
@@ -75,6 +78,7 @@ public final class HandsOnConfig {
         }
         fermentationBarrel = read(values, "fermentation_barrel", fermentationBarrel);
         cookingPot = read(values, "cooking_pot", cookingPot);
+        candlelightCookingPot = read(values, "candlelight_cooking_pot", candlelightCookingPot);
         stove = read(values, "stove", stove);
         roaster = read(values, "roaster", roaster);
         teaKettle = read(values, "tea_kettle", teaKettle);
@@ -131,6 +135,10 @@ public final class HandsOnConfig {
 
     public static boolean cookingPot() {
         return cookingPot;
+    }
+
+    public static boolean candlelightCookingPot() {
+        return candlelightCookingPot;
     }
 
     public static boolean stove() {

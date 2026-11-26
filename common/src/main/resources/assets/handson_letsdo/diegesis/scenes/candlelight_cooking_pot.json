@@ -1,0 +1,621 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
+  "$comment": "Candlelight's cooking pot. The station hides the block wherever this scene is drawn, with somebody at it or not, and shows it here, open (the pot tells the clients what it holds): the same pot, Farm & Charm's pot 4 px taller, x and z 3..13, rim at y 12, hollow (walls 1 px, inside x and z 4..12, floor y 1), its handles on its sides. The scene faces the cook; the code turns the pot to the way the block stands. The water stands at most 1.5 px under the rim. Six places for what cooks, as the pot's own six slots; the soup that is done is in the pot, not in a slot: a bowl is dipped into it. The camera looks down more steeply than at Farm & Charm's pot, into the deeper pot.",
+  "work_plane": 12,
+  "idle_visible": true,
+  "camera": {
+    "position": [
+      8.0,
+      50.918,
+      -17.598
+    ],
+    "target": [
+      8,
+      11.5,
+      8
+    ],
+    "fov": 30
+  },
+  "interface": {
+    "hide_player": true,
+    "inventory_panel": false,
+    "outline_color": "#FFFFE8C0"
+  },
+  "inventory_drawer": {
+    "side": "bottom",
+    "style": "minimal",
+    "always_open": true,
+    "compact": true,
+    "background": "#00000000",
+    "slot_color": "#8C1E140C"
+  },
+  "nodes": [
+    {
+      "id": "pot",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "pickable": false,
+      "visual": {
+        "model": "handson_letsdo:diegesis/candlelight_cooking_pot/body",
+        "lit_as_block": true
+      },
+      "children": [
+        {
+          "$comment": "The grate and legs the pot stands on over a campfire, as the block has them. Shown by the code for such a pot.",
+          "id": "support",
+          "pickable": false,
+          "hidden": true,
+          "visual": {
+            "model": "handson_letsdo:diegesis/candlelight_cooking_pot/support",
+            "lit_as_block": true
+          }
+        },
+        {
+          "$comment": "The lid, shown on a pot that stands on something hot: it lies askew on the pot as the block has it, and the code sets it down behind the pot while somebody cooks, on what the pot stands on, leaning on its back wall.",
+          "id": "lid",
+          "pos": [
+            -2.364,
+            12,
+            2.158
+          ],
+          "rotation": [
+            0,
+            22.5,
+            0
+          ],
+          "pickable": false,
+          "hidden": true,
+          "visual": {
+            "model": "handson_letsdo:diegesis/candlelight_cooking_pot/lid",
+            "anchor": [
+              7.5,
+              0,
+              7.5
+            ],
+            "lit_as_block": true
+          }
+        },
+        {
+          "$comment": "The spoon, the pot's own stick as its block has it: held by its handle above the rim only, under it the cursor belongs to what floats.",
+          "id": "ladle",
+          "strokes": true,
+          "visual": {
+            "model": "handson_letsdo:diegesis/candlelight_cooking_pot/ladle",
+            "anchor": [
+              7.5,
+              0,
+              7.5
+            ],
+            "lit_as_block": true
+          },
+          "collider": {
+            "from": [
+              3.6,
+              12.3,
+              -1.3
+            ],
+            "to": [
+              7.4,
+              15.6,
+              1.3
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "broth",
+      "pickable": false,
+      "tank": {
+        "tank": "broth",
+        "inner": {
+          "from": [
+            4,
+            1,
+            4
+          ],
+          "to": [
+            12,
+            10.5,
+            12
+          ]
+        }
+      }
+    },
+    {
+      "id": "mouth",
+      "drop_zone": "ingredients",
+      "collider": {
+        "from": [
+          3,
+          8,
+          3
+        ],
+        "to": [
+          13,
+          16,
+          13
+        ]
+      }
+    },
+    {
+      "id": "item_0",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[0]",
+        "size": 3.2,
+        "counts": "hover",
+        "highlight": false
+      }
+    },
+    {
+      "id": "item_1",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[1]",
+        "size": 3.2,
+        "counts": "hover",
+        "highlight": false
+      }
+    },
+    {
+      "id": "item_2",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[2]",
+        "size": 3.2,
+        "counts": "hover",
+        "highlight": false
+      }
+    },
+    {
+      "id": "item_3",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[3]",
+        "size": 3.2,
+        "counts": "hover",
+        "highlight": false
+      }
+    },
+    {
+      "id": "item_4",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[4]",
+        "size": 3.2,
+        "counts": "hover",
+        "highlight": false
+      }
+    },
+    {
+      "id": "item_5",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "slot": {
+        "slot": "ingredients[5]",
+        "size": 3.2,
+        "counts": "hover",
+        "highlight": false
+      }
+    },
+    {
+      "$comment": "A dish that needs no bowl, and what a hopper's bowls were filled with: it waits in the middle of the pot.",
+      "id": "served",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "slot": {
+        "slot": "served",
+        "size": 3.2,
+        "highlight": false
+      }
+    },
+    {
+      "$comment": "A bowl from the inventory, shown see-through over a finished soup to an empty hand. Moved by the code.",
+      "id": "scoop",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        -60,
+        180,
+        0
+      ],
+      "scale": 0.3,
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "$comment": "Takes the click of an empty hand over a finished soup while a bowl from the inventory is offered; off otherwise.",
+      "id": "soup",
+      "collider": {
+        "from": [
+          4,
+          1,
+          4
+        ],
+        "to": [
+          12,
+          11,
+          12
+        ]
+      }
+    },
+    {
+      "$comment": "The surface of the soup, moved to its level by the code: takes the click of an empty hand off anything floating while something went in without floating (water poured, an egg cracked, sugar dissolved), and it comes back out. Off otherwise.",
+      "id": "sunk",
+      "collider": {
+        "from": [
+          4,
+          -0.3,
+          4
+        ],
+        "to": [
+          12,
+          0.3,
+          12
+        ]
+      }
+    },
+    {
+      "id": "melt_0",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        -90,
+        180,
+        0
+      ],
+      "scale": 0.2,
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "melt_1",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        -90,
+        180,
+        0
+      ],
+      "scale": 0.2,
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "melt_2",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        -90,
+        180,
+        0
+      ],
+      "scale": 0.2,
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "melt_3",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        -90,
+        180,
+        0
+      ],
+      "scale": 0.2,
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "melt_4",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        -90,
+        180,
+        0
+      ],
+      "scale": 0.2,
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "melt_5",
+      "pos": [
+        8,
+        8,
+        8
+      ],
+      "rotation": [
+        -90,
+        180,
+        0
+      ],
+      "scale": 0.2,
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "$comment": "What a hand brings over the soup and pours, cracks or shakes out (a bucket of water, an egg, sugar), moved by the code in scene pixels; one for each ingredient slot.",
+      "id": "hand_0",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "hand_1",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "hand_2",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "hand_3",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "hand_4",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "hand_5",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "$comment": "The inside of an egg cracked over the soup, dropping into it.",
+      "id": "spill_0",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "spill_1",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "spill_2",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "spill_3",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "spill_4",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "spill_5",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "badge",
+      "pos": [
+        -0.841,
+        20.274,
+        4.667
+      ],
+      "rotation": [
+        -58.009,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "dial_track",
+      "pos": [
+        -0.841,
+        20.297,
+        4.649
+      ],
+      "rotation": [
+        -58.009,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "dial",
+      "pos": [
+        -0.841,
+        20.321,
+        4.632
+      ],
+      "rotation": [
+        -58.009,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "$comment": "The badge's pale count of what is still to come, and its time.",
+      "id": "dial_more",
+      "pos": [
+        -0.841,
+        20.332,
+        4.623
+      ],
+      "rotation": [
+        -58.009,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "preview",
+      "pos": [
+        -0.841,
+        20.367,
+        4.597
+      ],
+      "rotation": [
+        31.991,
+        0,
+        0
+      ],
+      "scale": 0.1285,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -12,
+          -12,
+          -12
+        ],
+        "to": [
+          12,
+          12,
+          12
+        ]
+      }
+    },
+    {
+      "id": "book_open",
+      "pos": [
+        16.563,
+        28.347,
+        -3.125
+      ],
+      "rotation": [
+        -58.009,
+        0,
+        0
+      ],
+      "scale": 0.7093,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -5.3,
+          -0.4,
+          -3.9
+        ],
+        "to": [
+          5.3,
+          1.4,
+          3.9
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "textures": {
+    "0": "candlelight:block/cooking_pot_side",
+    "1": "candlelight:block/cooking_pot_inside",
+    "3": "candlelight:block/cooking_pot_top",
+    "particle": "candlelight:block/cooking_pot_top"
+  },
+  "elements": [
+    {
+      "name": "lid",
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        12,
+        1,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            12,
+            12,
+            13
+          ],
+          "texture": "#3"
+        },
+        "east": {
+          "uv": [
+            3,
+            12,
+            12,
+            13
+          ],
+          "texture": "#3"
+        },
+        "south": {
+          "uv": [
+            3,
+            12,
+            12,
+            13
+          ],
+          "texture": "#3"
+        },
+        "west": {
+          "uv": [
+            3,
+            12,
+            12,
+            13
+          ],
+          "texture": "#3"
+        },
+        "up": {
+          "uv": [
+            12,
+            12,
+            3,
+            3
+          ],
+          "rotation": 180,
+          "texture": "#3"
+        },
+        "down": {
+          "uv": [
+            12,
+            12,
+            3,
+            3
+          ],
+          "rotation": 180,
+          "texture": "#3"
+        }
+      }
+    },
+    {
+      "name": "lid_top",
+      "from": [
+        6,
+        1,
+        6
+      ],
+      "to": [
+        9,
+        2,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            9,
+            1,
+            6
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            1,
+            8,
+            2,
+            5
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            1,
+            9,
+            2,
+            6
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            1,
+            4,
+            2,
+            7
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            0,
+            10,
+            3,
+            13
+          ],
+          "rotation": 90,
+          "texture": "#1"
+        }
+      }
+    }
+  ]
+}

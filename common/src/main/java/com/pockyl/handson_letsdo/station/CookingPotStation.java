@@ -25,6 +25,7 @@ import com.pockyl.handson_letsdo.HandsOnLetsDo;
 public final class CookingPotStation {
     public static final ResourceLocation ID = HandsOnLetsDo.id("cooking_pot");
     public static final ResourceLocation ROASTER_ID = HandsOnLetsDo.id("roaster");
+    public static final ResourceLocation CANDLELIGHT_ID = HandsOnLetsDo.id("candlelight_cooking_pot");
 
     public static final String INGREDIENTS = "ingredients";
     /** The soup that waits in the pot, as the dish it will be: a view, nothing is put there or taken from it. */
@@ -134,16 +135,36 @@ public final class CookingPotStation {
             .hidesBlock()
             .build();
 
+    /**
+     * Candlelight's cooking pot, Farm &amp; Charm's pot made taller: the same station, stirred, its soup filled into bowls, and its
+     * scene the pot in the world too.
+     */
+    public static final StationType CANDLELIGHT_TYPE = Diegesis.station(CANDLELIGHT_ID)
+            .block(Pot.CANDLELIGHT_POT.blockSupplier())
+            .schema(SCHEMA)
+            .logic(station -> new PotLogic(station, Pot.CANDLELIGHT_POT))
+            .orientation(StationType.Orientation.PLAYER)
+            .openWhen(CookingPotStation::opens)
+            .hidesBlock()
+            .idleLogic()
+            .build();
+
     private CookingPotStation() {
     }
 
-    /** With Farm &amp; Charm installed and the station left on in the config; otherwise the pot keeps its own menu. */
+    /**
+     * With Farm &amp; Charm installed (and Candlelight for its pot, which cooks Farm &amp; Charm's dishes) and the station left on in
+     * the config; otherwise the pot keeps its own menu.
+     */
     public static void register() {
         if (HandsOnLetsDo.has(FarmCharmDishes.MOD_ID) && Pot.COOKING_POT.active()) {
             Diegesis.register(TYPE);
         }
         if (HandsOnLetsDo.has(FarmCharmDishes.MOD_ID) && Pot.ROASTER.active()) {
             Diegesis.register(ROASTER_TYPE);
+        }
+        if (HandsOnLetsDo.has(FarmCharmDishes.MOD_ID) && HandsOnLetsDo.has(Pot.CANDLELIGHT) && Pot.CANDLELIGHT_POT.active()) {
+            Diegesis.register(CANDLELIGHT_TYPE);
         }
     }
 

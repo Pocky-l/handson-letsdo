@@ -123,6 +123,10 @@ public final class HandsOnLetsDoClient {
         if (Diegesis.stationType(CookingPotStation.ROASTER_ID).isPresent()) {
             DiegesisClient.registerBehavior(CookingPotStation.ROASTER_ID, view -> new PotBehavior(view, PotBehavior.Shape.ROASTER));
         }
+        if (Diegesis.stationType(CookingPotStation.CANDLELIGHT_ID).isPresent()) {
+            DiegesisClient.registerBehavior(CookingPotStation.CANDLELIGHT_ID,
+                    view -> new PotBehavior(view, PotBehavior.Shape.CANDLELIGHT_POT));
+        }
         if (Diegesis.stationType(OvenStation.STOVE_ID).isPresent()) {
             DiegesisClient.registerBehavior(OvenStation.STOVE_ID, OvenBehavior::stove);
         }

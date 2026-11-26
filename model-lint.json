@@ -102,6 +102,26 @@
         "coplanar"
       ],
       "reason": "Farm & Charm's own whisk, kept as it has it: its loops are sheets seen from both sides, one 0.027 px off the grid and through the handle; where the other lies on the handle's side its pixels are clear"
+    },
+    {
+      "model": "handson_letsdo:diegesis/candlelight_cooking_pot/body",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "D001",
+        "D002"
+      ],
+      "reason": "Candlelight's own handles, kept as its pot has them (their arms' tops a texel short)"
+    },
+    {
+      "model": "handson_letsdo:diegesis/candlelight_cooking_pot/body_lit",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "D001",
+        "D002"
+      ],
+      "reason": "Candlelight's own handles, kept as its pot has them (their arms' tops a texel short)"
     }
   ]
 }
