@@ -6,8 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0+1.21.1] - Unreleased
 ### Added
-- [Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)'s cooking pot is a station: stir it as Farm & Charm's pot for stars that add servings, and dip bowls into the soup.
-- Candlelight's cooking pan is a station: lay the food in and swirl the pan by its long handle as Farm & Charm's roaster for stars that add servings. The pan has no lid, so what fries in it can be seen in the world too.
+- [Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)'s cooking pot is a station: stir it as [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s pot for stars that add servings, and dip bowls into the soup.
+- [Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)'s cooking pan is a station: lay the food in and swirl it by its long handle as [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s roaster for stars that add servings. What fries in the open pan shows in the world too.
 
 ## [1.0.1+1.21.1] - 2026-11-25
 ### Fixed
