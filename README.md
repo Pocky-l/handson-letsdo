@@ -14,7 +14,7 @@
 
 <p align="center"><i>An addon by Pocky for the <a href="https://www.curseforge.com/members/satisfy/projects">Let's Do</a> mods by satisfy: work at their stations with your own hands.</i></p>
 
-<p align="center"><b>The fermentation barrel, the apple press, the cooking pots, the stove, the roaster, the mincer, the crafting bowl and the tea kettle open right where they stand, with no menu screen. You stir the soup, turn the mincer's crank and whisk the dough yourself, and players nearby see what you make.</b></p>
+<p align="center"><b>The fermentation barrel, the apple press, the cooking pots, the stove, the roaster, the cooking pan, the mincer, the crafting bowl and the tea kettle open right where they stand, with no menu screen. You stir the soup, turn the mincer's crank and whisk the dough yourself, and players nearby see what you make.</b></p>
 
 <p align="center"><img src="docs/showcase/cooking_pot.gif" alt="Water and barley go into the cooking pot on the stove, then the soup is stirred with the pot's stick until it is done" width="720"></p>
 
@@ -39,6 +39,8 @@ Built on [Diegesis](https://www.curseforge.com/minecraft/mc-mods/diegesis), from
   take it out.
 - **Cooking pot** ([Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)).
   Its tall copper pot is stirred like Farm & Charm's and earns the same stars, and its soup is dipped out with bowls.
+- **Cooking pan** (Candlelight). Lay the food into the open pan and swirl it by its long handle like the roaster; what
+  fries in it can be seen from around the pan.
 - **Stove** (Farm & Charm). Open the door, slide the grate out and lay the bread or the roast on it, coal goes into the
   firebox. It bakes with the door shut.
 - **Roaster** (Farm & Charm). Lay the food into the pan and swirl the roaster by its handle while it browns in its fat.
@@ -77,7 +79,7 @@ stirring the pot waits for, and scales the time of the pot and the roaster.
 
 [![Let's Do: HerbalBrews](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-herbal-brews.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-herbal-brews) ✅ **[Let's Do: HerbalBrews](https://www.curseforge.com/minecraft/mc-mods/lets-do-herbal-brews)** (optional) - the iron and copper tea kettles
 
-[![Let's Do: Candlelight](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-candlelight.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat) ✅ **[Let's Do: Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)** (optional) - its cooking pot
+[![Let's Do: Candlelight](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-candlelight.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat) ✅ **[Let's Do: Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)** (optional) - its cooking pot and its cooking pan
 
 ## Installation
 
