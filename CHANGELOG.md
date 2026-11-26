@@ -4,6 +4,10 @@ All notable changes to this mod are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0+1.20.1] - Unreleased
+### Added
+- [Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)'s cooking pot is a station: stir it as Farm & Charm's pot for stars that add servings, and dip bowls into the soup.
+
 ## [1.0.0+1.20.1] - 2026-11-25
 ### Added
 - [Vinery](https://www.curseforge.com/minecraft/mc-mods/lets-do-vinery)'s fermentation barrel is a station: everything in it ferments together with the lid on, and the wine is drawn at the bung.
