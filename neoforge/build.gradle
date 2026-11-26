@@ -50,6 +50,7 @@ dependencies {
     compileOnly "maven.modrinth:lets-do-vinery:${vinery_version}"
     compileOnly "maven.modrinth:lets-do-farm-charm:${farm_and_charm_version}"
     compileOnly "maven.modrinth:lets-do-herbalbrews:${herbalbrews_version}"
+    compileOnly "maven.modrinth:lets-do-candlelight-farmcharm-compat:${candlelight_version}"
     compileOnly "maven.modrinth:lets-do-foundation:${foundation_version}"
 }
 
@@ -120,6 +121,7 @@ var generateModMetadata = tasks.register('generateModMetadata', ProcessResources
             vinery_min_version               : vinery_min_version,
             farm_and_charm_min_version       : farm_and_charm_min_version,
             herbalbrews_min_version          : herbalbrews_min_version,
+            candlelight_min_version          : candlelight_min_version,
     ]
     inputs.properties replaceProperties
     expand replaceProperties

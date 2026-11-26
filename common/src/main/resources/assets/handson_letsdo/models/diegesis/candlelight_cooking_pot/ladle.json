@@ -1,0 +1,90 @@
+{
+  "textures": {
+    "stick": "farm_and_charm:block/window_sill",
+    "particle": "farm_and_charm:block/window_sill"
+  },
+  "elements": [
+    {
+      "name": "stick",
+      "from": [
+        7,
+        2,
+        7
+      ],
+      "to": [
+        8,
+        16,
+        8
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "z",
+        "origin": [
+          7.5,
+          2,
+          7.5
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            7,
+            15,
+            8
+          ],
+          "texture": "#stick",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            1,
+            9,
+            15,
+            10
+          ],
+          "texture": "#stick",
+          "rotation": 90
+        },
+        "south": {
+          "uv": [
+            1,
+            11,
+            15,
+            12
+          ],
+          "texture": "#stick",
+          "rotation": 90
+        },
+        "west": {
+          "uv": [
+            1,
+            13,
+            15,
+            14
+          ],
+          "texture": "#stick",
+          "rotation": 90
+        },
+        "up": {
+          "uv": [
+            4,
+            8,
+            5,
+            9
+          ],
+          "texture": "#stick"
+        },
+        "down": {
+          "uv": [
+            10,
+            12,
+            11,
+            13
+          ],
+          "texture": "#stick"
+        }
+      }
+    }
+  ]
+}

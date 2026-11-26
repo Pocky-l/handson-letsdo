@@ -267,7 +267,9 @@ public final class PotCooking {
         boolean stirred = isStirred(now);
         boolean ownWay = !stirred && (!byHand || !attended() || !HandsOnConfig.stirringRequired() || isInMenu(level));
         Dish dish = ownWay ? null : making(level, pot);
-        if (dish != null && dish.learned() && FarmCharmDishes.isLocked(cook == null ? null : level.getPlayerByUUID(cook), pot.kind().recipes())) {
+        // Only where the pot's own tick asks it (every pot of this line does, by the recipe's type).
+        if (dish != null && dish.learned() && pot.kind().learns()
+                && FarmCharmDishes.isLocked(cook == null ? null : level.getPlayerByUUID(cook), pot.kind().recipes())) {
             dish = null;
         }
         int batch = dish == null ? 0 : batch(pot, dish);

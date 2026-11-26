@@ -2,7 +2,6 @@ package com.pockyl.handson_letsdo.gametest;
 
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
-import net.minecraft.world.level.GameType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -19,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HopperBlock;
@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import com.pockyl.diegesis.api.Diegesis;
 import com.pockyl.diegesis.api.state.SlotRef;
+import com.pockyl.diegesis.api.station.StationType;
 import com.pockyl.handson_letsdo.Cookable;
 import com.pockyl.handson_letsdo.HandsOnLetsDo;
 import com.pockyl.handson_letsdo.station.BlockOwner;
@@ -41,12 +42,23 @@ import com.pockyl.handson_letsdo.station.StirredPot;
 import java.util.List;
 
 /**
- * The cooking pot's rules against a real pot of Farm &amp; Charm, the same on every loader; each loader's holder class calls them.
- * They pass at once without Farm &amp; Charm.
+ * The cooking pot's rules against a real pot of Farm &amp; Charm, and the same against Candlelight's pot ({@link Under}), the same
+ * on every loader; each loader's holder class calls them. They pass at once without the pot's mods.
  */
 public final class PotTests {
     /** Longer than Farm &amp; Charm cooks one serving for: one test waits for a pot fed by hoppers. */
     public static final int OWN_TIMEOUT = Pot.UPSTREAM_TIME + 200;
+
+    /** A pot the tests run against: its kind, its station, its scene, and the mod besides Farm &amp; Charm it comes with. */
+    public record Under(Pot.Kind kind, ResourceLocation id, StationType type, String scene, String mod) {
+    }
+
+    /** Farm &amp; Charm's own cooking pot. */
+    public static final Under FARM_AND_CHARM = new Under(Pot.COOKING_POT, CookingPotStation.ID, CookingPotStation.TYPE, "cooking_pot",
+            FarmCharmDishes.MOD_ID);
+    /** Candlelight's cooking pot: Farm &amp; Charm's dishes in a pot of Candlelight's own. */
+    public static final Under CANDLELIGHT = new Under(Pot.CANDLELIGHT_POT, CookingPotStation.CANDLELIGHT_ID,
+            CookingPotStation.CANDLELIGHT_TYPE, "candlelight_cooking_pot", Pot.CANDLELIGHT);
 
     private PotTests() {
     }
@@ -65,28 +77,33 @@ public final class PotTests {
         }
     }
 
-    /** A pot at {@code at}, on a magma block or on stone, with the logic the station would make for it. */
-    private static Setup pot(GameTestHelper helper, BlockPos at, boolean heated) {
+    /** A pot of {@code under} at {@code at}, on a magma block or on stone, with the logic the station would make for it. */
+    private static Setup pot(GameTestHelper helper, Under under, BlockPos at, boolean heated) {
         helper.setBlock(at.below(), heated ? Blocks.MAGMA_BLOCK : Blocks.STONE);
-        helper.setBlock(at, Pot.COOKING_POT.blockSupplier().get());
+        helper.setBlock(at, under.kind().blockSupplier().get());
         BlockPos pos = helper.absolutePos(at);
-        TestStation station = new TestStation(helper.getLevel(), pos, CookingPotStation.TYPE);
+        TestStation station = new TestStation(helper.getLevel(), pos, under.type());
         Pot pot = Pot.of(helper.getLevel().getBlockEntity(pos));
-        helper.assertTrue(pot != null, "Farm & Charm's pot is the pot the station was made for");
+        helper.assertTrue(pot != null && pot.kind() == under.kind(), under.kind().block() + " is the pot the station was made for");
         helper.assertTrue(pot.cooking() != null, "the pot waits for the spoon: the stirring is in it");
-        return new Setup(station, new PotLogic(station, Pot.COOKING_POT), pot, pot.cooking());
+        return new Setup(station, new PotLogic(station, under.kind()), pot, pot.cooking());
     }
 
-    private static Setup pot(GameTestHelper helper) {
-        return pot(helper, new BlockPos(1, 2, 1), true);
+    private static Setup pot(GameTestHelper helper, Under under) {
+        return pot(helper, under, new BlockPos(1, 2, 1), true);
     }
 
-    private static boolean withoutFarmAndCharm(GameTestHelper helper) {
-        if (HandsOnLetsDo.has(FarmCharmDishes.MOD_ID)) {
+    /** Whether the pot's mods are missing: the test then passes at once. */
+    private static boolean without(GameTestHelper helper, Under under) {
+        if (installed(under)) {
             return false;
         }
         helper.succeed();
         return true;
+    }
+
+    private static boolean installed(Under under) {
+        return HandsOnLetsDo.has(FarmCharmDishes.MOD_ID) && HandsOnLetsDo.has(under.mod());
     }
 
     /** A cook comes to the pot and stays: the station ticks for them every tick from now on. */
@@ -139,28 +156,37 @@ public final class PotTests {
      * slots, two numbers, the stirring in it, and its dishes read from the game's recipes.
      */
     public static void thePotIsAStationOnlyWithFarmAndCharm(GameTestHelper helper) {
-        boolean installed = HandsOnLetsDo.has(FarmCharmDishes.MOD_ID);
-        helper.assertTrue(Diegesis.stationType(CookingPotStation.ID).isPresent() == (installed && Pot.COOKING_POT.active()),
-                "the pot's station exists with Farm & Charm and only with it");
+        thePotIsAStationOnlyWithFarmAndCharm(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #thePotIsAStationOnlyWithFarmAndCharm(GameTestHelper)} at the pot {@code under}. */
+    public static void thePotIsAStationOnlyWithFarmAndCharm(GameTestHelper helper, Under under) {
+        boolean installed = installed(under);
+        helper.assertTrue(Diegesis.stationType(under.id()).isPresent() == (installed && under.kind().active()),
+                "the pot's station exists with its mods and only with them");
         if (!installed) {
             helper.succeed();
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         BlockState state = helper.getLevel().getBlockState(setup.station.pos());
-        helper.assertTrue(Diegesis.stationFor(state).filter(type -> type == CookingPotStation.TYPE).isPresent(), "the pot opens its station");
+        helper.assertTrue(Diegesis.stationFor(state).filter(type -> type == under.type()).isPresent(), "the pot opens its station");
         helper.assertTrue(setup.container().getContainerSize() == Pot.SLOTS, "eight slots");
         helper.assertTrue(Pot.of(helper.getLevel().getBlockEntity(setup.station.pos().below())) == null, "a magma block is no pot");
-        int dishes = Pot.COOKING_POT.dishes(helper.getLevel()).size();
+        int dishes = under.kind().dishes(helper.getLevel()).size();
         helper.assertTrue(dishes >= 10, "Farm & Charm's dishes are read, got " + dishes);
         helper.assertTrue(setup.pot.isHeated(), "a magma block under the pot heats it, as Farm & Charm's tag says");
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.logic.onOpen(setup.station, player);
-        helper.assertTrue(player.getUUID().equals(BlockOwner.get(setup.pot.entity())), "the pot is told who cooks at it");
+        if (under.kind().learns()) {
+            helper.assertTrue(player.getUUID().equals(BlockOwner.get(setup.pot.entity())), "the pot is told who cooks at it");
+        } else {
+            helper.assertTrue(BlockOwner.get(setup.pot.entity()) == null, "a pot that asks nobody what they learned keeps no cook");
+        }
         setup.logic.tick(setup.station);
         helper.assertTrue(setup.station.state().getControl(CookingPotStation.HEATED) > 0.5F, "the station shows the heat");
         helper.assertTrue(setup.station.state().getTank(CookingPotStation.BROTH).amount() > 0, "there is water in an empty pot");
-        Setup cold = pot(helper, new BlockPos(3, 2, 1), false);
+        Setup cold = pot(helper, under, new BlockPos(3, 2, 1), false);
         cold.logic.tick(cold.station);
         helper.assertTrue(cold.station.state().getControl(CookingPotStation.HEATED) < 0.5F, "a pot on stone is cold");
         helper.succeed();
@@ -171,10 +197,15 @@ public final class PotTests {
      * what some dish is made of goes into the water; bowls do not.
      */
     public static void thePotsSlotsAreItsOwn(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        thePotsSlotsAreItsOwn(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #thePotsSlotsAreItsOwn(GameTestHelper)} at the pot {@code under}. */
+    public static void thePotsSlotsAreItsOwn(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         SlotRef first = SlotRef.of(CookingPotStation.INGREDIENTS, 0);
         helper.assertTrue(setup.logic.mayPlace(setup.station, player, first, new ItemStack(Items.POTATO)), "a potato is in a soup: it goes in");
@@ -198,10 +229,15 @@ public final class PotTests {
      * nothing moves. Stirred, it cooks, and when it is done the bowl that lay in the pot is filled.
      */
     public static void aStirredPotCooksAndAnUnstirredOneWaits(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        aStirredPotCooksAndAnUnstirredOneWaits(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #aStirredPotCooksAndAnUnstirredOneWaits(GameTestHelper)} at the pot {@code under}. */
+    public static void aStirredPotCooksAndAnUnstirredOneWaits(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.container().setItem(Pot.VESSEL_SLOT, new ItemStack(Items.BOWL));
@@ -247,10 +283,15 @@ public final class PotTests {
      * soup, and no bowl, no soup. Each serving uses one of each ingredient and one bowl.
      */
     public static void theSoupIsFilledIntoBowls(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        theSoupIsFilledIntoBowls(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #theSoupIsFilledIntoBowls(GameTestHelper)} at the pot {@code under}. */
+    public static void theSoupIsFilledIntoBowls(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         cookPotatoSoup(helper, setup, player, 4, 4);
         Item soup = farm("potato_soup");
@@ -294,10 +335,15 @@ public final class PotTests {
      * can be taken back, and after the three servings nothing is left to make a fourth.
      */
     public static void unevenStacksMakeNoServingsFromNothing(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        unevenStacksMakeNoServingsFromNothing(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #unevenStacksMakeNoServingsFromNothing(GameTestHelper)} at the pot {@code under}. */
+    public static void unevenStacksMakeNoServingsFromNothing(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         cookPotatoSoup(helper, setup, player, 5, 3);
         helper.runAfterDelay(8, () -> {
@@ -321,10 +367,15 @@ public final class PotTests {
      * stays in the pot.
      */
     public static void whatAnIngredientLeavesGoesToTheCook(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        whatAnIngredientLeavesGoesToTheCook(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #whatAnIngredientLeavesGoesToTheCook(GameTestHelper)} at the pot {@code under}. */
+    public static void whatAnIngredientLeavesGoesToTheCook(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         putIn(setup, 0, new ItemStack(Items.SUGAR));
@@ -352,10 +403,15 @@ public final class PotTests {
      * uses a bowl like the others and no food.
      */
     public static void starsGiveBonusServings(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        starsGiveBonusServings(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #starsGiveBonusServings(GameTestHelper)} at the pot {@code under}. */
+    public static void starsGiveBonusServings(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         Item soup = farm("potato_soup");
         ServerPlayer player = new ServerPlayer(helper.getLevel().getServer(), helper.getLevel(), new GameProfile(java.util.UUID.randomUUID(), "cook"),
                 net.minecraft.server.level.ClientInformation.createDefault());
@@ -364,7 +420,7 @@ public final class PotTests {
         putIn(setup, 0, new ItemStack(Items.POTATO, 2));
         putIn(setup, 1, new ItemStack(farm("onion"), 2));
         // Two servings take the square root of two times as long as one, less the pace of the spoon.
-        int ticks = (int) (Pot.COOKING_POT.handTime() * Math.sqrt(2.0) / 1.5) + 12;
+        int ticks = (int) (under.kind().handTime() * Math.sqrt(2.0) / 1.5) + 12;
         stirFor(helper, setup, player, ticks);
         helper.runAfterDelay(120, () -> {
             helper.assertTrue(setup.station.state().getControl(CookingPotStation.STARS) > 2.99F, "steady wide rounds earn three stars, got "
@@ -390,11 +446,16 @@ public final class PotTests {
      * time, into its dish slot.
      */
     public static void aHopperFedPotCooksUpstreamsWay(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        aHopperFedPotCooksUpstreamsWay(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #aHopperFedPotCooksUpstreamsWay(GameTestHelper)} at the pot {@code under}. */
+    public static void aHopperFedPotCooksUpstreamsWay(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
         BlockPos at = new BlockPos(1, 2, 1);
-        Setup setup = pot(helper, at, true);
+        Setup setup = pot(helper, under, at, true);
         helper.setBlock(at.above(), Blocks.HOPPER.defaultBlockState().setValue(HopperBlock.FACING, Direction.DOWN));
         helper.setBlock(at.east(), Blocks.HOPPER.defaultBlockState().setValue(HopperBlock.FACING, Direction.WEST));
         Container above = (Container) helper.getBlockEntity(at.above());
@@ -422,11 +483,16 @@ public final class PotTests {
 
     /** A hopper feeding the pot while a cook stands at it still feeds it by itself: its food does not wait for the spoon. */
     public static void aHopperFeedsThePotByItselfBesideACook(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        aHopperFeedsThePotByItselfBesideACook(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #aHopperFeedsThePotByItselfBesideACook(GameTestHelper)} at the pot {@code under}. */
+    public static void aHopperFeedsThePotByItselfBesideACook(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
         BlockPos at = new BlockPos(1, 2, 1);
-        Setup setup = pot(helper, at, true);
+        Setup setup = pot(helper, under, at, true);
         attend(helper, setup, helper.makeMockPlayer(GameType.CREATIVE));
         setup.container().setItem(Pot.VESSEL_SLOT, new ItemStack(Items.BOWL));
         helper.setBlock(at.above(), Blocks.HOPPER.defaultBlockState().setValue(HopperBlock.FACING, Direction.DOWN));
@@ -446,10 +512,15 @@ public final class PotTests {
      * the spoon again once the menu is shut.
      */
     public static void aCookInTheMenuCooksUpstreamsWay(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        aCookInTheMenuCooksUpstreamsWay(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #aCookInTheMenuCooksUpstreamsWay(GameTestHelper)} at the pot {@code under}. */
+    public static void aCookInTheMenuCooksUpstreamsWay(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         attend(helper, setup, helper.makeMockPlayer(GameType.CREATIVE));
         setup.container().setItem(Pot.VESSEL_SLOT, new ItemStack(Items.BOWL));
         putIn(setup, 0, new ItemStack(Items.POTATO));
@@ -481,10 +552,15 @@ public final class PotTests {
      * the bowl that lies in it, and what was cooked under the spoon is not lost.
      */
     public static void aPotLeftMidStirGoesBackToUpstreamsTick(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        aPotLeftMidStirGoesBackToUpstreamsTick(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #aPotLeftMidStirGoesBackToUpstreamsTick(GameTestHelper)} at the pot {@code under}. */
+    public static void aPotLeftMidStirGoesBackToUpstreamsTick(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.container().setItem(Pot.VESSEL_SLOT, new ItemStack(Items.BOWL));
@@ -509,15 +585,20 @@ public final class PotTests {
 
     /** A dish that needs no bowl is made the moment it is done, into the pot's dish slot, and waits there to be taken. */
     public static void aDishThatNeedsNoBowlComesOutWhole(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        aDishThatNeedsNoBowlComesOutWhole(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #aDishThatNeedsNoBowlComesOutWhole(GameTestHelper)} at the pot {@code under}. */
+    public static void aDishThatNeedsNoBowlComesOutWhole(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Dish goulash = Pot.COOKING_POT.dishes(helper.getLevel()).stream().filter(dish -> dish.vessel().isEmpty()).findFirst().orElse(null);
+        Dish goulash = under.kind().dishes(helper.getLevel()).stream().filter(dish -> dish.vessel().isEmpty()).findFirst().orElse(null);
         if (goulash == null) {
             helper.succeed();
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         int slot = 0;
@@ -547,10 +628,15 @@ public final class PotTests {
      * and sugar are the tomato soup, which wants the tomatoes in two slots. What went in without floating comes back out whole.
      */
     public static void twoAlikeThrownInMakeTheirDish(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        twoAlikeThrownInMakeTheirDish(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #twoAlikeThrownInMakeTheirDish(GameTestHelper)} at the pot {@code under}. */
+    public static void twoAlikeThrownInMakeTheirDish(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         putIn(setup, 0, new ItemStack(farm("tomato"), 2));
@@ -591,11 +677,16 @@ public final class PotTests {
      * stirring is skipped.
      */
     public static void everyDishIsLaidFromTheBookAndCooks(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        everyDishIsLaidFromTheBookAndCooks(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #everyDishIsLaidFromTheBookAndCooks(GameTestHelper)} at the pot {@code under}. */
+    public static void everyDishIsLaidFromTheBookAndCooks(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
         // Not what only a player who learned it cooks, nor what nobody can make: a tag of a mod that is not here.
-        List<Dish> dishes = Pot.COOKING_POT.dishes(helper.getLevel()).stream().filter(dish -> !dish.learned() && Cookable.all(dish.ingredients()))
+        List<Dish> dishes = under.kind().dishes(helper.getLevel()).stream().filter(dish -> !dish.learned() && Cookable.all(dish.ingredients()))
                 .toList();
         BlockPos at = new BlockPos(1, 2, 1);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
@@ -619,7 +710,7 @@ public final class PotTests {
                         setup[0].container().clearContent();
                     }
                     helper.setBlock(at, Blocks.AIR);
-                    setup[0] = pot(helper, at, true);
+                    setup[0] = pot(helper, under, at, true);
                     setup[0].station.users.add(player);
                     setup[0].logic.onOpen(setup[0].station, player);
                     give(player, dish);
@@ -653,24 +744,42 @@ public final class PotTests {
 
     /**
      * A recipe that wants learning cooks at the station for the cook who learned it, and for nobody else: the pot is told who
-     * cooks, as its own menu tells it.
+     * cooks, as its own menu tells it. A pot whose own tick asks nobody (Candlelight's) cooks it for any cook, as it does itself.
      */
     public static void aLearnedDishCooksForTheCookWhoLearnedIt(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        aLearnedDishCooksForTheCookWhoLearnedIt(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #aLearnedDishCooksForTheCookWhoLearnedIt(GameTestHelper)} at the pot {@code under}. */
+    public static void aLearnedDishCooksForTheCookWhoLearnedIt(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        ResourceLocation id = HandsOnLetsDo.id("test_learned_soup");
-        FarmCharmTestRecipes.addLearnedPotRecipe(helper.getLevel(), id, new ItemStack(Items.MUSHROOM_STEW), Items.BROWN_MUSHROOM, Items.RED_MUSHROOM);
-        Setup setup = pot(helper);
+        // A recipe and food of each pot's own: the pots' tests run side by side with one recipe manager.
+        ResourceLocation id = HandsOnLetsDo.id("test_learned_soup_" + under.kind().name());
+        Item[] food = under == FARM_AND_CHARM ? new Item[] {Items.BROWN_MUSHROOM, Items.RED_MUSHROOM}
+                : new Item[] {Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS};
+        FarmCharmTestRecipes.addLearnedPotRecipe(helper.getLevel(), id, new ItemStack(Items.MUSHROOM_STEW), food[0], food[1]);
+        Setup setup = pot(helper, under);
         ServerPlayer cook = TestPlayers.join(helper);
         attend(helper, setup, cook);
-        putIn(setup, 0, new ItemStack(Items.BROWN_MUSHROOM));
-        putIn(setup, 1, new ItemStack(Items.RED_MUSHROOM));
+        putIn(setup, 0, new ItemStack(food[0]));
+        putIn(setup, 1, new ItemStack(food[1]));
         helper.runAfterDelay(2, () -> {
             setup.cooking.setProgress(setup.pot, 0.995F);
             stir(setup, cook, 0.0);
         });
         helper.runAfterDelay(8, () -> {
+            if (!under.kind().learns()) {
+                helper.assertTrue(setup.cooking.servings() == 1, "this pot cooks it for a cook who never learned it, as by itself, got "
+                        + setup.cooking.servings());
+                setup.container().clearContent();
+                setup.cooking.load(new CompoundTag());
+                FarmCharmTestRecipes.remove(helper.getLevel(), id);
+                TestPlayers.leave(helper, cook);
+                helper.succeed();
+                return;
+            }
             helper.assertTrue(setup.cooking.servings() == 0, "a cook who has not learned the recipe makes nothing of it");
             FarmCharmTestRecipes.teach(cook, helper.getLevel(), id);
             setup.cooking.setProgress(setup.pot, 0.995F);
@@ -694,10 +803,15 @@ public final class PotTests {
      * nothing once the pot is emptied. What the pot saves to the world does not carry that word.
      */
     public static void thePotTellsItsClientsWhatItHolds(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        thePotTellsItsClientsWhatItHolds(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #thePotTellsItsClientsWhatItHolds(GameTestHelper)} at the pot {@code under}. */
+    public static void thePotTellsItsClientsWhatItHolds(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         cookPotatoSoup(helper, setup, player, 3, 2);
         helper.runAfterDelay(8, () -> {
@@ -725,10 +839,15 @@ public final class PotTests {
 
     /** All the station tells a client who comes to a full pot is far below what one packet may hold. */
     public static void thePotsDataStaysSmall(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        thePotsDataStaysSmall(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #thePotsDataStaysSmall(GameTestHelper)} at the pot {@code under}. */
+    public static void thePotsDataStaysSmall(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = pot(helper);
+        Setup setup = pot(helper, under);
         Container container = setup.container();
         Item[] food = {Items.POTATO, Items.CARROT, Items.BEETROOT, Items.SUGAR, Items.WHEAT, Items.APPLE};
         for (int slot = 0; slot < Pot.INGREDIENTS; slot++) {
@@ -750,15 +869,20 @@ public final class PotTests {
     /**
      * The pot's scene is one the library reads, with every part the station shows things on: a place for each ingredient and for
      * the dish that is done, and no other slot (the soup is in the pot, bowls are dipped), the water, the spoon, the
-     * hands, the badge and the book. No lid: Farm &amp; Charm's pot has none on 1.21.1.
+     * hands, the badge and the book. No lid: neither pot shows one on 1.21.1.
      */
     public static void thePotsSceneIsRead(GameTestHelper helper) {
+        thePotsSceneIsRead(helper, FARM_AND_CHARM);
+    }
+
+    /** {@link #thePotsSceneIsRead(GameTestHelper)} at the pot {@code under}. */
+    public static void thePotsSceneIsRead(GameTestHelper helper, Under under) {
         List<String> nodes = new java.util.ArrayList<>(List.of("pot", "support", "ladle", "broth", "mouth", "served", "scoop", "soup", "sunk",
                 "badge", "dial_track", "dial", "preview", "book_open"));
         for (int i = 0; i < Pot.INGREDIENTS; i++) {
             nodes.addAll(List.of("item_" + i, "melt_" + i, "hand_" + i, "spill_" + i));
         }
-        StationTests.sceneIsRead(helper, "cooking_pot", nodes, CookingPotStation.SCHEMA,
+        StationTests.sceneIsRead(helper, under.scene(), nodes, CookingPotStation.SCHEMA,
                 List.of(CookingPotStation.INGREDIENTS, CookingPotStation.SERVED));
         helper.succeed();
     }

@@ -23,11 +23,11 @@ import com.pockyl.handson_letsdo.station.PotCooking;
 import com.pockyl.handson_letsdo.station.StirredPot;
 
 /**
- * Farm &amp; Charm's pot and its roaster, which ticks alike, wait for the spoon: their own tick is held back while a cook's batch
- * waits to be stirred or cooks under the spoon, and while a finished dish waits for its bowls ({@link PotCooking#holds}). Nothing
- * inside their cooking is touched: every serving is still made by that tick, and with nobody at the station they are Farm &amp;
- * Charm's own. And they tell the clients near them what they hold (Farm &amp; Charm tells them nothing), whenever it changes, so that
- * every client shows the pot as its station does with nobody at it ({@code BlockEntityUpdateMixin} sends it).
+ * Farm &amp; Charm's pot (and Candlelight's, built on it) and its roaster, which ticks alike, wait for the spoon: their own tick is
+ * held back while a cook's batch waits to be stirred or cooks under the spoon, and while a finished dish waits for its bowls ({@link
+ * PotCooking#holds}). Nothing inside their cooking is touched: every serving is still made by that tick, and with nobody at the
+ * station they are their own mod's. And they tell the clients near them what they hold (their mods tell them nothing), whenever it
+ * changes, so that every client shows the pot as its station does with nobody at it ({@code BlockEntityUpdateMixin} sends it).
  */
 @Pseudo
 @Mixin({CookingPotBlockEntity.class, RoasterBlockEntity.class})
