@@ -175,18 +175,14 @@ public final class BarrelBehavior implements StationBehavior {
         view.setInventoryFilter(stack -> usable.test(stack, this::usable));
         book.opened(view);
         refresh(view);
-        // What the cook came with is meant for the barrel: juice is poured in, anything else of use comes to the hand.
+        // Juice the cook came with is poured in; anything else stays in its slot.
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && view.openedByUse() && player.inventoryMenu.getCarried().isEmpty()) {
-            ItemStack held = player.getMainHandItem();
-            if (BarrelStation.pourable(view.state(), held) > 0) {
-                // The hatch comes off for it.
-                lidAsked = true;
-                lidAskedAt = time;
-                sendPour(view, false, player.getInventory().selected);
-            } else if (!held.isEmpty() && usable(held)) {
-                view.takeFromInventory(player.getInventory().selected);
-            }
+        if (player != null && view.openedByUse() && player.inventoryMenu.getCarried().isEmpty()
+                && BarrelStation.pourable(view.state(), player.getMainHandItem()) > 0) {
+            // The hatch comes off for it.
+            lidAsked = true;
+            lidAskedAt = time;
+            sendPour(view, false, player.getInventory().selected);
         }
     }
 

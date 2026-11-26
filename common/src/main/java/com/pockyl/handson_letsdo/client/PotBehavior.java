@@ -504,14 +504,6 @@ public final class PotBehavior implements StationBehavior {
         view.setInventoryFilter(stack -> usable.test(stack, it -> usable(view, it)));
         book.opened(view);
         refresh(view, true);
-        // What the cook came with is meant for the pot: a bowl takes a serving of the soup that waits, food comes to the hand.
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && view.openedByUse() && player.inventoryMenu.getCarried().isEmpty()) {
-            ItemStack held = player.getMainHandItem();
-            if (!held.isEmpty() && (canScoop(view, held) || usable(view, held))) {
-                view.takeFromInventory(player.getInventory().selected);
-            }
-        }
     }
 
     @Override

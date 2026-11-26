@@ -195,14 +195,6 @@ public final class PressBehavior implements StationBehavior {
         view.setInventoryFilter(stack -> usable.test(stack, this::usable));
         book.opened(view);
         refresh(view);
-        // What the cook came with is meant for the press: it comes to the hand.
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && view.openedByUse() && player.inventoryMenu.getCarried().isEmpty()) {
-            ItemStack held = player.getMainHandItem();
-            if (!held.isEmpty() && usable(held)) {
-                view.takeFromInventory(player.getInventory().selected);
-            }
-        }
     }
 
     @Override
