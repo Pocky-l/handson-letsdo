@@ -14,6 +14,7 @@ import com.pockyl.handson_letsdo.HandsOnLetsDo;
 import com.pockyl.handson_letsdo.station.BarrelStation;
 import com.pockyl.handson_letsdo.station.BowlStation;
 import com.pockyl.handson_letsdo.station.CookingPotStation;
+import com.pockyl.handson_letsdo.station.FarmCharmStove;
 import com.pockyl.handson_letsdo.station.KettleStation;
 import com.pockyl.handson_letsdo.station.MincerStation;
 import com.pockyl.handson_letsdo.station.OvenStation;
@@ -132,6 +133,11 @@ public final class HandsOnLetsDoClient {
         }
         if (Diegesis.stationType(OvenStation.STOVE_ID).isPresent()) {
             DiegesisClient.registerBehavior(OvenStation.STOVE_ID, OvenBehavior::stove);
+        }
+        for (String name : FarmCharmStove.CANDLELIGHT_STOVES) {
+            if (Diegesis.stationType(OvenStation.candlelightId(name)).isPresent()) {
+                DiegesisClient.registerBehavior(OvenStation.candlelightId(name), view -> OvenBehavior.candlelightStove(view, name));
+            }
         }
         if (Diegesis.stationType(KettleStation.ID).isPresent()) {
             DiegesisClient.registerBehavior(KettleStation.ID, KettleBehavior::new);

@@ -17,16 +17,19 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import com.pockyl.diegesis.api.station.StationContext;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.function.Supplier;
 
 /**
  * Farm &amp; Charm's stove, a brick oven, as the oven station sees it: its own container and the numbers its menu shows
  * ({@link BlockNumbers}). Nothing of Farm &amp; Charm is named here but its recipes ({@link FarmCharmDishes}); the stove bakes by
- * itself, in its own time, with its own fuel, and the station only lays things into it.
+ * itself, in its own time, with its own fuel, and the station only lays things into it. Candlelight's eleven stoves
+ * ({@link #CANDLELIGHT_STOVES}) are Farm &amp; Charm's stove in other blocks, its block entity's subclass: the same stove here.
  *
  * <p>Slots, as the stove has them: the baked dish, three ingredients, the fuel. Numbers: ticks its fuel still burns and burnt for
  * in all, ticks baked and ticks a dish takes.
@@ -52,6 +55,14 @@ public final class FarmCharmStove implements KitchenOven {
     public static final ResourceLocation BLOCK_ID = ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, "stove");
     private static final ResourceLocation RECIPES = ResourceLocation.fromNamespaceAndPath(FarmCharmDishes.MOD_ID, "stove");
     public static final Supplier<Block> BLOCK = () -> BuiltInRegistries.BLOCK.get(BLOCK_ID);
+    /**
+     * Candlelight's stoves by what they are made of, {@code candlelight:<name>_stove} (its block tag {@code candlelight:stoves}):
+     * ten of stone and one of bamboo.
+     */
+    public static final List<String> CANDLELIGHT_STOVES = List.of("cobblestone", "stone_bricks", "red_nether_bricks", "sandstone",
+            "deepslate", "end", "granite", "quartz", "mud", "basalt", "bamboo");
+    /** Every block whose block entity is this stove: Farm &amp; Charm's and Candlelight's. */
+    private static final Set<ResourceLocation> BLOCK_IDS = blockIds();
 
     /** What burns and for how long, as furnaces know it; read again every few seconds, as tags may change. */
     private static Map<Item, Integer> fuels = Map.of();
@@ -72,20 +83,35 @@ public final class FarmCharmStove implements KitchenOven {
         this.numbers = numbers;
     }
 
+    /** Candlelight's stove of {@code name} ({@link #CANDLELIGHT_STOVES}). */
+    public static ResourceLocation candlelightBlock(String name) {
+        return ResourceLocation.fromNamespaceAndPath(Pot.CANDLELIGHT, name + "_stove");
+    }
+
+    private static Set<ResourceLocation> blockIds() {
+        Set<ResourceLocation> ids = new HashSet<>();
+        ids.add(BLOCK_ID);
+        CANDLELIGHT_STOVES.forEach(name -> ids.add(candlelightBlock(name)));
+        return Set.copyOf(ids);
+    }
+
     /**
      * The stove of a block entity, or null for anything that is not the stove this was made for: another build of Farm &amp;
-     * Charm whose stove has other slots or numbers keeps its own menu.
+     * Charm whose stove has other slots or numbers keeps its own menu. Farm &amp; Charm's stove and Candlelight's.
      */
     public static FarmCharmStove of(BlockEntity entity) {
         if (!(entity instanceof WorldlyContainer container) || container.getContainerSize() != SLOTS
-                || !BuiltInRegistries.BLOCK.getKey(entity.getBlockState().getBlock()).equals(BLOCK_ID)) {
+                || !BLOCK_IDS.contains(BuiltInRegistries.BLOCK.getKey(entity.getBlockState().getBlock()))) {
             return null;
         }
         ContainerData numbers = BlockNumbers.of(entity);
         return numbers == null || numbers.getCount() != NUMBERS ? null : new FarmCharmStove(entity, container, numbers);
     }
 
-    /** Whether {@code entity} is Farm &amp; Charm's stove: asked for every block entity drawn, so by the block itself. */
+    /**
+     * Whether {@code entity} is Farm &amp; Charm's stove: asked for every block entity drawn, so by the block itself. Only its own block
+     * has a renderer to leave out; Candlelight's stoves have none.
+     */
     public static boolean isStove(BlockEntity entity) {
         if (stoveBlock == null) {
             stoveBlock = BLOCK.get();

@@ -111,6 +111,37 @@
         "H006"
       ],
       "reason": "Farm & Charm's own grate legs on 1.21.1, kept as it has them (their tops under the grate)"
+    },
+    {
+      "model": "handson_letsdo:diegesis/candlelight_stove/*/fire",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001",
+        "T010",
+        "Z002"
+      ],
+      "reason": "Candlelight's own flames inside its stoves (its campfire in the bamboo one), kept where it has them, only cut lower"
+    },
+    {
+      "model": "handson_letsdo:diegesis/candlelight_stove/*/inside",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001",
+        "D001",
+        "F014"
+      ],
+      "reason": "Candlelight's own inner box of its stoves, seen from inside, kept as it has it"
+    },
+    {
+      "model": "handson_letsdo:diegesis/candlelight_stove/bamboo/body",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "Z002"
+      ],
+      "reason": "Candlelight's own bamboo walls, top and floor, planes seen from inside and outside as it has them"
     }
   ]
 }

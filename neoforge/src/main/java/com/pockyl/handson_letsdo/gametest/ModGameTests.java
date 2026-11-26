@@ -315,6 +315,66 @@ public final class ModGameTests {
     }
 
     @GameTest(template = "room")
+    public static void candlelightsStoveIsAStationOnlyWithCandlelight(GameTestHelper helper) {
+        StoveTests.theStoveIsAStationOnlyWithFarmAndCharm(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightTheStovesSlotsAreItsOwn(GameTestHelper helper) {
+        StoveTests.theStovesSlotsAreItsOwn(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 500)
+    public static void candlelightBreadThroughTheStationIsBreadByHoppers(GameTestHelper helper) {
+        StoveTests.breadThroughTheStationIsBreadByHoppers(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightTakingTheDishKeepsWhatBakes(GameTestHelper helper) {
+        StoveTests.takingTheDishKeepsWhatBakes(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void candlelightTheStoveBakesOnlyShut(GameTestHelper helper) {
+        StoveTests.theStoveBakesOnlyShut(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightFuelGoesOnTheFireWithTheDoorShut(GameTestHelper helper) {
+        StoveTests.fuelGoesOnTheFireWithTheDoorShut(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = StoveTests.THREE_BAKES)
+    public static void candlelightTwoAlikeBakeToTheLastSet(GameTestHelper helper) {
+        StoveTests.twoAlikeBakeToTheLastSet(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 600)
+    public static void candlelightEveryBakingIsLaidFromTheBookAndBakes(GameTestHelper helper) {
+        StoveTests.everyBakingIsLaidFromTheBookAndBakes(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightAClientsCopyOfAnEmptiedStoveIsEmpty(GameTestHelper helper) {
+        StoveTests.aClientsCopyOfAnEmptiedStoveIsEmpty(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightTheStovesDataStaysSmall(GameTestHelper helper) {
+        StoveTests.theStovesDataStaysSmall(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "empty")
+    public static void candlelightTheStovesSceneIsRead(GameTestHelper helper) {
+        StoveTests.theStovesSceneIsRead(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void everyCandlelightStoveBakesAsTheStation(GameTestHelper helper) {
+        StoveTests.everyCandlelightStoveBakesAsTheStation(helper);
+    }
+
+    @GameTest(template = "room")
     public static void theRoasterIsAStationOnlyWithFarmAndCharm(GameTestHelper helper) {
         RoasterTests.theRoasterIsAStationOnlyWithFarmAndCharm(helper);
     }

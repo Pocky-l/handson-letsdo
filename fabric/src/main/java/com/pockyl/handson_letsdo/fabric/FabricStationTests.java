@@ -316,6 +316,66 @@ public final class FabricStationTests implements FabricGameTest {
     }
 
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void candlelightsStoveIsAStationOnlyWithCandlelight(GameTestHelper helper) {
+        StoveTests.theStoveIsAStationOnlyWithFarmAndCharm(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void candlelightTheStovesSlotsAreItsOwn(GameTestHelper helper) {
+        StoveTests.theStovesSlotsAreItsOwn(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 500)
+    public void candlelightBreadThroughTheStationIsBreadByHoppers(GameTestHelper helper) {
+        StoveTests.breadThroughTheStationIsBreadByHoppers(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void candlelightTakingTheDishKeepsWhatBakes(GameTestHelper helper) {
+        StoveTests.takingTheDishKeepsWhatBakes(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
+    public void candlelightTheStoveBakesOnlyShut(GameTestHelper helper) {
+        StoveTests.theStoveBakesOnlyShut(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
+    public void candlelightFuelGoesOnTheFireWithTheDoorShut(GameTestHelper helper) {
+        StoveTests.fuelGoesOnTheFireWithTheDoorShut(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = StoveTests.THREE_BAKES)
+    public void candlelightTwoAlikeBakeToTheLastSet(GameTestHelper helper) {
+        StoveTests.twoAlikeBakeToTheLastSet(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 600)
+    public void candlelightEveryBakingIsLaidFromTheBookAndBakes(GameTestHelper helper) {
+        StoveTests.everyBakingIsLaidFromTheBookAndBakes(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void candlelightAClientsCopyOfAnEmptiedStoveIsEmpty(GameTestHelper helper) {
+        StoveTests.aClientsCopyOfAnEmptiedStoveIsEmpty(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void candlelightTheStovesDataStaysSmall(GameTestHelper helper) {
+        StoveTests.theStovesDataStaysSmall(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void candlelightTheStovesSceneIsRead(GameTestHelper helper) {
+        StoveTests.theStovesSceneIsRead(helper, StoveTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
+    public void everyCandlelightStoveBakesAsTheStation(GameTestHelper helper) {
+        StoveTests.everyCandlelightStoveBakesAsTheStation(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
     public void theRoasterIsAStationOnlyWithFarmAndCharm(GameTestHelper helper) {
         RoasterTests.theRoasterIsAStationOnlyWithFarmAndCharm(helper);
     }

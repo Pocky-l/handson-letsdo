@@ -1,0 +1,137 @@
+{
+  "textures": {
+    "door": "candlelight:block/sandstone_stove_front",
+    "particle": "candlelight:block/sandstone_stove_front"
+  },
+  "elements": [
+    {
+      "name": "door",
+      "from": [
+        4,
+        10,
+        0
+      ],
+      "to": [
+        11,
+        11,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            5,
+            12,
+            6
+          ],
+          "texture": "#door"
+        },
+        "south": {
+          "uv": [
+            5,
+            5,
+            12,
+            6
+          ],
+          "texture": "#door"
+        },
+        "east": {
+          "uv": [
+            5,
+            5,
+            6,
+            6
+          ],
+          "texture": "#door"
+        },
+        "west": {
+          "uv": [
+            11,
+            5,
+            12,
+            6
+          ],
+          "texture": "#door"
+        },
+        "up": {
+          "uv": [
+            5,
+            5,
+            12,
+            6
+          ],
+          "texture": "#door"
+        }
+      }
+    },
+    {
+      "name": "door",
+      "from": [
+        3,
+        7,
+        0
+      ],
+      "to": [
+        12,
+        10,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            6,
+            13,
+            9
+          ],
+          "texture": "#door"
+        },
+        "south": {
+          "uv": [
+            4,
+            6,
+            13,
+            9
+          ],
+          "texture": "#door"
+        },
+        "east": {
+          "uv": [
+            4,
+            6,
+            5,
+            9
+          ],
+          "texture": "#door"
+        },
+        "west": {
+          "uv": [
+            12,
+            6,
+            13,
+            9
+          ],
+          "texture": "#door"
+        },
+        "up": {
+          "uv": [
+            4,
+            6,
+            13,
+            7
+          ],
+          "texture": "#door"
+        },
+        "down": {
+          "uv": [
+            4,
+            8,
+            13,
+            9
+          ],
+          "texture": "#door"
+        }
+      }
+    }
+  ]
+}

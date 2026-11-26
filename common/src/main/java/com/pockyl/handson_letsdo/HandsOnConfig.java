@@ -30,6 +30,8 @@ public final class HandsOnConfig {
             "  menu. It is swirled as Farm & Charm's roaster is, in the time roaster_time gives.",
             "stove: Farm & Charm's stove as a station, when that mod is there. Off, it keeps its own menu. It bakes in its own",
             "  time with its own fuel either way.",
+            "candlelight_stoves: Candlelight's eleven stoves as stations, when that mod is there. Off, they keep their own menu.",
+            "  They bake as Farm & Charm's stove does, in its time with their own fuel either way.",
             "tea_kettle: HerbalBrews' tea kettles as a station, when that mod is there. Off, they keep their own menu. They brew",
             "  in their own time either way.",
             "apple_press: Vinery's apple press as a station, when that mod is there. Off, it keeps its own menu. At the station it",
@@ -52,6 +54,7 @@ public final class HandsOnConfig {
     private static boolean cookingPot = true;
     private static boolean candlelightCookingPot = true;
     private static boolean stove = true;
+    private static boolean candlelightStoves = true;
     private static boolean roaster = true;
     private static boolean candlelightCookingPan = true;
     private static boolean teaKettle = true;
@@ -83,6 +86,7 @@ public final class HandsOnConfig {
         cookingPot = read(values, "cooking_pot", cookingPot);
         candlelightCookingPot = read(values, "candlelight_cooking_pot", candlelightCookingPot);
         stove = read(values, "stove", stove);
+        candlelightStoves = read(values, "candlelight_stoves", candlelightStoves);
         roaster = read(values, "roaster", roaster);
         candlelightCookingPan = read(values, "candlelight_cooking_pan", candlelightCookingPan);
         teaKettle = read(values, "tea_kettle", teaKettle);
@@ -147,6 +151,10 @@ public final class HandsOnConfig {
 
     public static boolean stove() {
         return stove;
+    }
+
+    public static boolean candlelightStoves() {
+        return candlelightStoves;
     }
 
     public static boolean roaster() {

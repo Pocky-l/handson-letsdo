@@ -67,4 +67,19 @@ record OvenLook(Door door, float doorOpen, float doorTime, float trayOut, float 
     static final OvenLook STOVE = new OvenLook(Door.SIDE, 105.0F, 0.4F, 7.0F, 0.4F, new float[] {3.3F, 0.0F, -3.3F},
             new float[] {0.5F, 0.5F, 0.5F}, 0.3F, 0.21F, new Vector3f(8.0F, 10.0F, -1.0F), new Vector3f(8.0F, 16.4F, 6.5F),
             SoundEvents.IRON_DOOR_OPEN, SoundEvents.IRON_DOOR_CLOSE, new String[] {"oven"}, Models.NONE, false, false, 0xFF4A3C36, true);
+
+    /**
+     * Candlelight's stoves of stone: Farm &amp; Charm's stove in other blocks, each with its own scene of its front (its door, the cold
+     * front over its oven mouth, swings as Farm &amp; Charm's plate does). Their mouths are 8 px wide, Farm &amp; Charm's 10: the
+     * grate out of them is 8 px wide with its three places closer, at 2.6 px.
+     */
+    static final OvenLook CANDLELIGHT_STOVE = new OvenLook(Door.SIDE, 105.0F, 0.4F, 7.0F, 0.4F, new float[] {2.6F, 0.0F, -2.6F},
+            new float[] {0.5F, 0.5F, 0.5F}, 0.3F, 0.17F, new Vector3f(8.0F, 9.5F, -1.0F), new Vector3f(8.0F, 16.4F, 6.5F),
+            SoundEvents.IRON_DOOR_OPEN, SoundEvents.IRON_DOOR_CLOSE, new String[] {"oven"}, Models.NONE, false, false, 0xFF4A3C36, true);
+
+    /** Candlelight's bamboo stove: its door is the lattice of its front with the bamboo round it, and sounds as a bamboo door. */
+    static final OvenLook BAMBOO_STOVE = new OvenLook(Door.SIDE, 105.0F, 0.4F, 7.0F, 0.4F, new float[] {2.6F, 0.0F, -2.6F},
+            new float[] {0.5F, 0.5F, 0.5F}, 0.3F, 0.17F, new Vector3f(8.0F, 7.5F, -1.0F), new Vector3f(8.0F, 16.4F, 6.5F),
+            SoundEvents.BAMBOO_WOOD_DOOR_OPEN, SoundEvents.BAMBOO_WOOD_DOOR_CLOSE, new String[] {"oven"}, Models.NONE, false, false,
+            0xFF4A3C36, true);
 }

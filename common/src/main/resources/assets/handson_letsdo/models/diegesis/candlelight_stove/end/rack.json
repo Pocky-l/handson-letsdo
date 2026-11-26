@@ -1,0 +1,33 @@
+{
+  "textures": {
+    "grate": "farm_and_charm:block/furnace_lit_grate",
+    "particle": "farm_and_charm:block/furnace_lit_grate"
+  },
+  "elements": [
+    {
+      "name": "grill",
+      "from": [
+        4,
+        9,
+        0
+      ],
+      "to": [
+        12,
+        9,
+        13
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            13,
+            8
+          ],
+          "rotation": 90,
+          "texture": "#grate"
+        }
+      }
+    }
+  ]
+}

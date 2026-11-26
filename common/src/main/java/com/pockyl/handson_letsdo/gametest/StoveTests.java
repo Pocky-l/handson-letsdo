@@ -16,6 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HopperBlock;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import com.pockyl.diegesis.api.Diegesis;
 import com.pockyl.diegesis.api.state.SlotRef;
+import com.pockyl.diegesis.api.station.StationType;
 import com.pockyl.handson_letsdo.Cookable;
 import com.pockyl.handson_letsdo.HandsOnConfig;
 import com.pockyl.handson_letsdo.HandsOnLetsDo;
@@ -34,17 +36,35 @@ import com.pockyl.handson_letsdo.station.FarmCharmStove;
 import com.pockyl.handson_letsdo.station.KitchenOven;
 import com.pockyl.handson_letsdo.station.OvenLogic;
 import com.pockyl.handson_letsdo.station.OvenStation;
+import com.pockyl.handson_letsdo.station.Pot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 /**
- * The stove's rules against a real stove of Farm &amp; Charm, the same on every loader; each loader's holder class calls them.
- * They pass at once without Farm &amp; Charm.
+ * The stove's rules against a real stove of Farm &amp; Charm, and the same against one of Candlelight's ({@link Under}), the same on
+ * every loader; each loader's holder class calls them. They pass at once without the stove's mods.
  */
 public final class StoveTests {
     /** Longer than three dishes take the stove: one test waits for them with nobody near. */
     public static final int THREE_BAKES = 3 * FarmCharmStove.BAKE_TIME + 200;
+
+    /** A stove the tests run against: its block, its station, its scene, the mods it comes with and its key in the config. */
+    public record Under(Supplier<Block> block, ResourceLocation id, StationType type, String scene, List<String> mods,
+            BooleanSupplier on) {
+        boolean installed() {
+            return mods.stream().allMatch(HandsOnLetsDo::has);
+        }
+    }
+
+    /** Farm &amp; Charm's own stove. */
+    public static final Under FARM_AND_CHARM = new Under(FarmCharmStove.BLOCK, OvenStation.STOVE_ID, OvenStation.STOVE_TYPE, "stove",
+            List.of(FarmCharmDishes.MOD_ID), HandsOnConfig::stove);
+    /** Candlelight's cobblestone stove: Farm &amp; Charm's stove in a block of Candlelight's, with a scene of its own front. */
+    public static final Under CANDLELIGHT = candlelight("cobblestone");
 
     private StoveTests() {
     }
@@ -60,22 +80,30 @@ public final class StoveTests {
     }
 
     /** A stove at {@code at} with the logic the station would make for it. */
-    private static Setup stove(GameTestHelper helper, BlockPos at) {
-        helper.setBlock(at, FarmCharmStove.BLOCK.get());
+    /** Candlelight's stove of {@code name} ({@link FarmCharmStove#CANDLELIGHT_STOVES}). */
+    public static Under candlelight(String name) {
+        int index = FarmCharmStove.CANDLELIGHT_STOVES.indexOf(name);
+        ResourceLocation block = FarmCharmStove.candlelightBlock(name);
+        return new Under(() -> BuiltInRegistries.BLOCK.get(block), OvenStation.candlelightId(name), OvenStation.CANDLELIGHT_TYPES.get(index),
+                OvenStation.candlelightId(name).getPath(), List.of(FarmCharmDishes.MOD_ID, Pot.CANDLELIGHT), HandsOnConfig::candlelightStoves);
+    }
+
+    private static Setup stove(GameTestHelper helper, Under under, BlockPos at) {
+        helper.setBlock(at, under.block().get());
         BlockPos pos = helper.absolutePos(at);
-        TestStation station = new TestStation(helper.getLevel(), pos, OvenStation.STOVE_TYPE);
+        TestStation station = new TestStation(helper.getLevel(), pos, under.type());
         BlockEntity entity = helper.getLevel().getBlockEntity(pos);
         FarmCharmStove stove = FarmCharmStove.of(entity);
-        helper.assertTrue(stove != null, "Farm & Charm's stove is the stove the station was made for");
+        helper.assertTrue(stove != null, under.id() + ": the stove is the stove the station was made for");
         return new Setup(station, new OvenLogic(station), stove, BlockNumbers.of(entity));
     }
 
-    private static Setup stove(GameTestHelper helper) {
-        return stove(helper, new BlockPos(1, 2, 1));
+    private static Setup stove(GameTestHelper helper, Under under) {
+        return stove(helper, under, new BlockPos(1, 2, 1));
     }
 
-    private static boolean withoutFarmAndCharm(GameTestHelper helper) {
-        if (HandsOnLetsDo.has(FarmCharmDishes.MOD_ID)) {
+    private static boolean without(GameTestHelper helper, Under under) {
+        if (under.installed()) {
             return false;
         }
         helper.succeed();
@@ -137,16 +165,20 @@ public final class StoveTests {
      * five slots, four numbers, its recipes read from the game's, and it is told who cooks at it.
      */
     public static void theStoveIsAStationOnlyWithFarmAndCharm(GameTestHelper helper) {
-        boolean installed = HandsOnLetsDo.has(FarmCharmDishes.MOD_ID);
-        helper.assertTrue(Diegesis.stationType(OvenStation.STOVE_ID).isPresent() == (installed && HandsOnConfig.stove()),
-                "the stove's station exists with Farm & Charm and only with it");
+        theStoveIsAStationOnlyWithFarmAndCharm(helper, FARM_AND_CHARM);
+    }
+
+    public static void theStoveIsAStationOnlyWithFarmAndCharm(GameTestHelper helper, Under under) {
+        boolean installed = under.installed();
+        helper.assertTrue(Diegesis.stationType(under.id()).isPresent() == (installed && under.on().getAsBoolean()),
+                "the stove's station exists with its mods and only with them");
         if (!installed) {
             helper.succeed();
             return;
         }
-        Setup setup = stove(helper);
+        Setup setup = stove(helper, under);
         BlockState state = helper.getLevel().getBlockState(setup.station.pos());
-        helper.assertTrue(Diegesis.stationFor(state).filter(type -> type == OvenStation.STOVE_TYPE).isPresent(), "the stove opens its station");
+        helper.assertTrue(Diegesis.stationFor(state).filter(type -> type == under.type()).isPresent(), "the stove opens its station");
         helper.assertTrue(setup.container().getContainerSize() == FarmCharmStove.SLOTS && setup.numbers.getCount() == FarmCharmStove.NUMBERS,
                 "five slots and four numbers");
         int recipes = setup.stove.recipes(helper.getLevel()).size();
@@ -166,10 +198,14 @@ public final class StoveTests {
      * last cook.
      */
     public static void theStovesSlotsAreItsOwn(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        theStovesSlotsAreItsOwn(helper, FARM_AND_CHARM);
+    }
+
+    public static void theStovesSlotsAreItsOwn(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = stove(helper);
+        Setup setup = stove(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.station.users.add(player);
         setup.logic.onOpen(setup.station, player);
@@ -199,11 +235,15 @@ public final class StoveTests {
      * after as many ticks of baking, the stove's own.
      */
     public static void breadThroughTheStationIsBreadByHoppers(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        breadThroughTheStationIsBreadByHoppers(helper, FARM_AND_CHARM);
+    }
+
+    public static void breadThroughTheStationIsBreadByHoppers(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
         BlockPos alone = new BlockPos(1, 3, 1);
-        helper.setBlock(alone, FarmCharmStove.BLOCK.get());
+        helper.setBlock(alone, under.block().get());
         helper.setBlock(alone.above(), Blocks.HOPPER.defaultBlockState().setValue(HopperBlock.FACING, Direction.DOWN));
         helper.setBlock(alone.east(), Blocks.HOPPER.defaultBlockState().setValue(HopperBlock.FACING, Direction.WEST));
         Container above = (Container) helper.getBlockEntity(alone.above());
@@ -214,7 +254,7 @@ public final class StoveTests {
         FarmCharmStove byHoppers = FarmCharmStove.of(aloneEntity);
         ContainerData aloneNumbers = BlockNumbers.of(aloneEntity);
 
-        Setup setup = stove(helper, new BlockPos(5, 2, 1));
+        Setup setup = stove(helper, under, new BlockPos(5, 2, 1));
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         player.getInventory().add(new ItemStack(farm("dough")));
@@ -264,10 +304,14 @@ public final class StoveTests {
      * over at every such change.
      */
     public static void takingTheDishKeepsWhatBakes(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        takingTheDishKeepsWhatBakes(helper, FARM_AND_CHARM);
+    }
+
+    public static void takingTheDishKeepsWhatBakes(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = stove(helper);
+        Setup setup = stove(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.stove.setPlace(0, new ItemStack(farm("corn"), 2));
@@ -295,10 +339,14 @@ public final class StoveTests {
      * three roasted corns. The stove alone takes both corns of a set from one place and stops with the other place still full.
      */
     public static void twoAlikeBakeToTheLastSet(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        twoAlikeBakeToTheLastSet(helper, FARM_AND_CHARM);
+    }
+
+    public static void twoAlikeBakeToTheLastSet(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = stove(helper);
+        Setup setup = stove(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.station.users.add(player);
         setup.logic.onOpen(setup.station, player);
@@ -342,11 +390,15 @@ public final class StoveTests {
      * inventory as the stove reads them, and with a fire under them the stove bakes that dish. The wait is skipped.
      */
     public static void everyBakingIsLaidFromTheBookAndBakes(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        everyBakingIsLaidFromTheBookAndBakes(helper, FARM_AND_CHARM);
+    }
+
+    public static void everyBakingIsLaidFromTheBookAndBakes(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
         BlockPos at = new BlockPos(1, 2, 1);
-        Setup[] setup = {stove(helper, at)};
+        Setup[] setup = {stove(helper, under, at)};
         List<KitchenOven.Baking> recipes = setup[0].stove.recipes(helper.getLevel()).stream()
                 .filter(recipe -> Cookable.all(recipe.ingredients())).toList();
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
@@ -365,7 +417,7 @@ public final class StoveTests {
                     // A new stove for each dish.
                     setup[0].container().clearContent();
                     helper.setBlock(at, Blocks.AIR);
-                    setup[0] = stove(helper, at);
+                    setup[0] = stove(helper, under, at);
                     setup[0].station.users.add(player);
                     setup[0].logic.onOpen(setup[0].station, player);
                     give(player, recipe);
@@ -393,10 +445,14 @@ public final class StoveTests {
      * shown what baked is empty again.
      */
     public static void aClientsCopyOfAnEmptiedStoveIsEmpty(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        aClientsCopyOfAnEmptiedStoveIsEmpty(helper, FARM_AND_CHARM);
+    }
+
+    public static void aClientsCopyOfAnEmptiedStoveIsEmpty(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = stove(helper);
+        Setup setup = stove(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.stove.setPlace(0, new ItemStack(farm("corn")));
@@ -425,10 +481,14 @@ public final class StoveTests {
      * is lost by looking in; shut, both go on.
      */
     public static void theStoveBakesOnlyShut(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        theStoveBakesOnlyShut(helper, FARM_AND_CHARM);
+    }
+
+    public static void theStoveBakesOnlyShut(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = stove(helper);
+        Setup setup = stove(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         attend(helper, setup, player);
         setup.logic.onCustomAction(setup.station, player, OvenStation.ACTION_DOOR, door(true));
@@ -462,10 +522,14 @@ public final class StoveTests {
      * right click and the stack with a left one, while the tray still takes nothing.
      */
     public static void fuelGoesOnTheFireWithTheDoorShut(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        fuelGoesOnTheFireWithTheDoorShut(helper, FARM_AND_CHARM);
+    }
+
+    public static void fuelGoesOnTheFireWithTheDoorShut(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = stove(helper);
+        Setup setup = stove(helper, under);
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
         setup.station.users.add(player);
         setup.logic.onOpen(setup.station, player);
@@ -492,10 +556,14 @@ public final class StoveTests {
 
     /** All the station tells a client who comes to a full stove is far below what one packet may hold. */
     public static void theStovesDataStaysSmall(GameTestHelper helper) {
-        if (withoutFarmAndCharm(helper)) {
+        theStovesDataStaysSmall(helper, FARM_AND_CHARM);
+    }
+
+    public static void theStovesDataStaysSmall(GameTestHelper helper, Under under) {
+        if (without(helper, under)) {
             return;
         }
-        Setup setup = stove(helper);
+        Setup setup = stove(helper, under);
         Container container = setup.container();
         container.setItem(FarmCharmStove.FIRST_PLACE, new ItemStack(farm("dough"), 64));
         container.setItem(FarmCharmStove.FIRST_PLACE + 1, new ItemStack(Items.SUGAR, 64));
@@ -518,10 +586,73 @@ public final class StoveTests {
      * the tray with a place for each ingredient and for the dish, the fire and the fuel, the badge and the book.
      */
     public static void theStovesSceneIsRead(GameTestHelper helper) {
-        StationTests.sceneIsRead(helper, "stove", List.of("oven", "body", "inside", "glow", "fuel", "panel", "door", "tray",
-                "rack_model", "place_0", "place_1", "place_2", "food_0", "food_1", "food_2", "served", "dish", "rack_zone", "badge", "dial_track",
-                "dial", "flame", "flame_lit", "preview", "book_open"), OvenStation.STOVE_SCHEMA,
-                List.of(OvenStation.INGREDIENTS, OvenStation.SERVED, OvenStation.FUEL));
+        theStovesSceneIsRead(helper, FARM_AND_CHARM);
+    }
+
+    /** The scene of a stove; Candlelight's bamboo stove has no inner box, its cage is its inside. */
+    public static void theStovesSceneIsRead(GameTestHelper helper, Under under) {
+        sceneIsRead(helper, under);
         helper.succeed();
+    }
+
+    private static void sceneIsRead(GameTestHelper helper, Under under) {
+        List<String> nodes = new ArrayList<>(List.of("oven", "body", "inside", "glow", "fuel", "panel", "door", "tray",
+                "rack_model", "place_0", "place_1", "place_2", "food_0", "food_1", "food_2", "served", "dish", "rack_zone", "badge", "dial_track",
+                "dial", "flame", "flame_lit", "preview", "book_open"));
+        if (under.scene().equals("candlelight_bamboo_stove")) {
+            nodes.remove("inside");
+        }
+        StationTests.sceneIsRead(helper, under.scene(), nodes, OvenStation.STOVE_SCHEMA,
+                List.of(OvenStation.INGREDIENTS, OvenStation.SERVED, OvenStation.FUEL));
+    }
+
+    /**
+     * Each of Candlelight's eleven stoves opens a station of its own, with its own scene, and is Farm &amp; Charm's stove there: what
+     * a cook lays on its tray through the station, shut in with a fire under it, bakes into the stove's dish.
+     */
+    public static void everyCandlelightStoveBakesAsTheStation(GameTestHelper helper) {
+        List<Under> stoves = FarmCharmStove.CANDLELIGHT_STOVES.stream().map(StoveTests::candlelight).toList();
+        for (Under under : stoves) {
+            sceneIsRead(helper, under);
+        }
+        if (!CANDLELIGHT.installed()) {
+            helper.succeed();
+            return;
+        }
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
+        Setup[] setups = new Setup[stoves.size()];
+        for (int i = 0; i < stoves.size(); i++) {
+            Under under = stoves.get(i);
+            Setup setup = stove(helper, under, new BlockPos(1 + i % 5, 2, 1 + 2 * (i / 5)));
+            setups[i] = setup;
+            BlockState state = helper.getLevel().getBlockState(setup.station.pos());
+            helper.assertTrue(Diegesis.stationFor(state).filter(type -> type == under.type()).isPresent(), under.id() + " opens its own station");
+            setup.station.users.add(player);
+            setup.logic.onOpen(setup.station, player);
+            player.getInventory().add(new ItemStack(farm("corn"), 2));
+            player.getInventory().add(new ItemStack(farm("butter")));
+            fill(setup, player, baking(helper, setup, "roasted_corn").id(), false);
+            setup.container().setItem(FarmCharmStove.FUEL_SLOT, new ItemStack(Items.COAL));
+            setup.logic.onCustomAction(setup.station, player, OvenStation.ACTION_DOOR, door(false));
+        }
+        helper.onEachTick(() -> {
+            for (Setup setup : setups) {
+                setup.logic.tick(setup.station);
+            }
+        });
+        helper.runAfterDelay(10, () -> {
+            for (int i = 0; i < setups.length; i++) {
+                helper.assertTrue(setups[i].numbers.get(FarmCharmStove.COOK) > 0, stoves.get(i).id() + " bakes what the book laid, shut over a fire");
+                nearlyBaked(setups[i]);
+            }
+        });
+        helper.runAfterDelay(20, () -> {
+            for (int i = 0; i < setups.length; i++) {
+                helper.assertTrue(setups[i].stove.output(0).is(farm("roasted_corn")), stoves.get(i).id() + " baked roasted corn, got "
+                        + setups[i].stove.output(0));
+                setups[i].container().clearContent();
+            }
+            helper.succeed();
+        });
     }
 }

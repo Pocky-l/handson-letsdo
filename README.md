@@ -43,6 +43,8 @@ Built on [Diegesis](https://www.curseforge.com/minecraft/mc-mods/diegesis), from
   fries in it can be seen from around the pan.
 - **Stove** (Farm & Charm). Open the door, slide the grate out and lay the bread or the roast on it, coal goes into the
   firebox. It bakes with the door shut.
+- **Stoves** (Candlelight). Its eleven stoves, from cobblestone to bamboo, bake like Farm & Charm's stove. Each one opens
+  the door its front shows and slides out a grate, and the coal goes into its own firebox.
 - **Roaster** (Farm & Charm). Lay the food into the pan and swirl the roaster by its handle while it browns in its fat.
 - **Mincer** (Farm & Charm). Drop the meat into the hopper and turn the crank by hand, up to eight pieces at once. A
   heavier load turns slower, and the mince waits under the spout.
@@ -79,7 +81,7 @@ stirring the pot waits for, and scales the time of the pot and the roaster.
 
 [![Let's Do: HerbalBrews](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-herbal-brews.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-herbal-brews) ✅ **[Let's Do: HerbalBrews](https://www.curseforge.com/minecraft/mc-mods/lets-do-herbal-brews)** (optional) - the iron and copper tea kettles
 
-[![Let's Do: Candlelight](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-candlelight.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat) ✅ **[Let's Do: Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)** (optional) - its cooking pot and its cooking pan
+[![Let's Do: Candlelight](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-candlelight.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat) ✅ **[Let's Do: Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)** (optional) - its cooking pot, its cooking pan and its eleven stoves
 
 ## Installation
 
