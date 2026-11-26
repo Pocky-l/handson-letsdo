@@ -4,6 +4,10 @@ All notable changes to this mod are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0+1.21.1] - Unreleased
+### Added
+- [Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)'s cooking pot is a station: stir it as Farm & Charm's pot for stars that add servings, and dip bowls into the soup.
+
 ## [1.0.1+1.21.1] - 2026-11-25
 ### Fixed
 - The cooking pot and the tea kettles showed broken textures with Farm & Charm and HerbalBrews for 1.21.1: they now look as those mods draw them.
