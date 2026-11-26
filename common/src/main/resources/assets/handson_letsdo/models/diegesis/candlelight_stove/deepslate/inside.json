@@ -1,0 +1,79 @@
+{
+  "textures": {
+    "6": "candlelight:block/furnace_lit_inside",
+    "8": "candlelight:block/furnace_lit_inside_bottom",
+    "particle": "candlelight:block/furnace_lit_inside"
+  },
+  "elements": [
+    {
+      "name": "inner_block",
+      "from": [
+        14,
+        1,
+        0
+      ],
+      "to": [
+        2,
+        16,
+        13.01
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            12,
+            15
+          ],
+          "texture": "#6"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            12,
+            15
+          ],
+          "texture": "#6"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            12,
+            15
+          ],
+          "texture": "#6"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            12,
+            15
+          ],
+          "texture": "#6"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            13,
+            15
+          ],
+          "texture": "#6"
+        },
+        "down": {
+          "uv": [
+            14,
+            3,
+            2,
+            16
+          ],
+          "texture": "#8"
+        }
+      }
+    }
+  ]
+}

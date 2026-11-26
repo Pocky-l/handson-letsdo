@@ -1,6 +1,7 @@
 package com.pockyl.handson_letsdo.station;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,11 +15,14 @@ import com.pockyl.diegesis.api.station.StationType;
 import com.pockyl.handson_letsdo.HandsOnConfig;
 import com.pockyl.handson_letsdo.HandsOnLetsDo;
 
+import java.util.List;
+
 /**
  * An oven as a station, Hands-On Delight's shared oven: its door opens, the tray slides out with what bakes laid on it, the tray
  * goes back in and it bakes as the oven always does. One station for every oven ({@link KitchenOven}); each oven has its type and
  * scene. Farm &amp; Charm's stove ({@link #STOVE_TYPE}): the iron plate over its mouth drops, its grate slides out with three
- * places, the dish that is baked lies on the grate, and the fuel burns in the firebox under it.
+ * places, the dish that is baked lies on the grate, and the fuel burns in the firebox under it. Candlelight's eleven stoves
+ * ({@link #CANDLELIGHT_TYPES}) are the same stove in other blocks: the same station, each with a scene of its own front.
  */
 public final class OvenStation {
     public static final ResourceLocation STOVE_ID = HandsOnLetsDo.id("stove");
@@ -86,7 +90,32 @@ public final class OvenStation {
             .idleLogic()
             .build();
 
+    /**
+     * Candlelight's stoves, one station each ({@link FarmCharmStove#CANDLELIGHT_STOVES}, in that order): Farm &amp; Charm's stove in
+     * blocks of their own, so the stove's station, with a scene for each block, its door and firebox where its front has them.
+     */
+    public static final List<StationType> CANDLELIGHT_TYPES = FarmCharmStove.CANDLELIGHT_STOVES.stream().map(OvenStation::candlelightStove)
+            .toList();
+
     private OvenStation() {
+    }
+
+    /** The station of Candlelight's stove of {@code name}, and its scene's name. */
+    public static ResourceLocation candlelightId(String name) {
+        return HandsOnLetsDo.id("candlelight_" + name + "_stove");
+    }
+
+    private static StationType candlelightStove(String name) {
+        ResourceLocation block = FarmCharmStove.candlelightBlock(name);
+        return Diegesis.station(candlelightId(name))
+                .block(() -> BuiltInRegistries.BLOCK.get(block))
+                .schema(STOVE_SCHEMA)
+                .logic(OvenLogic::new)
+                .orientation(StationType.Orientation.BLOCK)
+                .openWhen(OvenStation::opensStove)
+                .hidesBlock()
+                .idleLogic()
+                .build();
     }
 
     /** The slots of an oven with {@code places} places holding {@code perPlace} each, its outputs, fuel and tool places. */
@@ -106,10 +135,16 @@ public final class OvenStation {
                 .build();
     }
 
-    /** With Farm &amp; Charm installed and the station left on in the config; otherwise the stove keeps its own menu. */
+    /**
+     * With Farm &amp; Charm installed and the station left on in the config; otherwise the stove keeps its own menu. Candlelight's
+     * stoves with Candlelight too, by their own key.
+     */
     public static void register() {
         if (HandsOnLetsDo.has(FarmCharmDishes.MOD_ID) && HandsOnConfig.stove()) {
             Diegesis.register(STOVE_TYPE);
+        }
+        if (HandsOnLetsDo.has(FarmCharmDishes.MOD_ID) && HandsOnLetsDo.has(Pot.CANDLELIGHT) && HandsOnConfig.candlelightStoves()) {
+            CANDLELIGHT_TYPES.forEach(Diegesis::register);
         }
     }
 

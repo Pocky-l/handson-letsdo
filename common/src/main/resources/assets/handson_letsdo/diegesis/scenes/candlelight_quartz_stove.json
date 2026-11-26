@@ -1,0 +1,448 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
+  "$comment": "Candlelight's quartz stove as a station, turned as the block faces (front to the north): Farm & Charm's stove's scene (stove.json, its notes there) on this stove's own openings. Its door, the cold front's pixels over its oven mouth, swings aside on its left hinge; the grate slides out 7 px with three places; the fuel lies in the firebox under it, an opening of its own. It is the stove in the world too, with nobody at it.",
+  "work_plane": 8,
+  "idle_visible": true,
+  "camera": {
+    "position": [
+      -7.5,
+      36.0,
+      -45.0
+    ],
+    "target": [
+      7.5,
+      8.5,
+      -1.5
+    ],
+    "fov": 30
+  },
+  "interface": {
+    "hide_player": true,
+    "inventory_panel": false,
+    "outline_color": "#FFFFE8C0"
+  },
+  "inventory_drawer": {
+    "side": "bottom",
+    "style": "minimal",
+    "always_open": true,
+    "compact": true,
+    "background": "#00000000",
+    "slot_color": "#8C1E140C",
+    "carry_size": 3.0
+  },
+  "clear_view": {
+    "blocks": false
+  },
+  "nodes": [
+    {
+      "id": "oven",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "pickable": false,
+      "children": [
+        {
+          "id": "body",
+          "pickable": false,
+          "visual": {
+            "model": "handson_letsdo:diegesis/candlelight_stove/quartz/body",
+            "lit_as_block": true
+          }
+        },
+        {
+          "id": "inside",
+          "pickable": false,
+          "visual": {
+            "model": "handson_letsdo:diegesis/candlelight_stove/quartz/inside",
+            "lit_as_block": true
+          }
+        },
+        {
+          "id": "glow",
+          "pickable": false,
+          "hidden": true,
+          "visual": {
+            "model": "handson_letsdo:diegesis/candlelight_stove/quartz/fire",
+            "emissive": true,
+            "translucent": true,
+            "tint": "#C0FFFFFF"
+          }
+        },
+        {
+          "id": "fuel",
+          "pos": [
+            0.5,
+            1,
+            -7.2
+          ],
+          "slot": {
+            "slot": "fuel[0]",
+            "ghost": [
+              "minecraft:coal",
+              "minecraft:charcoal",
+              "minecraft:oak_log"
+            ],
+            "display": "upright",
+            "size": 2.6,
+            "highlight": false,
+            "count_facing": "camera"
+          },
+          "collider": {
+            "from": [
+              -3.5,
+              0,
+              -1.4
+            ],
+            "to": [
+              3.5,
+              6,
+              0.6
+            ]
+          }
+        },
+        {
+          "id": "panel",
+          "collider": {
+            "from": [
+              -3.1,
+              0.9,
+              -8.8
+            ],
+            "to": [
+              4.1,
+              7.6,
+              -6.5
+            ]
+          }
+        },
+        {
+          "id": "door",
+          "pos": [
+            4,
+            7.95,
+            -8
+          ],
+          "visual": {
+            "model": "handson_letsdo:diegesis/candlelight_stove/quartz/door",
+            "anchor": [
+              12,
+              8,
+              0
+            ],
+            "lit_as_block": true
+          },
+          "collider": {
+            "from": [
+              -8,
+              0,
+              -0.3
+            ],
+            "to": [
+              0,
+              5,
+              1.2
+            ]
+          }
+        },
+        {
+          "id": "tray",
+          "pos": [
+            0,
+            8,
+            -5
+          ],
+          "pickable": false,
+          "children": [
+            {
+              "id": "rack_model",
+              "pos": [
+                0,
+                -8,
+                5
+              ],
+              "pickable": false,
+              "visual": {
+                "model": "handson_letsdo:diegesis/candlelight_stove/quartz/rack",
+                "lit_as_block": true
+              }
+            },
+            {
+              "id": "place_0",
+              "pos": [
+                2.6,
+                0.3,
+                0.5
+              ],
+              "slot": {
+                "slot": "ingredients[0]",
+                "display": "hidden",
+                "size": 2.5,
+                "highlight": true
+              },
+              "takes_items": true,
+              "children": [
+                {
+                  "id": "food_0",
+                  "pickable": false,
+                  "rotation": [
+                    -90,
+                    0,
+                    0
+                  ],
+                  "scale": 0.24,
+                  "hidden": true
+                }
+              ]
+            },
+            {
+              "id": "place_1",
+              "pos": [
+                0.0,
+                0.3,
+                0.5
+              ],
+              "slot": {
+                "slot": "ingredients[1]",
+                "display": "hidden",
+                "size": 2.5,
+                "highlight": true
+              },
+              "takes_items": true,
+              "children": [
+                {
+                  "id": "food_1",
+                  "pickable": false,
+                  "rotation": [
+                    -90,
+                    0,
+                    0
+                  ],
+                  "scale": 0.24,
+                  "hidden": true
+                }
+              ]
+            },
+            {
+              "id": "place_2",
+              "pos": [
+                -2.6,
+                0.3,
+                0.5
+              ],
+              "slot": {
+                "slot": "ingredients[2]",
+                "display": "hidden",
+                "size": 2.5,
+                "highlight": true
+              },
+              "takes_items": true,
+              "children": [
+                {
+                  "id": "food_2",
+                  "pickable": false,
+                  "rotation": [
+                    -90,
+                    0,
+                    0
+                  ],
+                  "scale": 0.24,
+                  "hidden": true
+                }
+              ]
+            },
+            {
+              "id": "served",
+              "pos": [
+                0,
+                0.6,
+                0.5
+              ],
+              "slot": {
+                "slot": "served[0]",
+                "display": "hidden",
+                "size": 4.4,
+                "highlight": true,
+                "item_size": 3.0
+              },
+              "children": [
+                {
+                  "id": "dish",
+                  "pickable": false,
+                  "rotation": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "scale": 0.25,
+                  "hidden": true
+                }
+              ]
+            },
+            {
+              "id": "rack_zone",
+              "takes_items": true,
+              "collider": {
+                "from": [
+                  -4,
+                  -0.3,
+                  -3
+                ],
+                "to": [
+                  4,
+                  0.8,
+                  10
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "pos": [
+        -1.5,
+        9.5,
+        -3.5
+      ],
+      "rotation": [
+        -30.9,
+        19.0,
+        0
+      ],
+      "pickable": false,
+      "scale": 1.25
+    },
+    {
+      "id": "dial_track",
+      "pos": [
+        -1.51,
+        9.51,
+        -3.53
+      ],
+      "rotation": [
+        -30.9,
+        19.0,
+        0
+      ],
+      "pickable": false,
+      "scale": 1.25
+    },
+    {
+      "id": "dial",
+      "pos": [
+        -1.52,
+        9.53,
+        -3.55
+      ],
+      "rotation": [
+        -30.9,
+        19.0,
+        0
+      ],
+      "pickable": false,
+      "scale": 1.25
+    },
+    {
+      "id": "dial_more",
+      "pos": [
+        -1.525,
+        9.54,
+        -3.56
+      ],
+      "rotation": [
+        -30.9,
+        19.0,
+        0
+      ],
+      "scale": 1.25,
+      "pickable": false
+    },
+    {
+      "id": "flame",
+      "pos": [
+        -1.51,
+        9.51,
+        -3.53
+      ],
+      "rotation": [
+        -30.9,
+        19.0,
+        0
+      ],
+      "pickable": false,
+      "scale": 1.25
+    },
+    {
+      "id": "flame_lit",
+      "pos": [
+        -1.52,
+        9.53,
+        -3.55
+      ],
+      "rotation": [
+        -30.9,
+        19.0,
+        0
+      ],
+      "pickable": false,
+      "scale": 1.25
+    },
+    {
+      "id": "preview",
+      "pos": [
+        -1.55,
+        9.55,
+        -3.59
+      ],
+      "rotation": [
+        59.1,
+        19.0,
+        0
+      ],
+      "scale": 0.156,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -12,
+          -12,
+          -12
+        ],
+        "to": [
+          12,
+          12,
+          12
+        ]
+      }
+    },
+    {
+      "id": "book_open",
+      "pos": [
+        7.95,
+        22.48,
+        -26.89
+      ],
+      "rotation": [
+        -30.9,
+        19.0,
+        0
+      ],
+      "scale": 0.69,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -5.3,
+          -0.4,
+          -3.9
+        ],
+        "to": [
+          5.3,
+          1.4,
+          3.9
+        ]
+      }
+    }
+  ]
+}

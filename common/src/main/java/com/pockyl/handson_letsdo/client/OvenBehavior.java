@@ -159,6 +159,11 @@ public final class OvenBehavior implements StationBehavior {
         return new OvenBehavior(view, OvenLook.STOVE);
     }
 
+    /** Candlelight's stove of {@code name}: its bamboo one has a door of its own. */
+    public static OvenBehavior candlelightStove(StationView view, String name) {
+        return new OvenBehavior(view, name.equals("bamboo") ? OvenLook.BAMBOO_STOVE : OvenLook.CANDLELIGHT_STOVE);
+    }
+
     private static KitchenOven oven(StationView view) {
         return KitchenOven.of(view.level().getBlockEntity(view.pos()));
     }

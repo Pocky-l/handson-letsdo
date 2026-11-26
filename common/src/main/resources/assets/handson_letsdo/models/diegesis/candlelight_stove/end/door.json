@@ -1,0 +1,257 @@
+{
+  "textures": {
+    "door": "candlelight:block/end_woodfiredoven_front",
+    "particle": "candlelight:block/end_woodfiredoven_front"
+  },
+  "elements": [
+    {
+      "name": "door",
+      "from": [
+        6,
+        12,
+        0
+      ],
+      "to": [
+        10,
+        13,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            3,
+            10,
+            4
+          ],
+          "texture": "#door"
+        },
+        "south": {
+          "uv": [
+            6,
+            3,
+            10,
+            4
+          ],
+          "texture": "#door"
+        },
+        "east": {
+          "uv": [
+            6,
+            3,
+            7,
+            4
+          ],
+          "texture": "#door"
+        },
+        "west": {
+          "uv": [
+            9,
+            3,
+            10,
+            4
+          ],
+          "texture": "#door"
+        },
+        "up": {
+          "uv": [
+            6,
+            3,
+            10,
+            4
+          ],
+          "texture": "#door"
+        }
+      }
+    },
+    {
+      "name": "door",
+      "from": [
+        5,
+        11,
+        0
+      ],
+      "to": [
+        11,
+        12,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            4,
+            11,
+            5
+          ],
+          "texture": "#door"
+        },
+        "south": {
+          "uv": [
+            5,
+            4,
+            11,
+            5
+          ],
+          "texture": "#door"
+        },
+        "east": {
+          "uv": [
+            5,
+            4,
+            6,
+            5
+          ],
+          "texture": "#door"
+        },
+        "west": {
+          "uv": [
+            10,
+            4,
+            11,
+            5
+          ],
+          "texture": "#door"
+        },
+        "up": {
+          "uv": [
+            5,
+            4,
+            11,
+            5
+          ],
+          "texture": "#door"
+        }
+      }
+    },
+    {
+      "name": "door",
+      "from": [
+        4,
+        9,
+        0
+      ],
+      "to": [
+        12,
+        11,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            5,
+            12,
+            7
+          ],
+          "texture": "#door"
+        },
+        "south": {
+          "uv": [
+            4,
+            5,
+            12,
+            7
+          ],
+          "texture": "#door"
+        },
+        "east": {
+          "uv": [
+            4,
+            5,
+            5,
+            7
+          ],
+          "texture": "#door"
+        },
+        "west": {
+          "uv": [
+            11,
+            5,
+            12,
+            7
+          ],
+          "texture": "#door"
+        },
+        "up": {
+          "uv": [
+            4,
+            5,
+            12,
+            6
+          ],
+          "texture": "#door"
+        },
+        "down": {
+          "uv": [
+            4,
+            6,
+            12,
+            7
+          ],
+          "texture": "#door"
+        }
+      }
+    },
+    {
+      "name": "door",
+      "from": [
+        5,
+        8,
+        0
+      ],
+      "to": [
+        11,
+        9,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            7,
+            11,
+            8
+          ],
+          "texture": "#door"
+        },
+        "south": {
+          "uv": [
+            5,
+            7,
+            11,
+            8
+          ],
+          "texture": "#door"
+        },
+        "east": {
+          "uv": [
+            5,
+            7,
+            6,
+            8
+          ],
+          "texture": "#door"
+        },
+        "west": {
+          "uv": [
+            10,
+            7,
+            11,
+            8
+          ],
+          "texture": "#door"
+        },
+        "down": {
+          "uv": [
+            5,
+            7,
+            11,
+            8
+          ],
+          "texture": "#door"
+        }
+      }
+    }
+  ]
+}
