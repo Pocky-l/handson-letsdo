@@ -8,6 +8,7 @@
     "ApplePressInvoker",
     "ApplePressMixin",
     "BlockEntityUpdateMixin",
+    "CauldronMixin",
     "CraftingBowlMixin",
     "FermentationBarrelMixin",
     "MincerMixin",

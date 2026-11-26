@@ -5,6 +5,7 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 
 import com.pockyl.handson_letsdo.gametest.BowlTests;
+import com.pockyl.handson_letsdo.gametest.CauldronTests;
 import com.pockyl.handson_letsdo.gametest.KettleTests;
 import com.pockyl.handson_letsdo.gametest.MincerTests;
 import com.pockyl.handson_letsdo.gametest.PotTests;
@@ -13,7 +14,7 @@ import com.pockyl.handson_letsdo.gametest.RoasterTests;
 import com.pockyl.handson_letsdo.gametest.StationTests;
 import com.pockyl.handson_letsdo.gametest.StoveTests;
 
-/** {@link StationTests}, {@link PotTests}, {@link StoveTests}, {@link RoasterTests}, {@link KettleTests}, {@link PressTests}, {@link MincerTests} and {@link BowlTests} on Fabric: they run when the game starts with {@code -Dfabric-api.gametest}. */
+/** {@link StationTests}, {@link PotTests}, {@link StoveTests}, {@link RoasterTests}, {@link KettleTests}, {@link CauldronTests}, {@link PressTests}, {@link MincerTests} and {@link BowlTests} on Fabric: they run when the game starts with {@code -Dfabric-api.gametest}. */
 public final class FabricStationTests implements FabricGameTest {
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
     public void modLoads(GameTestHelper helper) {
@@ -473,6 +474,41 @@ public final class FabricStationTests implements FabricGameTest {
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
     public void theKettlesSceneIsRead(GameTestHelper helper) {
         KettleTests.theKettlesSceneIsRead(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void theCauldronIsAStationOnlyWithHerbalBrews(GameTestHelper helper) {
+        CauldronTests.theCauldronIsAStationOnlyWithHerbalBrews(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void theCauldronsSlotsAreItsOwn(GameTestHelper helper) {
+        CauldronTests.theCauldronsSlotsAreItsOwn(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void potionsArePouredAndDrawnBack(GameTestHelper helper) {
+        CauldronTests.potionsArePouredAndDrawnBack(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void theStickHurriesTheBrew(GameTestHelper helper) {
+        CauldronTests.theStickHurriesTheBrew(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void potionsWithoutEffectsBrewAsHerbalBrewsDoes(GameTestHelper helper) {
+        CauldronTests.potionsWithoutEffectsBrewAsHerbalBrewsDoes(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
+    public void aHopperStillFeedsTheCauldron(GameTestHelper helper) {
+        CauldronTests.aHopperStillFeedsTheCauldron(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void theCauldronsSceneIsRead(GameTestHelper helper) {
+        CauldronTests.theCauldronsSceneIsRead(helper);
     }
 
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)

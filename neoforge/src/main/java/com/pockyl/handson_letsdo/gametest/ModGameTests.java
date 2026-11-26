@@ -7,7 +7,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import com.pockyl.handson_letsdo.HandsOnLetsDo;
 
-/** {@link StationTests}, {@link PotTests}, {@link StoveTests}, {@link RoasterTests}, {@link KettleTests}, {@link PressTests}, {@link MincerTests} and {@link BowlTests} on NeoForge. */
+/** {@link StationTests}, {@link PotTests}, {@link StoveTests}, {@link RoasterTests}, {@link KettleTests}, {@link CauldronTests}, {@link PressTests}, {@link MincerTests} and {@link BowlTests} on NeoForge. */
 @GameTestHolder(HandsOnLetsDo.MOD_ID)
 @PrefixGameTestTemplate(false)
 public final class ModGameTests {
@@ -472,6 +472,41 @@ public final class ModGameTests {
     @GameTest(template = "empty")
     public static void theKettlesSceneIsRead(GameTestHelper helper) {
         KettleTests.theKettlesSceneIsRead(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void theCauldronIsAStationOnlyWithHerbalBrews(GameTestHelper helper) {
+        CauldronTests.theCauldronIsAStationOnlyWithHerbalBrews(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void theCauldronsSlotsAreItsOwn(GameTestHelper helper) {
+        CauldronTests.theCauldronsSlotsAreItsOwn(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void potionsArePouredAndDrawnBack(GameTestHelper helper) {
+        CauldronTests.potionsArePouredAndDrawnBack(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void theStickHurriesTheBrew(GameTestHelper helper) {
+        CauldronTests.theStickHurriesTheBrew(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void potionsWithoutEffectsBrewAsHerbalBrewsDoes(GameTestHelper helper) {
+        CauldronTests.potionsWithoutEffectsBrewAsHerbalBrewsDoes(helper);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void aHopperStillFeedsTheCauldron(GameTestHelper helper) {
+        CauldronTests.aHopperStillFeedsTheCauldron(helper);
+    }
+
+    @GameTest(template = "empty")
+    public static void theCauldronsSceneIsRead(GameTestHelper helper) {
+        CauldronTests.theCauldronsSceneIsRead(helper);
     }
 
     @GameTest(template = "room")

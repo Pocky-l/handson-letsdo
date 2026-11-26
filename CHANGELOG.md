@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0+1.21.1] - Unreleased
 ### Added
-- [Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)'s eleven stoves are stations: open the door, lay the food on the grate and shut it to bake, as at [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s stove.
+- [Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)'s eleven stoves are stations that bake as [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s stove does.
+- [HerbalBrews](https://www.curseforge.com/minecraft/mc-mods/lets-do-herbal-brews)'s brewing cauldron is a station: potions are poured in, stirred together and drawn into the flask.
 
 ## [1.1.0+1.21.1] - 2026-11-26
 ### Added

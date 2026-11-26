@@ -13,6 +13,7 @@ import com.pockyl.diegesis.api.client.StationView;
 import com.pockyl.handson_letsdo.HandsOnLetsDo;
 import com.pockyl.handson_letsdo.station.BarrelStation;
 import com.pockyl.handson_letsdo.station.BowlStation;
+import com.pockyl.handson_letsdo.station.CauldronStation;
 import com.pockyl.handson_letsdo.station.CookingPotStation;
 import com.pockyl.handson_letsdo.station.FarmCharmStove;
 import com.pockyl.handson_letsdo.station.KettleStation;
@@ -87,6 +88,7 @@ public final class HandsOnLetsDoClient {
         guiModels = models;
         // The crafting bowl's liquid: our own still surface, coloured by what was poured in.
         DiegesisClient.registerLiquid(BowlMass.LIQUID, new LiquidLook(0xFFFFFFFF, LiquidLook.LIQUID_SPRITE, false, 0.0F));
+        DiegesisClient.registerLiquid(CauldronBehavior.LIQUID, new LiquidLook(0xE6FFFFFF, LiquidLook.LIQUID_SPRITE, false, 0.0F));
         DiegesisClient.registerParticle(GRAIN, ParticleStyle.builder(ResourceLocation.fromNamespaceAndPath("minecraft", "generic_0")).color(0xFFFFFFFF)
                 .size(0.28F, 0.42F).life(0.35F, 0.6F).gravity(55.0F).drag(0.2F).pop().build());
         DiegesisClient.registerParticle(FAT, ParticleStyle.builder(ResourceLocation.fromNamespaceAndPath("minecraft", "drip_fall")).color(0xFFFFE7A8)
@@ -141,6 +143,9 @@ public final class HandsOnLetsDoClient {
         }
         if (Diegesis.stationType(KettleStation.ID).isPresent()) {
             DiegesisClient.registerBehavior(KettleStation.ID, KettleBehavior::new);
+        }
+        if (Diegesis.stationType(CauldronStation.ID).isPresent()) {
+            DiegesisClient.registerBehavior(CauldronStation.ID, CauldronBehavior::new);
         }
         if (Diegesis.stationType(PressStation.ID).isPresent()) {
             DiegesisClient.registerBehavior(PressStation.ID, PressBehavior::new);

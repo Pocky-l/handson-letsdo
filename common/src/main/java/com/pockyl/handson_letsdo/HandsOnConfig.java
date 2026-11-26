@@ -34,6 +34,8 @@ public final class HandsOnConfig {
             "  They bake as Farm & Charm's stove does, in its time with their own fuel either way.",
             "tea_kettle: HerbalBrews' tea kettles as a station, when that mod is there. Off, they keep their own menu. They brew",
             "  in their own time either way.",
+            "brewing_cauldron: HerbalBrews' brewing cauldron as a station, when that mod is there. Off, it keeps its own menu.",
+            "  Left alone it brews in its own time; stirred at the station, faster.",
             "apple_press: Vinery's apple press as a station, when that mod is there. Off, it keeps its own menu. At the station it",
             "  presses as the cook presses the screw's cap; left alone, it presses and bottles in the times Vinery's own config",
             "  gives it.",
@@ -58,6 +60,7 @@ public final class HandsOnConfig {
     private static boolean roaster = true;
     private static boolean candlelightCookingPan = true;
     private static boolean teaKettle = true;
+    private static boolean brewingCauldron = true;
     private static boolean applePress = true;
     private static boolean mincer = true;
     private static boolean craftingBowl = true;
@@ -90,6 +93,7 @@ public final class HandsOnConfig {
         roaster = read(values, "roaster", roaster);
         candlelightCookingPan = read(values, "candlelight_cooking_pan", candlelightCookingPan);
         teaKettle = read(values, "tea_kettle", teaKettle);
+        brewingCauldron = read(values, "brewing_cauldron", brewingCauldron);
         applePress = read(values, "apple_press", applePress);
         mincer = read(values, "mincer", mincer);
         craftingBowl = read(values, "crafting_bowl", craftingBowl);
@@ -167,6 +171,10 @@ public final class HandsOnConfig {
 
     public static boolean teaKettle() {
         return teaKettle;
+    }
+
+    public static boolean brewingCauldron() {
+        return brewingCauldron;
     }
 
     public static boolean applePress() {
