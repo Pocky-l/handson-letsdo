@@ -266,15 +266,11 @@ public final class KettleBehavior implements StationBehavior {
         view.setInventoryFilter(stack -> usable.test(stack, this::usable));
         book.opened(view);
         refresh(view);
-        // What the cook came with is meant for the kettle: water is poured in, anything else of use comes to the hand.
+        // Water the cook came with is poured in; anything else stays in its slot.
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && view.openedByUse() && player.inventoryMenu.getCarried().isEmpty()) {
-            ItemStack held = player.getMainHandItem();
-            if (KettleStation.pourable(view.state(), held)) {
-                sendPour(view, player.getInventory().selected);
-            } else if (!held.isEmpty() && usable(held)) {
-                view.takeFromInventory(player.getInventory().selected);
-            }
+        if (player != null && view.openedByUse() && player.inventoryMenu.getCarried().isEmpty()
+                && KettleStation.pourable(view.state(), player.getMainHandItem())) {
+            sendPour(view, player.getInventory().selected);
         }
     }
 

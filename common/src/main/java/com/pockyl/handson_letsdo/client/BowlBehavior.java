@@ -1,7 +1,5 @@
 package com.pockyl.handson_letsdo.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -194,13 +192,6 @@ public final class BowlBehavior implements StationBehavior {
         view.setInventoryFilter(stack -> usable.test(stack, it -> BowlRecipes.uses(recipes, it)) || drawsBack(view, stack));
         book.opened(view);
         refresh(view);
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && view.openedByUse() && player.inventoryMenu.getCarried().isEmpty()) {
-            ItemStack held = player.getMainHandItem();
-            if (!held.isEmpty() && BowlRecipes.uses(recipes, held)) {
-                view.takeFromInventory(player.getInventory().selected);
-            }
-        }
     }
 
     @Override

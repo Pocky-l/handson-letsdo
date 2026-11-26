@@ -154,14 +154,6 @@ public final class MincerBehavior implements StationBehavior {
         view.setInventoryFilter(stack -> usable.test(stack, it -> MincerRecipes.taking(recipes, it) != null));
         book.opened(view);
         refresh(view);
-        // What the cook came with is meant for the hopper: it comes to the hand.
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && view.openedByUse() && player.inventoryMenu.getCarried().isEmpty()) {
-            ItemStack held = player.getMainHandItem();
-            if (!held.isEmpty() && MincerRecipes.taking(recipes, held) != null) {
-                view.takeFromInventory(player.getInventory().selected);
-            }
-        }
     }
 
     @Override
