@@ -26,6 +26,7 @@ public final class CookingPotStation {
     public static final ResourceLocation ID = HandsOnLetsDo.id("cooking_pot");
     public static final ResourceLocation ROASTER_ID = HandsOnLetsDo.id("roaster");
     public static final ResourceLocation CANDLELIGHT_ID = HandsOnLetsDo.id("candlelight_cooking_pot");
+    public static final ResourceLocation CANDLELIGHT_PAN_ID = HandsOnLetsDo.id("candlelight_cooking_pan");
 
     public static final String INGREDIENTS = "ingredients";
     /** The soup that waits in the pot, as the dish it will be: a view, nothing is put there or taken from it. */
@@ -149,12 +150,26 @@ public final class CookingPotStation {
             .idleLogic()
             .build();
 
+    /**
+     * Candlelight's cooking pan, a roaster of its own without a lid: the roaster's station, swirled by its one handle, the roast
+     * served into bowls; and its scene the pan in the world too, what lies in it in sight as at the station.
+     */
+    public static final StationType CANDLELIGHT_PAN_TYPE = Diegesis.station(CANDLELIGHT_PAN_ID)
+            .block(Pot.CANDLELIGHT_PAN.blockSupplier())
+            .schema(SCHEMA)
+            .logic(station -> new PotLogic(station, Pot.CANDLELIGHT_PAN))
+            .orientation(StationType.Orientation.PLAYER)
+            .openWhen(CookingPotStation::opens)
+            .hidesBlock()
+            .idleLogic()
+            .build();
+
     private CookingPotStation() {
     }
 
     /**
-     * With Farm &amp; Charm installed (and Candlelight for its pot, which cooks Farm &amp; Charm's dishes) and the station left on in
-     * the config; otherwise the pot keeps its own menu.
+     * With Farm &amp; Charm installed (and Candlelight for its pot and pan, which cook Farm &amp; Charm's dishes) and the station
+     * left on in the config; otherwise the pot keeps its own menu.
      */
     public static void register() {
         if (HandsOnLetsDo.has(FarmCharmDishes.MOD_ID) && Pot.COOKING_POT.active()) {
@@ -165,6 +180,9 @@ public final class CookingPotStation {
         }
         if (HandsOnLetsDo.has(FarmCharmDishes.MOD_ID) && HandsOnLetsDo.has(Pot.CANDLELIGHT) && Pot.CANDLELIGHT_POT.active()) {
             Diegesis.register(CANDLELIGHT_TYPE);
+        }
+        if (HandsOnLetsDo.has(FarmCharmDishes.MOD_ID) && HandsOnLetsDo.has(Pot.CANDLELIGHT) && Pot.CANDLELIGHT_PAN.active()) {
+            Diegesis.register(CANDLELIGHT_PAN_TYPE);
         }
     }
 

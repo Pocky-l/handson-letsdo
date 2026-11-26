@@ -66,24 +66,32 @@ public final class PotBehavior implements StationBehavior {
      * and how it is turned there (pixels from the pot's middle, degrees), and where it is set down while somebody cooks.
      * {@code worldLook}: the scene is the pot's look in the world too, with nobody at it as well, wherever it is drawn: its own
      * block shows it otherwise (a flat surface where the scene has water and what swims in it), and would change the moment a cook
-     * came.
+     * came. {@code inside}: a dry pan's floor and walls, where what lies in it slides; null in a pot. A pan whose scene has no lid
+     * ({@code lidRest} null) shows none.
      */
     public record Shape(Pot.Kind kind, float floor, float depth, float spoonEnd, float rim, float lean, float homeX, float homeZ,
-            boolean dry, String models, boolean lit, Vector3f lidOn, float lidOnYaw, LidRest lidRest, boolean worldLook) {
+            boolean dry, String models, boolean lit, Vector3f lidOn, float lidOnYaw, LidRest lidRest, boolean worldLook,
+            RoasterPan.Inside inside) {
         /** Farm &amp; Charm's cooking pot: walls and floor 1 px, rim at 8; its stick stands off the middle, to the front. */
         public static final Shape COOKING_POT = new Shape(Pot.COOKING_POT, 1.0F, 5.5F, 2.0F, 8.0F, 22.5F, 0.87F, -2.0F, false,
-                "cooking_pot", true, new Vector3f(-1.123F, 8.0F, 2.685F), -22.5F, LidRest.COOKING_POT, true);
+                "cooking_pot", true, new Vector3f(-1.123F, 8.0F, 2.685F), -22.5F, LidRest.COOKING_POT, true, null);
         /**
          * Farm &amp; Charm's roaster: a pan 10 by 8 inside, floor 1 px, rim at 6, under a lid that covers it whole.
          */
         public static final Shape ROASTER = new Shape(Pot.ROASTER, 1.0F, 0.0F, 1.0F, 6.0F, 0.0F, 0.0F, 0.0F, true,
-                "roaster", false, new Vector3f(0.0F, 6.0F, 0.0F), 0.0F, LidRest.ROASTER, false);
+                "roaster", false, new Vector3f(0.0F, 6.0F, 0.0F), 0.0F, LidRest.ROASTER, false, RoasterPan.Inside.ROASTER);
         /**
          * Candlelight's cooking pot: Farm &amp; Charm's pot 4 px taller, walls and floor 1 px, rim at 12; its longer stick stands on
          * the floor off the middle, to the back, and its lid lies askew the other way round.
          */
         public static final Shape CANDLELIGHT_POT = new Shape(Pot.CANDLELIGHT_POT, 1.0F, 9.5F, 1.0F, 12.0F, 22.5F, -1.05F, 2.0F, false,
-                "candlelight_cooking_pot", true, new Vector3f(-2.364F, 12.0F, 2.158F), 22.5F, LidRest.CANDLELIGHT_POT, true);
+                "candlelight_cooking_pot", true, new Vector3f(-2.364F, 12.0F, 2.158F), 22.5F, LidRest.CANDLELIGHT_POT, true, null);
+        /**
+         * Candlelight's cooking pan: a pan 8 by 8 inside, floor 1 px, rim at 4, one long handle and no lid; what lies in it is in
+         * sight in the world as at the station.
+         */
+        public static final Shape CANDLELIGHT_PAN = new Shape(Pot.CANDLELIGHT_PAN, 1.0F, 0.0F, 1.0F, 4.0F, 0.0F, 0.0F, 0.0F, true,
+                "candlelight_cooking_pan", false, new Vector3f(0.0F, 4.0F, 0.0F), 0.0F, null, true, RoasterPan.Inside.CANDLELIGHT_PAN);
     }
 
     /** Arrays are as long as the biggest pot needs; a pot uses its own {@link Shape#slots} of them. */
@@ -438,7 +446,7 @@ public final class PotBehavior implements StationBehavior {
         this.shape = shape;
         kind = shape.kind();
         dry = shape.dry();
-        pan = dry ? new RoasterPan(ITEM_NODES) : null;
+        pan = dry ? new RoasterPan(ITEM_NODES, shape.inside()) : null;
         floorOfShape = shape.floor();
         rimOfShape = shape.rim();
         brothFloor = shape.floor();
@@ -1402,7 +1410,8 @@ public final class PotBehavior implements StationBehavior {
         });
         float before = lid;
         lid = Mth.clamp(lid + (view.isInUse() ? dt : -dt) / LID_MOVE, 0.0F, 1.0F);
-        lidShown = open && (heated || !shape.lit());
+        // A pot without a lid in its scene (Candlelight's pan) has none to set down.
+        lidShown = open && (heated || !shape.lit()) && view.node("lid").isPresent();
         if (lidShown && (before < 1.0F && lid >= 1.0F || before > 0.0F && lid <= 0.0F)) {
             view.playSound(SoundEvents.LANTERN_PLACE, "lid", 0.25F, 0.8F + view.level().getRandom().nextFloat() * 0.1F);
         }

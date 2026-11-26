@@ -340,6 +340,41 @@ public final class ModGameTests {
     }
 
     @GameTest(template = "room")
+    public static void theRoasterTellsItsClientsWhatItHolds(GameTestHelper helper) {
+        RoasterTests.theRoasterTellsItsClientsWhatItHolds(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightsPanIsAStationOnlyWithCandlelight(GameTestHelper helper) {
+        RoasterTests.theRoasterIsAStationOnlyWithFarmAndCharm(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightASwirledPanRoastsAndAnUnswirledOneWaits(GameTestHelper helper) {
+        RoasterTests.aSwirledRoasterRoastsAndAnUnswirledOneWaits(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = PotTests.OWN_TIMEOUT)
+    public static void candlelightAHopperFedPanRoastsUpstreamsWay(GameTestHelper helper) {
+        RoasterTests.aHopperFedRoasterRoastsUpstreamsWay(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 600)
+    public static void candlelightEveryRoastIsLaidFromTheBookAndRoastsInThePan(GameTestHelper helper) {
+        RoasterTests.everyRoastIsLaidFromTheBookAndRoasts(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
+    public static void candlelightThePanTellsItsClientsWhatItHolds(GameTestHelper helper) {
+        RoasterTests.theRoasterTellsItsClientsWhatItHolds(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "empty")
+    public static void candlelightThePansSceneIsRead(GameTestHelper helper) {
+        RoasterTests.theRoastersSceneIsRead(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = "room")
     public static void theKettleIsAStationOnlyWithHerbalBrews(GameTestHelper helper) {
         KettleTests.theKettleIsAStationOnlyWithHerbalBrews(helper);
     }

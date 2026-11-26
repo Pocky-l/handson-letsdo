@@ -26,6 +26,8 @@ public final class HandsOnConfig {
             "candlelight_cooking_pot: Candlelight's cooking pot as a station, when that mod is there. Off, it keeps its own",
             "  menu. It is stirred as Farm & Charm's pot is, in the time cooking_pot_time gives.",
             "roaster: Farm & Charm's roaster as a station, when that mod is there. Off, it keeps its own menu.",
+            "candlelight_cooking_pan: Candlelight's cooking pan as a station, when that mod is there. Off, it keeps its own",
+            "  menu. It is swirled as Farm & Charm's roaster is, in the time roaster_time gives.",
             "stove: Farm & Charm's stove as a station, when that mod is there. Off, it keeps its own menu. It bakes in its own",
             "  time with its own fuel either way.",
             "tea_kettle: HerbalBrews' tea kettles as a station, when that mod is there. Off, they keep their own menu. They brew",
@@ -44,13 +46,14 @@ public final class HandsOnConfig {
             "cooking_pot_time: how long a pot stirred at the station takes (Farm & Charm's and Candlelight's), as a multiple of",
             "  the usual time: 1.0 as it is, 2.0 twice as long, 0.5 half. Food left alone, fed by a hopper or cooked in the pot's",
             "  own menu keeps its own mod's time.",
-            "roaster_time: the same for a roaster worked at the station.");
+            "roaster_time: the same for a roaster worked at the station (Farm & Charm's roaster and Candlelight's pan).");
 
     private static boolean fermentationBarrel = true;
     private static boolean cookingPot = true;
     private static boolean candlelightCookingPot = true;
     private static boolean stove = true;
     private static boolean roaster = true;
+    private static boolean candlelightCookingPan = true;
     private static boolean teaKettle = true;
     private static boolean applePress = true;
     private static boolean mincer = true;
@@ -81,6 +84,7 @@ public final class HandsOnConfig {
         candlelightCookingPot = read(values, "candlelight_cooking_pot", candlelightCookingPot);
         stove = read(values, "stove", stove);
         roaster = read(values, "roaster", roaster);
+        candlelightCookingPan = read(values, "candlelight_cooking_pan", candlelightCookingPan);
         teaKettle = read(values, "tea_kettle", teaKettle);
         applePress = read(values, "apple_press", applePress);
         mincer = read(values, "mincer", mincer);
@@ -147,6 +151,10 @@ public final class HandsOnConfig {
 
     public static boolean roaster() {
         return roaster;
+    }
+
+    public static boolean candlelightCookingPan() {
+        return candlelightCookingPan;
     }
 
     public static boolean teaKettle() {

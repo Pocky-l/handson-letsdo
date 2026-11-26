@@ -9,6 +9,7 @@
     "ApplePressInvoker",
     "ApplePressMixin",
     "BlockEntityUpdateMixin",
+    "CookingPanUpdateMixin",
     "CraftingBowlMixin",
     "FermentationBarrelMixin",
     "MincerMixin",

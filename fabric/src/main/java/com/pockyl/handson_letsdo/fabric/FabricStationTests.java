@@ -341,6 +341,41 @@ public final class FabricStationTests implements FabricGameTest {
     }
 
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void theRoasterTellsItsClientsWhatItHolds(GameTestHelper helper) {
+        RoasterTests.theRoasterTellsItsClientsWhatItHolds(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void candlelightsPanIsAStationOnlyWithCandlelight(GameTestHelper helper) {
+        RoasterTests.theRoasterIsAStationOnlyWithFarmAndCharm(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void candlelightASwirledPanRoastsAndAnUnswirledOneWaits(GameTestHelper helper) {
+        RoasterTests.aSwirledRoasterRoastsAndAnUnswirledOneWaits(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = PotTests.OWN_TIMEOUT)
+    public void candlelightAHopperFedPanRoastsUpstreamsWay(GameTestHelper helper) {
+        RoasterTests.aHopperFedRoasterRoastsUpstreamsWay(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 600)
+    public void candlelightEveryRoastIsLaidFromTheBookAndRoastsInThePan(GameTestHelper helper) {
+        RoasterTests.everyRoastIsLaidFromTheBookAndRoasts(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void candlelightThePanTellsItsClientsWhatItHolds(GameTestHelper helper) {
+        RoasterTests.theRoasterTellsItsClientsWhatItHolds(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void candlelightThePansSceneIsRead(GameTestHelper helper) {
+        RoasterTests.theRoastersSceneIsRead(helper, RoasterTests.CANDLELIGHT);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
     public void theKettleIsAStationOnlyWithHerbalBrews(GameTestHelper helper) {
         KettleTests.theKettleIsAStationOnlyWithHerbalBrews(helper);
     }
