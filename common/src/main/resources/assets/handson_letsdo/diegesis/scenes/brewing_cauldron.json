@@ -1,0 +1,311 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
+  "$comment": "HerbalBrews' brewing cauldron. The station hides the block wherever this scene is drawn, with somebody at it or not, and shows it here, open (the cauldron tells the clients what it holds): the same cauldron, hollow under its opening (x and z 3..13) down to a floor at y 5, the brew standing in it up to y 13, where the block has it. The scene faces the cook; the code turns the cauldron to the way the block stands. The potions are the brew, not items: nothing shows their slots; the infusion floats on it; the flask that is done is the brew too, filled at the cauldron.",
+  "work_plane": 13,
+  "idle_visible": true,
+  "camera": {
+    "position": [
+      8,
+      53.733,
+      -12.763
+    ],
+    "target": [
+      8,
+      13,
+      8
+    ],
+    "fov": 30
+  },
+  "interface": {
+    "hide_player": true,
+    "inventory_panel": false,
+    "outline_color": "#FFFFE8C0"
+  },
+  "inventory_drawer": {
+    "side": "bottom",
+    "style": "minimal",
+    "always_open": true,
+    "compact": true,
+    "background": "#00000000",
+    "slot_color": "#8C1E140C"
+  },
+  "nodes": [
+    {
+      "$comment": "The cauldron, turned by the code to the world's sides. Its children are in its own axes, pixels from the middle of its foot.",
+      "id": "cauldron",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "pickable": false,
+      "visual": {
+        "model": "handson_letsdo:diegesis/cauldron/body",
+        "lit_as_block": true
+      },
+      "children": [
+        {
+          "$comment": "The brew: what was poured, in its colours, mixing as it brews into the flask's colour. Filled by the code; the station's tank only names it.",
+          "id": "brew",
+          "pickable": false,
+          "tank": {
+            "tank": "brew",
+            "inner": {
+              "from": [
+                -4.8,
+                5,
+                -4.8
+              ],
+              "to": [
+                4.8,
+                13,
+                4.8
+              ]
+            }
+          }
+        },
+        {
+          "$comment": "The cauldron's own stick. At rest its foot stands on the floor and it leans on the opening's edge, as the block shows it; taken by its upper part (a click holds it, a press drags it) it stirs, its foot following the hand round the brew. Placed, turned and shown by the code from its foot; its box is in its own axes, along it from its foot.",
+          "id": "stick",
+          "pos": [
+            0,
+            0,
+            0
+          ],
+          "strokes": true,
+          "visual": {
+            "model": "handson_letsdo:diegesis/cauldron/stick",
+            "lit_as_block": true
+          },
+          "collider": {
+            "from": [
+              -1.8,
+              9,
+              -1.8
+            ],
+            "to": [
+              1.8,
+              16.6,
+              1.8
+            ]
+          },
+          "hidden": true
+        },
+        {
+          "$comment": "The herbal infusion, afloat on the brew (on the floor of an empty cauldron); moved by the code. A click takes it back.",
+          "id": "sachet",
+          "pos": [
+            0,
+            0,
+            0
+          ],
+          "slot": {
+            "slot": "catalyst[0]",
+            "size": 3.6,
+            "counts": "hover",
+            "highlight": false
+          }
+        }
+      ]
+    },
+    {
+      "$comment": "What a stack on the cursor is brought to: the whole opening and the air over it. A potion is poured, the infusion thrown in, a glass bottle draws the last potion back.",
+      "id": "mouth",
+      "drop_zone": "catalyst",
+      "collider": {
+        "from": [
+          2.5,
+          5,
+          2.5
+        ],
+        "to": [
+          13.5,
+          18,
+          13.5
+        ]
+      }
+    },
+    {
+      "$comment": "Takes the click of an empty hand over the opening while a flask waits (it is filled) or a potion or the infusion from the inventory is offered; off otherwise.",
+      "id": "dip",
+      "collider": {
+        "from": [
+          2.5,
+          5,
+          2.5
+        ],
+        "to": [
+          13.5,
+          18,
+          13.5
+        ]
+      }
+    },
+    {
+      "$comment": "A potion or the infusion from the inventory, shown see-through over the opening to an empty hand. Leant back to face the camera above; moved by the code.",
+      "id": "offer",
+      "pos": [
+        8,
+        18,
+        8
+      ],
+      "rotation": [
+        50,
+        0,
+        0
+      ],
+      "scale": 0.35,
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "$comment": "The bottle a potion is poured from. Moved by the code.",
+      "id": "pour_hand",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "$comment": "The flask filled at the cauldron, and a glass bottle that draws a potion back: dipped into the brew where it hangs. Leant back to face the camera above; moved by the code.",
+      "id": "dip_hand",
+      "pos": [
+        8,
+        18,
+        8
+      ],
+      "rotation": [
+        50,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "$comment": "The infusion thrown in: it flies from the cook to the brew. Moved by the code.",
+      "id": "throw",
+      "pos": [
+        8,
+        18,
+        8
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "badge",
+      "pos": [
+        -0.6,
+        21.827,
+        5.666
+      ],
+      "rotation": [
+        -36,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "dial_track",
+      "pos": [
+        -0.6,
+        21.851,
+        5.652
+      ],
+      "rotation": [
+        -36,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "dial",
+      "pos": [
+        -0.6,
+        21.875,
+        5.637
+      ],
+      "rotation": [
+        -36,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "$comment": "The badge's pale count of what is still to come, and its time.",
+      "id": "dial_more",
+      "pos": [
+        -0.6,
+        21.887,
+        5.63
+      ],
+      "rotation": [
+        -36,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "preview",
+      "pos": [
+        -0.6,
+        21.924,
+        5.608
+      ],
+      "rotation": [
+        54,
+        0,
+        0
+      ],
+      "scale": 0.125,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -12,
+          -12,
+          -12
+        ],
+        "to": [
+          12,
+          12,
+          12
+        ]
+      }
+    },
+    {
+      "id": "book_open",
+      "pos": [
+        16.33,
+        30.428,
+        -1.053
+      ],
+      "rotation": [
+        -36,
+        0,
+        0
+      ],
+      "scale": 0.69,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -5.3,
+          -0.4,
+          -3.9
+        ],
+        "to": [
+          5.3,
+          1.4,
+          3.9
+        ]
+      }
+    }
+  ]
+}

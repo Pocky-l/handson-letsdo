@@ -153,6 +153,55 @@
         "Z002"
       ],
       "reason": "Candlelight's own bamboo walls, top and floor, planes seen from inside and outside as it has them"
+    },
+    {
+      "model": "handson_letsdo:diegesis/cauldron/body",
+      "element": "leg",
+      "face": "*",
+      "flags": [
+        "D001",
+        "H006",
+        "Z003"
+      ],
+      "reason": "HerbalBrews' own legs of its cauldron, kept as it has them"
+    },
+    {
+      "model": "handson_letsdo:diegesis/cauldron/body",
+      "element": "coal",
+      "face": "*",
+      "flags": [
+        "D001",
+        "H002"
+      ],
+      "reason": "HerbalBrews' own coal under its cauldron, kept as it has it"
+    },
+    {
+      "model": "handson_letsdo:diegesis/cauldron/body",
+      "element": "flames",
+      "face": "*",
+      "flags": [
+        "H002"
+      ],
+      "reason": "HerbalBrews' own campfire flames under its cauldron, reaching into its body as it has them"
+    },
+    {
+      "model": "handson_letsdo:diegesis/cauldron/body",
+      "element": "log",
+      "face": "*",
+      "flags": [
+        "H001",
+        "H006"
+      ],
+      "reason": "HerbalBrews' own logs under its cauldron, kept as it has them"
+    },
+    {
+      "model": "handson_letsdo:diegesis/cauldron/body",
+      "element": "rim_inside",
+      "face": "*",
+      "flags": [
+        "F014"
+      ],
+      "reason": "HerbalBrews' own inner walls of its cauldron's rim, a box turned inside out, kept as it has them"
     }
   ]
 }

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 
 import com.pockyl.handson_letsdo.station.BarrelStation;
 import com.pockyl.handson_letsdo.station.BowlStation;
+import com.pockyl.handson_letsdo.station.CauldronStation;
 import com.pockyl.handson_letsdo.station.CookingPotStation;
 import com.pockyl.handson_letsdo.station.KettleStation;
 import com.pockyl.handson_letsdo.station.MincerStation;
@@ -53,6 +54,7 @@ public final class HandsOnLetsDo {
         CookingPotStation.register();
         OvenStation.register();
         KettleStation.register();
+        CauldronStation.register();
         PressStation.register();
         MincerStation.register();
         BowlStation.register();
