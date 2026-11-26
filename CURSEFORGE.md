@@ -11,7 +11,7 @@
 
 <p style="text-align:center"><em>An addon by Pocky for the <a href="https://www.curseforge.com/members/satisfy/projects">Let's Do</a> mods by satisfy: work at their stations with your own hands.</em></p>
 
-<p style="text-align:center"><strong>The fermentation barrel, the apple press, the cooking pot, the stove, the roaster, the mincer, the crafting bowl and the tea kettle open right where they stand, with no menu screen. You stir the soup, turn the mincer's crank and whisk the dough yourself, and players nearby see what you make.</strong></p>
+<p style="text-align:center"><strong>The fermentation barrel, the apple press, the cooking pots, the stove, the roaster, the cooking pan, the mincer, the crafting bowl and the tea kettle open right where they stand, with no menu screen. You stir the soup, turn the mincer's crank and whisk the dough yourself, and players nearby see what you make.</strong></p>
 
 <p style="text-align:center"><span style="color:#e0884a"><strong>No menus</strong></span>, the blocks open in the world &nbsp;&middot;&nbsp; <span style="color:#e0884a"><strong>Every recipe</strong></span> of the Let's Do mods &nbsp;&middot;&nbsp; <span style="color:#e0884a"><strong>No new blocks or items</strong></span></p>
 
