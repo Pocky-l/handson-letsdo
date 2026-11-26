@@ -46,7 +46,7 @@ import java.util.List;
  * on every loader; each loader's holder class calls them. They pass at once without the pot's mods.
  */
 public final class PotTests {
-    /** Longer than Farm &amp; Charm cooks one serving for: one test waits for a pot fed by hoppers. */
+    /** Longer than any of these pots cooks one serving for by itself: one test waits for a pot fed by hoppers. */
     public static final int OWN_TIMEOUT = Pot.UPSTREAM_TIME + 200;
 
     /** A pot the tests run against: its kind, its station, its scene, and the mod besides Farm &amp; Charm it comes with. */
@@ -473,8 +473,8 @@ public final class PotTests {
                 helper.assertTrue(setup.pot.output().is(farm("potato_soup")) && setup.pot.output().getCount() == 1, "one soup, got "
                         + setup.pot.output());
                 long took = now - began[0];
-                helper.assertTrue(began[0] >= 0 && Math.abs(took - Pot.UPSTREAM_TIME) <= 2, "in Farm & Charm's own time ("
-                        + Pot.UPSTREAM_TIME + "), took " + took);
+                int own = under.kind().upstreamTime();
+                helper.assertTrue(began[0] >= 0 && Math.abs(took - own) <= 2, "in the pot's own time (" + own + "), took " + took);
                 helper.assertTrue(setup.cooking.servings() == 0, "and no soup waits for a cook");
                 helper.succeed();
             }

@@ -491,7 +491,7 @@ public final class PotLogic implements StationLogic {
         Dish making = soup != null || cooking == null ? null : cooking.making(level, pot);
         int batch = making == null ? 0 : PotCooking.batch(pot, making);
         float progress = cooking != null && batch > 0 ? cooking.progress(pot) : !pot.isReal() || cooking != null ? 0.0F
-                : Math.min(1.0F, (float) pot.time() / Pot.UPSTREAM_TIME);
+                : Math.min(1.0F, (float) pot.time() / pot.kind().upstreamTime());
         state.setControl(CookingPotStation.PROGRESS, progress);
         state.setControl(CookingPotStation.HEATED, pot.isHeated() ? 1.0F : 0.0F);
         boolean stirred = cooking != null && cooking.isStirred(now);

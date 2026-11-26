@@ -34,10 +34,21 @@ import java.util.Optional;
  * pan glistening. Pan pixels from the middle of its floor; the pan's own node carries them to the scene.
  */
 final class RoasterPan {
-    /** The pan's inside: half its width across the handles and half its depth; the floor's top. */
-    private static final float HALF_X = 5.0F;
-    private static final float HALF_Z = 4.0F;
-    private static final float FLOOR = 1.0F;
+    /**
+     * The inside of a pan, pixels: half its width (from side to side as its block stands facing north) and half its depth, the
+     * floor's top and the rim's height; and the free places what comes in is laid on, a hand's way.
+     */
+    record Inside(float halfX, float halfZ, float floor, float rim, float[][] places) {
+        /** Farm &amp; Charm's roaster: 10 by 8 across its handles, floor 1, rim 6; two rows of three. */
+        static final Inside ROASTER = new Inside(5.0F, 4.0F, 1.0F, 6.0F,
+                new float[][] {{-3.1F, 1.9F}, {0.1F, 2.0F}, {3.1F, 1.8F}, {-3.0F, -1.9F}, {0.0F, -2.0F}, {3.2F, -1.9F}});
+        /**
+         * Candlelight's cooking pan: 8 by 8, floor 1, rim 4; three rows of two, the middle one wider, as six pieces fit in it.
+         */
+        static final Inside CANDLELIGHT_PAN = new Inside(4.0F, 4.0F, 1.0F, 4.0F,
+                new float[][] {{-1.5F, 2.5F}, {1.5F, 2.5F}, {-2.5F, 0.0F}, {2.5F, 0.0F}, {-1.5F, -2.5F}, {1.5F, -2.5F}});
+    }
+
     /** A piece: pixels across, how far round its middle it keeps others and the walls off, how thick it is in icon pixels. */
     private static final float SIZE = 3.8F;
     private static final float RADIUS = 1.45F;
@@ -114,12 +125,12 @@ final class RoasterPan {
     private static final int OIL_ALPHA = 0x9C;
     /**
      * The oil as the pot's liquid shows it (its tank of the station is unused at a roaster): the liquid it is drawn as, in this
-     * colour; how deep a full layer stands, of the pan's inside (5 px); how patchy it looks, how long trails stay on it and how
+     * colour; how deep a full layer stands, pixels; how patchy it looks, how long trails stay on it and how
      * clearly; how hard it seethes along the walls while it roasts and while it only stands hot.
      */
     private static final ResourceLocation OIL = ResourceLocation.fromNamespaceAndPath("minecraft", "water");
     private static final int OIL_RGB = 0xE8A93A;
-    private static final float OIL_DEPTH = 0.04F;
+    private static final float OIL_DEPTH = 0.2F;
     private static final float OIL_MOTTLE = 0.45F;
     private static final float OIL_WAKE_LIFE = 1.6F;
     private static final float OIL_WAKE_CONTRAST = 0.6F;
@@ -167,14 +178,17 @@ final class RoasterPan {
     private static final int UNSEEN = 0x00FFFFFF;
     private static final Vector3f SEETHE_UP = new Vector3f(0.0F, 0.6F, 0.0F);
 
-    /** The free places a piece is laid on, a hand's way: two rows of three. */
-    private static final float[][] PLACES = {{-3.1F, 1.9F}, {0.1F, 2.0F}, {3.1F, 1.8F}, {-3.0F, -1.9F}, {0.0F, -2.0F}, {3.2F, -1.9F}};
-
     private static final Map<Item, ItemStack> COOKED = new HashMap<>();
 
     private final String[] nodes;
     private final String[] looks;
     private final int slots;
+    private final float halfX;
+    private final float halfZ;
+    private final float floor;
+    /** Of the oil node's tank, which stands from the floor to the rim: how much a full layer of oil fills. */
+    private final float oilShare;
+    private final float[][] places;
     private final PanFat fat = new PanFat();
     private final RandomSource random = RandomSource.create();
 
@@ -230,9 +244,14 @@ final class RoasterPan {
     private float readyClock;
     private boolean painted;
 
-    RoasterPan(String[] nodes) {
+    RoasterPan(String[] nodes, Inside inside) {
         this.nodes = nodes;
         this.slots = nodes.length;
+        halfX = inside.halfX();
+        halfZ = inside.halfZ();
+        floor = inside.floor();
+        oilShare = OIL_DEPTH / (inside.rim() - inside.floor());
+        places = inside.places();
         looks = new String[slots];
         for (int i = 0; i < slots; i++) {
             looks[i] = "look_" + i;
@@ -371,11 +390,11 @@ final class RoasterPan {
         Matrix4f toPan = panMatrix(view).invert();
         Vector3f from;
         float[] to;
-        Vector3f cursor = view.cursorOn(at(view, 0.0F, FLOOR, 0.0F).y).map(toPan::transformPosition).orElse(new Vector3f(100.0F, FLOOR, 100.0F));
-        boolean overPan = Math.abs(cursor.x) < HALF_X && Math.abs(cursor.z) < HALF_Z;
+        Vector3f cursor = view.cursorOn(at(view, 0.0F, floor, 0.0F).y).map(toPan::transformPosition).orElse(new Vector3f(100.0F, floor, 100.0F));
+        boolean overPan = Math.abs(cursor.x) < halfX && Math.abs(cursor.z) < halfZ;
         if (count > 1 || !overPan) {
             // From the hand at the bottom of the screen onto a free place: a stack sent in from the inventory, a dish picked in the book.
-            from = FromPlayer.point(view, FLOOR + FLY_FROM, k, count).orElse(new Vector3f(8.0F, FLOOR + FLY_FROM, -2.0F));
+            from = FromPlayer.point(view, floor + FLY_FROM, k, count).orElse(new Vector3f(8.0F, floor + FLY_FROM, -2.0F));
             toPan.transformPosition(from);
             to = freePlace(index);
             flyTime[index] = FLY_TIME;
@@ -383,8 +402,8 @@ final class RoasterPan {
             flyAge[index] = -k * STAGGER;
         } else {
             // Let go over the pan: it drops where the hand is.
-            to = new float[] {Mth.clamp(cursor.x, -HALF_X + RADIUS, HALF_X - RADIUS), Mth.clamp(cursor.z, -HALF_Z + RADIUS, HALF_Z - RADIUS)};
-            from = new Vector3f(to[0], FLOOR + DROP_FROM, to[1]);
+            to = new float[] {Mth.clamp(cursor.x, -halfX + RADIUS, halfX - RADIUS), Mth.clamp(cursor.z, -halfZ + RADIUS, halfZ - RADIUS)};
+            from = new Vector3f(to[0], floor + DROP_FROM, to[1]);
             flyTime[index] = DROP_TIME;
             arc[index] = 0.0F;
             flyAge[index] = 0.0F;
@@ -403,9 +422,9 @@ final class RoasterPan {
 
     /** Of the laying places, the one farthest from everything already in the pan. */
     private float[] freePlace(int index) {
-        float[] best = PLACES[index % PLACES.length];
+        float[] best = places[index % places.length];
         float bestRoom = -1.0F;
-        for (float[] place : PLACES) {
+        for (float[] place : places) {
             float room = Float.MAX_VALUE;
             for (int j = 0; j < slots; j++) {
                 if (j != index && item[j] != null && Float.isNaN(meltAge[j])) {
@@ -459,7 +478,7 @@ final class RoasterPan {
         });
         roastAge = dish == null ? Float.NaN : 0.0F;
         if (dish != null) {
-            Vector3f middle = at(view, 0.0F, FLOOR + 1.0F, 0.0F);
+            Vector3f middle = at(view, 0.0F, floor + 1.0F, 0.0F);
             view.spawnParticles(DiegesisParticles.STEAM, middle, new Vector3f(0.0F, 3.0F, 0.0F), 2.0F, 4, 0x60FFFFFF);
             view.spawnParticles(DiegesisParticles.GLINT, middle, new Vector3f(0.0F, 2.0F, 0.0F), 2.5F, 4, GLINT_COLOR);
         }
@@ -561,21 +580,21 @@ final class RoasterPan {
         x[i] += vx[i] * dt;
         z[i] += vz[i] * dt;
         float r = radius(i);
-        if (x[i] > HALF_X - r) {
-            x[i] = HALF_X - r;
+        if (x[i] > halfX - r) {
+            x[i] = halfX - r;
             wall(view, i, vx[i], vz[i], 1.0F, 0.0F, heated);
             vx[i] = -Math.max(0.0F, vx[i]) * BOUNCE;
-        } else if (x[i] < -HALF_X + r) {
-            x[i] = -HALF_X + r;
+        } else if (x[i] < -halfX + r) {
+            x[i] = -halfX + r;
             wall(view, i, -vx[i], -vz[i], -1.0F, 0.0F, heated);
             vx[i] = -Math.min(0.0F, vx[i]) * BOUNCE;
         }
-        if (z[i] > HALF_Z - r) {
-            z[i] = HALF_Z - r;
+        if (z[i] > halfZ - r) {
+            z[i] = halfZ - r;
             wall(view, i, vz[i], -vx[i], 0.0F, 1.0F, heated);
             vz[i] = -Math.max(0.0F, vz[i]) * BOUNCE;
-        } else if (z[i] < -HALF_Z + r) {
-            z[i] = -HALF_Z + r;
+        } else if (z[i] < -halfZ + r) {
+            z[i] = -halfZ + r;
             wall(view, i, -vz[i], vx[i], 0.0F, -1.0F, heated);
             vz[i] = -Math.min(0.0F, vz[i]) * BOUNCE;
         }
@@ -594,7 +613,7 @@ final class RoasterPan {
         }
         knocked[i] = clock + KNOCK_GAP;
         float r = radius(i);
-        Vector3f contact = at(view, x[i] + nx * r, FLOOR + 0.15F, z[i] + nz * r);
+        Vector3f contact = at(view, x[i] + nx * r, floor + 0.15F, z[i] + nz * r);
         if (heated && pool > 0.05F) {
             view.spawnParticles(HandsOnLetsDoClient.OIL_POP, contact, SEETHE_UP, 0.4F, 2 + random.nextInt(3), 0);
             view.node("oil").ifPresent(oil -> oil.ripple(x[i] + nx * r, z[i] + nz * r, Math.min(0.3F, into * 0.015F)));
@@ -647,8 +666,8 @@ final class RoasterPan {
                 }
                 for (int k : new int[] {i, j}) {
                     float r = radius(k);
-                    x[k] = Mth.clamp(x[k], -HALF_X + r, HALF_X - r);
-                    z[k] = Mth.clamp(z[k], -HALF_Z + r, HALF_Z - r);
+                    x[k] = Mth.clamp(x[k], -halfX + r, halfX - r);
+                    z[k] = Mth.clamp(z[k], -halfZ + r, halfZ - r);
                 }
             }
         }
@@ -669,7 +688,7 @@ final class RoasterPan {
             return;
         }
         float px = x[i];
-        float py = FLOOR;
+        float py = floor;
         float pz = z[i];
         float pitch = over[i];
         float scale = 1.0F;
@@ -689,7 +708,7 @@ final class RoasterPan {
             pz = Mth.lerp(eased, fromZ[i], z[i]);
             // Dropped, it falls as things fall; thrown in, it comes over in an arc, turning.
             float fall = arc[i] > 0.0F ? t : t * t;
-            py = Mth.lerp(fall, fromY[i], FLOOR) + arc[i] * Mth.sin(t * Mth.PI);
+            py = Mth.lerp(fall, fromY[i], floor) + arc[i] * Mth.sin(t * Mth.PI);
             pitch += (1.0F - eased) * (arc[i] > 0.0F ? 180.0F : 0.0F);
             if (t >= 1.0F) {
                 flyAge[i] = Float.NaN;
@@ -702,7 +721,7 @@ final class RoasterPan {
             meltAge[i] += dt;
             float age = meltAge[i];
             if (age >= SWELL_TIME + GONE_TIME) {
-                Vector3f puff = at(view, px, FLOOR + 1.0F, pz);
+                Vector3f puff = at(view, px, floor + 1.0F, pz);
                 view.spawnParticles(DiegesisParticles.STEAM, puff, new Vector3f(0.0F, 4.0F, 0.0F), 0.5F, 4, 0);
                 view.spawnParticles(DiegesisParticles.GLINT, puff, new Vector3f(0.0F, 4.0F, 0.0F), 0.9F, 3, GLINT_COLOR);
                 clear(view, i);
@@ -772,7 +791,7 @@ final class RoasterPan {
         for (int k = 0; k < 4; k++) {
             spitFrom(view, i);
         }
-        view.spawnParticles(DiegesisParticles.STEAM, at(view, x[i], FLOOR + 0.8F, z[i]), new Vector3f(0.0F, 3.0F, 0.0F), 1.2F, 3, 0x50FFFFFF);
+        view.spawnParticles(DiegesisParticles.STEAM, at(view, x[i], floor + 0.8F, z[i]), new Vector3f(0.0F, 3.0F, 0.0F), 1.2F, 3, 0x50FFFFFF);
     }
 
     /**
@@ -810,7 +829,7 @@ final class RoasterPan {
         fat.frame(dt);
         float layer = pool;
         view.node("oil").ifPresent(oil -> {
-            oil.showLiquid(OIL, Math.max(0.2F, layer) * OIL_DEPTH);
+            oil.showLiquid(OIL, Math.max(0.2F, layer) * oilShare);
             oil.setLiquidColor(Math.round(OIL_ALPHA * layer) << 24 | OIL_RGB);
             oil.setMottle(OIL_MOTTLE);
             oil.setWakeLook(OIL_WAKE_LIFE, OIL_WAKE_CONTRAST * layer);
@@ -903,7 +922,8 @@ final class RoasterPan {
         shimmer += dt * (lying > 0 || roast != null ? SHIMMER_RATE : SHIMMER_EMPTY_RATE);
         while (shimmer >= 1.0F) {
             shimmer -= 1.0F;
-            view.spawnParticles(HandsOnLetsDoClient.HEAT, at(view, randomly(4.5F), FLOOR + 3.0F + random.nextFloat() * 2.0F, randomly(3.5F)),
+            Vector3f over = at(view, randomly(halfX - 0.5F), floor + 3.0F + random.nextFloat() * 2.0F, randomly(halfZ - 0.5F));
+            view.spawnParticles(HandsOnLetsDoClient.HEAT, over,
                     new Vector3f(0.0F, 3.0F, 0.0F), 0.3F, 1, 0);
         }
         if (lying == 0) {
@@ -925,7 +945,7 @@ final class RoasterPan {
             while (vapour >= 1.0F) {
                 vapour -= 1.0F;
                 int i = anyLying();
-                view.spawnParticles(DiegesisParticles.STEAM, at(view, x[i], FLOOR + 0.8F, z[i]),
+                view.spawnParticles(DiegesisParticles.STEAM, at(view, x[i], floor + 0.8F, z[i]),
                         direction(view, randomly(0.4F), 2.2F, randomly(0.4F)), 0.4F, 1, STEAM_COLOR);
             }
             smoke += dt * SMOKE_RATE * Math.max(0.0F, (progress - SMOKE_FROM) / (1.0F - SMOKE_FROM)) * fullness;
@@ -960,7 +980,7 @@ final class RoasterPan {
         boolean fullest = before < READY_BEAT * 0.25F && readyClock >= READY_BEAT * 0.25F;
         if (fullest) {
             for (int k = 0; k < 2; k++) {
-                view.spawnParticles(DiegesisParticles.GLINT, at(view, randomly(2.0F), FLOOR + ROAST_THICK * 0.5F + 0.4F, randomly(1.6F)),
+                view.spawnParticles(DiegesisParticles.GLINT, at(view, randomly(2.0F), floor + ROAST_THICK * 0.5F + 0.4F, randomly(1.6F)),
                         new Vector3f(0.0F, 0.8F, 0.0F), 0.4F, 1, GLINT_COLOR);
             }
         }
@@ -970,14 +990,14 @@ final class RoasterPan {
         wisps += dt * WISP_RATE;
         while (wisps >= 1.0F) {
             wisps -= 1.0F;
-            view.spawnParticles(DiegesisParticles.STEAM, at(view, randomly(2.0F), FLOOR + 1.0F, randomly(1.6F)),
+            view.spawnParticles(DiegesisParticles.STEAM, at(view, randomly(2.0F), floor + 1.0F, randomly(1.6F)),
                     direction(view, randomly(0.2F), 1.4F, randomly(0.2F)), 0.3F, 1, 0x30FFFFFF);
         }
         seethe += dt * 3.0F;
         while (seethe >= 1.0F) {
             seethe -= 1.0F;
             float angle = random.nextFloat() * Mth.TWO_PI;
-            view.spawnParticles(HandsOnLetsDoClient.OIL_POP, at(view, Mth.cos(angle) * 3.2F, FLOOR + 0.15F, Mth.sin(angle) * 2.6F), SEETHE_UP,
+            view.spawnParticles(HandsOnLetsDoClient.OIL_POP, at(view, Mth.cos(angle) * 3.2F, floor + 0.15F, Mth.sin(angle) * 2.6F), SEETHE_UP,
                     0.1F, 1, 0);
         }
     }
@@ -1022,7 +1042,7 @@ final class RoasterPan {
     private Vector3f round(StationView view, int i) {
         float angle = random.nextFloat() * Mth.TWO_PI;
         float out = radius(i) * (0.8F + 0.3F * random.nextFloat());
-        return at(view, x[i] + Mth.cos(angle) * out, FLOOR + 0.15F, z[i] + Mth.sin(angle) * out);
+        return at(view, x[i] + Mth.cos(angle) * out, floor + 0.15F, z[i] + Mth.sin(angle) * out);
     }
 
     private float randomly(float half) {

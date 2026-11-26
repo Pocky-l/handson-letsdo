@@ -290,7 +290,7 @@ public final class PotCooking {
             }
         }
         pot.setHeated(heated);
-        pot.setTime(servings > 0 ? 0 : Math.round(progress(pot) * (Pot.UPSTREAM_TIME - 1)));
+        pot.setTime(servings > 0 ? 0 : Math.round(progress(pot) * (pot.kind().upstreamTime() - 1)));
         pot.showState(heated, stirred && heated && servings <= 0);
         return true;
     }
@@ -302,7 +302,7 @@ public final class PotCooking {
     private void followOwnCooking(Pot pot) {
         int time = pot.time();
         if (time > 0) {
-            work = Math.max(work, time * (float) pot.kind().handTime() / Pot.UPSTREAM_TIME);
+            work = Math.max(work, time * (float) pot.kind().handTime() / pot.kind().upstreamTime());
         } else if (ownTime > 0) {
             work = 0.0F;
         }
@@ -544,7 +544,7 @@ public final class PotCooking {
         if (!vessel.isEmpty()) {
             container.setItem(Pot.VESSEL_SLOT, vessel.copyWithCount(1));
         }
-        pot.setTime(Pot.UPSTREAM_TIME - 1);
+        pot.setTime(pot.kind().upstreamTime() - 1);
         crafting = true;
         try {
             tickOwn(level);
