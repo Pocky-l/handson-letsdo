@@ -260,6 +260,96 @@ public final class ModGameTests {
     }
 
     @GameTest(template = "room")
+    public static void bakerysPotIsAStationOnlyWithBakery(GameTestHelper helper) {
+        PotTests.thePotIsAStationOnlyWithFarmAndCharm(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room")
+    public static void bakeryThePotsSlotsAreItsOwn(GameTestHelper helper) {
+        PotTests.thePotsSlotsAreItsOwn(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void bakeryAStirredPotCooksAndAnUnstirredOneWaits(GameTestHelper helper) {
+        PotTests.aStirredPotCooksAndAnUnstirredOneWaits(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room")
+    public static void bakeryTheSoupIsFilledIntoBowls(GameTestHelper helper) {
+        PotTests.theSoupIsFilledIntoBowls(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room")
+    public static void bakeryUnevenStacksMakeNoServingsFromNothing(GameTestHelper helper) {
+        PotTests.unevenStacksMakeNoServingsFromNothing(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room")
+    public static void bakeryWhatAnIngredientLeavesGoesToTheCook(GameTestHelper helper) {
+        PotTests.whatAnIngredientLeavesGoesToTheCook(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 400)
+    public static void bakeryStarsGiveBonusServings(GameTestHelper helper) {
+        PotTests.starsGiveBonusServings(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room", timeoutTicks = PotTests.OWN_TIMEOUT)
+    public static void bakeryAHopperFedPotCooksUpstreamsWay(GameTestHelper helper) {
+        PotTests.aHopperFedPotCooksUpstreamsWay(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void bakeryAHopperFeedsThePotByItselfBesideACook(GameTestHelper helper) {
+        PotTests.aHopperFeedsThePotByItselfBesideACook(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void bakeryACookInTheMenuCooksUpstreamsWay(GameTestHelper helper) {
+        PotTests.aCookInTheMenuCooksUpstreamsWay(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 300)
+    public static void bakeryAPotLeftMidStirGoesBackToUpstreamsTick(GameTestHelper helper) {
+        PotTests.aPotLeftMidStirGoesBackToUpstreamsTick(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room")
+    public static void bakeryADishThatNeedsNoBowlComesOutWhole(GameTestHelper helper) {
+        PotTests.aDishThatNeedsNoBowlComesOutWhole(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room")
+    public static void bakeryTwoAlikeThrownInMakeTheirDish(GameTestHelper helper) {
+        PotTests.twoAlikeThrownInMakeTheirDish(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 600)
+    public static void bakeryEveryDishIsLaidFromTheBookAndCooks(GameTestHelper helper) {
+        PotTests.everyDishIsLaidFromTheBookAndCooks(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room")
+    public static void bakeryALearnedDishCooksForTheCookWhoLearnedIt(GameTestHelper helper) {
+        PotTests.aLearnedDishCooksForTheCookWhoLearnedIt(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room")
+    public static void bakeryThePotTellsItsClientsWhatItHolds(GameTestHelper helper) {
+        PotTests.thePotTellsItsClientsWhatItHolds(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room")
+    public static void bakeryThePotsDataStaysSmall(GameTestHelper helper) {
+        PotTests.thePotsDataStaysSmall(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "empty")
+    public static void bakeryThePotsSceneIsRead(GameTestHelper helper) {
+        PotTests.thePotsSceneIsRead(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = "room")
     public static void theStoveIsAStationOnlyWithFarmAndCharm(GameTestHelper helper) {
         StoveTests.theStoveIsAStationOnlyWithFarmAndCharm(helper);
     }

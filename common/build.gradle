@@ -24,6 +24,7 @@ dependencies {
     modCompileOnly "maven.modrinth:lets-do-farm-charm:${farm_and_charm_version}"
     modCompileOnly "maven.modrinth:lets-do-herbalbrews:${herbalbrews_version}"
     modCompileOnly "maven.modrinth:lets-do-candlelight-farmcharm-compat:${candlelight_version}"
+    modCompileOnly "maven.modrinth:lets-do-bakery-farmcharm-compat:${bakery_version}"
 }
 
 configurations {

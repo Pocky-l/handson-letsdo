@@ -37,6 +37,8 @@ public record LidRest(float halfX, float halfZ, float wallX, float wallZ, float 
     public static final LidRest ROASTER = new LidRest(5.0F, 4.0F, 6.0F, 5.0F, 6.0F, 14.0F, new Vector3f());
     /** Candlelight's cooking pot: Farm &amp; Charm's pot and lid, the pot 4 px taller. */
     public static final LidRest CANDLELIGHT_POT = new LidRest(4.5F, 4.5F, 5.0F, 5.0F, 12.0F, 0.0F, new Vector3f(-0.5F, 0.0F, -0.5F));
+    /** Bakery's small cooking pot, 8 by 8 over its walls, rim at 5, and its 8 by 8 lid, its model centred on its block. */
+    public static final LidRest BAKERY_POT = new LidRest(4.0F, 4.0F, 4.0F, 4.0F, 5.0F, 0.0F, new Vector3f());
 
     /** How far the lid set down leans in onto the vessel's wall from upright, radians; and one hung on the rim. */
     private static final float LEAN = 12.0F * Mth.DEG_TO_RAD;

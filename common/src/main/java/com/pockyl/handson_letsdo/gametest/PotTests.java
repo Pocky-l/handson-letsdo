@@ -42,8 +42,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The cooking pot's rules against a real pot of Farm &amp; Charm, and the same against Candlelight's pot ({@link Under}), the same
- * on every loader; each loader's holder class calls them. They pass at once without the pot's mods.
+ * The cooking pot's rules against a real pot of Farm &amp; Charm, and the same against Candlelight's pot and Bakery's small pot
+ * ({@link Under}), the same on every loader; each loader's holder class calls them. They pass at once without the pot's mods.
  */
 public final class PotTests {
     /** Longer than any of these pots cooks one serving for by itself: one test waits for a pot fed by hoppers. */
@@ -59,6 +59,9 @@ public final class PotTests {
     /** Candlelight's cooking pot: Farm &amp; Charm's dishes in a pot of Candlelight's own. */
     public static final Under CANDLELIGHT = new Under(Pot.CANDLELIGHT_POT, CookingPotStation.CANDLELIGHT_ID,
             CookingPotStation.CANDLELIGHT_TYPE, "candlelight_cooking_pot", Pot.CANDLELIGHT);
+    /** Bakery's small cooking pot: Farm &amp; Charm's dishes in a small pot of Bakery's own, in a third of the time. */
+    public static final Under BAKERY = new Under(Pot.BAKERY_POT, CookingPotStation.BAKERY_ID, CookingPotStation.BAKERY_TYPE,
+            "bakery_small_cooking_pot", Pot.BAKERY);
 
     private PotTests() {
     }
@@ -391,8 +394,10 @@ public final class PotTests {
             player.inventoryMenu.setCarried(new ItemStack(Items.BOWL));
             scoop(setup, player, false, false);
             Item yeast = farm("yeast");
-            helper.assertTrue(player.inventoryMenu.getCarried().is(yeast) && player.inventoryMenu.getCarried().getCount() == 12,
-                    "one bowl takes the whole serving, twelve yeast, got " + player.inventoryMenu.getCarried());
+            // Twelve, as the recipe gives; one in a pot whose own tick makes one of a dish a serving (Bakery's).
+            int each = under.kind().oneEach() ? 1 : 12;
+            helper.assertTrue(player.inventoryMenu.getCarried().is(yeast) && player.inventoryMenu.getCarried().getCount() == each,
+                    "one bowl takes the whole serving, " + each + " yeast, got " + player.inventoryMenu.getCarried());
             helper.assertTrue(player.getInventory().countItem(Items.BUCKET) == 1, "the bucket the water came in goes to the cook");
             helper.assertTrue(setup.container().isEmpty(), "and nothing stays in the pot");
             helper.succeed();
@@ -732,7 +737,7 @@ public final class PotTests {
                     } else {
                         helper.assertTrue(setup[0].cooking.servings() >= 1, dish.id() + " is done and waits for its vessel");
                         scoop(setup[0], player, false, true);
-                        helper.assertTrue(player.getInventory().countItem(dish.result().getItem()) >= dish.result().getCount(),
+                        helper.assertTrue(player.getInventory().countItem(dish.result().getItem()) >= under.kind().perServing(dish),
                                 dish.id() + " is served in " + dish.vessel());
                     }
                 }

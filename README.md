@@ -41,6 +41,9 @@ Built on [Diegesis](https://www.curseforge.com/minecraft/mc-mods/diegesis), from
   Its tall copper pot is stirred like Farm & Charm's and earns the same stars, and its soup is dipped out with bowls.
 - **Cooking pan** (Candlelight). Lay the food into the open pan and swirl it by its long handle like the roaster; what
   fries in it can be seen from around the pan.
+- **Small cooking pot** ([Bakery](https://www.curseforge.com/minecraft/mc-mods/lets-do-bakery-farm-charm-compat), Minecraft 1.20.1).
+  Its lid goes aside, and the little pot is stirred like Farm & Charm's for the same stars; bowls dipped into it take the
+  soup out.
 - **Stove** (Farm & Charm). Open the door, slide the grate out and lay the bread or the roast on it, coal goes into the
   firebox. It bakes with the door shut.
 - **Stoves** (Candlelight). Its eleven stoves, from cobblestone to bamboo, bake like Farm & Charm's stove. Each one opens
@@ -82,6 +85,8 @@ stirring the pot waits for, and scales the time of the pot and the roaster.
 [![Let's Do: HerbalBrews](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-herbal-brews.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-herbal-brews) ✅ **[Let's Do: HerbalBrews](https://www.curseforge.com/minecraft/mc-mods/lets-do-herbal-brews)** (optional) - the iron and copper tea kettles
 
 [![Let's Do: Candlelight](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-candlelight.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat) ✅ **[Let's Do: Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)** (optional) - its cooking pot, its cooking pan and its eleven stoves
+
+[![Let's Do: Bakery](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-bakery.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-bakery-farm-charm-compat) ✅ **[Let's Do: Bakery](https://www.curseforge.com/minecraft/mc-mods/lets-do-bakery-farm-charm-compat)** (optional) - its small cooking pot (Minecraft 1.20.1; on 1.21.1 Bakery gave it no menu)
 
 ## Installation
 

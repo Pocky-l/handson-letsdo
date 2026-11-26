@@ -27,8 +27,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 /**
- * A pot of Farm &amp; Charm (its cooking pot, its roaster, and Candlelight's pot and pan, which are built as Farm &amp; Charm's)
- * as the station sees it: its own container and the numbers its menu shows ({@link BlockNumbers}). Nothing of either mod is named here,
+ * A pot of Farm &amp; Charm (its cooking pot, its roaster, Candlelight's pot and pan and Bakery's small pot, which are built as
+ * Farm &amp; Charm's) as the station sees it: its own container and the numbers its menu shows ({@link BlockNumbers}). Nothing of either mod is named here,
  * so the pot stays its mod's in every way and the station only looks into it.
  *
  * <p>Slots, as the pot has them: six ingredients, the vessel a serving is filled into (a bowl), the dish. Numbers: ticks cooked,
@@ -46,6 +46,8 @@ public final class Pot {
 
     /** Candlelight's mod id: its cooking pot and its cooking pan are of these pots. */
     public static final String CANDLELIGHT = "candlelight";
+    /** Bakery's mod id: its small cooking pot is of these pots. */
+    public static final String BAKERY = "bakery";
 
     /** Ticks Farm &amp; Charm cooks one serving for, in its pot and its roaster: the longest any of these pots takes. */
     public static final int UPSTREAM_TIME = 900;
@@ -56,15 +58,21 @@ public final class Pot {
 
     /**
      * One kind of pot: its block, the recipes it cooks, the block state it shows while it cooks, whether its own tick asks who
-     * cooks before it makes a dish that wants learning, the ticks its own tick cooks one serving for, and what the config says of
-     * its station: whether it is one, and how many times as long as usual it takes under the spoon.
+     * cooks before it makes a dish that wants learning, the ticks its own tick cooks one serving for, whether its own tick makes
+     * one of a dish a serving whatever the recipe gives ({@code oneEach}), and what the config says of its station: whether it is
+     * one, and how many times as long as usual it takes under the spoon.
      */
     public record Kind(String name, ResourceLocation block, ResourceLocation recipes, String cookingState, boolean learns,
-            int upstreamTime, BooleanSupplier on, Supplier<Float> time) {
+            int upstreamTime, boolean oneEach, BooleanSupplier on, Supplier<Float> time) {
         @SuppressWarnings("removal")
         static Kind of(String block, String recipes, String cookingState, BooleanSupplier on, Supplier<Float> time) {
             return new Kind(block, new ResourceLocation(FarmCharmDishes.MOD_ID, block), new ResourceLocation(FarmCharmDishes.MOD_ID, recipes),
-                    cookingState, true, UPSTREAM_TIME, on, time);
+                    cookingState, true, UPSTREAM_TIME, false, on, time);
+        }
+
+        /** How many of {@code dish} the pot's own tick makes a serving: the recipe's count, or one in a pot that makes one each. */
+        public int perServing(Dish dish) {
+            return oneEach ? 1 : Math.max(1, dish.result().getCount());
         }
 
         public Supplier<Block> blockSupplier() {
@@ -100,7 +108,7 @@ public final class Pot {
      */
     @SuppressWarnings("removal")
     public static final Kind CANDLELIGHT_POT = new Kind("candlelight_cooking_pot", new ResourceLocation(CANDLELIGHT, "cooking_pot"),
-            new ResourceLocation(FarmCharmDishes.MOD_ID, "pot_cooking"), "cooking", false, UPSTREAM_TIME,
+            new ResourceLocation(FarmCharmDishes.MOD_ID, "pot_cooking"), "cooking", false, UPSTREAM_TIME, false,
             HandsOnConfig::candlelightCookingPot, HandsOnConfig::cookingPotTime);
     /**
      * Candlelight's cooking pan: a copy of Farm &amp; Charm's roaster of its own (the same slots, numbers and heat) that roasts Farm
@@ -109,10 +117,20 @@ public final class Pot {
      */
     @SuppressWarnings("removal")
     public static final Kind CANDLELIGHT_PAN = new Kind("candlelight_cooking_pan", new ResourceLocation(CANDLELIGHT, "cooking_pan"),
-            new ResourceLocation(FarmCharmDishes.MOD_ID, "roaster"), "cooking", false, 300, HandsOnConfig::candlelightCookingPan,
+            new ResourceLocation(FarmCharmDishes.MOD_ID, "roaster"), "cooking", false, 300, false, HandsOnConfig::candlelightCookingPan,
             HandsOnConfig::roasterTime);
 
-    private static final List<Kind> KINDS = List.of(COOKING_POT, ROASTER, CANDLELIGHT_POT, CANDLELIGHT_PAN);
+    /**
+     * Bakery's small cooking pot: a copy of Farm &amp; Charm's pot of its own (the same slots, numbers and heat) that cooks Farm
+     * &amp; Charm's dishes in a third of the pot's time, one of a dish a serving (twelve yeast in Farm &amp; Charm's pot are one
+     * here), and asks nobody whether a dish was learned. Stirred as Farm &amp; Charm's pot, in its time.
+     */
+    @SuppressWarnings("removal")
+    public static final Kind BAKERY_POT = new Kind("bakery_small_cooking_pot", new ResourceLocation(BAKERY, "small_cooking_pot"),
+            new ResourceLocation(FarmCharmDishes.MOD_ID, "pot_cooking"), "cooking", false, 300, true,
+            HandsOnConfig::bakerySmallCookingPot, HandsOnConfig::cookingPotTime);
+
+    private static final List<Kind> KINDS = List.of(COOKING_POT, ROASTER, CANDLELIGHT_POT, CANDLELIGHT_PAN, BAKERY_POT);
 
     private final BlockEntity entity;
     private final Container container;

@@ -62,3 +62,10 @@ displayTest="IGNORE_ALL_VERSION"
     versionRange="[${candlelight_min_version},)"
     ordering="AFTER"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="bakery"
+    mandatory=false
+    versionRange="[${bakery_min_version},)"
+    ordering="AFTER"
+    side="BOTH"

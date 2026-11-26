@@ -62,36 +62,49 @@ public final class PotBehavior implements StationBehavior {
      * {@code broth} tank ends at the same height. {@code rim}: where an egg is knocked; {@code lean}: how the spoon leans at rest
      * in its model, degrees, plus to the right. {@code dry}: a pan without water, where food lies on the floor and browns, and
      * which is swirled by its handle instead of stirred with a spoon. {@code models}: the folder of its body's models; {@code lit}:
-     * whether its body has a look of its own on something hot, and its lid lies on it only then. The lid: where it lies on the pot
-     * and how it is turned there (pixels from the pot's middle, degrees), and where it is set down while somebody cooks.
+     * whether its body has a look of its own on something hot, and its lid lies on it only then (unless {@code lidCold}: the block
+     * has it on cold too). The lid: where it lies on the pot and how it is turned there (pixels from the pot's middle, degrees), and
+     * where it is set down while somebody cooks.
      * {@code worldLook}: the scene is the pot's look in the world too, with nobody at it as well, wherever it is drawn: its own
      * block shows it otherwise (a flat surface where the scene has water and what swims in it), and would change the moment a cook
      * came. {@code inside}: a dry pan's floor and walls, where what lies in it slides; null in a pot. A pan whose scene has no lid
-     * ({@code lidRest} null) shows none.
+     * ({@code lidRest} null) shows none. {@code inner}: half the width inside a pot's walls (4 in Farm &amp; Charm's), which walls
+     * 1 px thick stand round; what floats, the spoon's reach and the room they have go with it.
      */
     public record Shape(Pot.Kind kind, float floor, float depth, float spoonEnd, float rim, float lean, float homeX, float homeZ,
             boolean dry, String models, boolean lit, Vector3f lidOn, float lidOnYaw, LidRest lidRest, boolean worldLook,
-            RoasterPan.Inside inside) {
+            RoasterPan.Inside inside, float inner, boolean lidCold) {
         /** Farm &amp; Charm's cooking pot: walls and floor 1 px, rim at 8; its stick stands off the middle, to the front. */
         public static final Shape COOKING_POT = new Shape(Pot.COOKING_POT, 1.0F, 5.5F, 2.0F, 8.0F, 22.5F, 0.87F, -2.0F, false,
-                "cooking_pot", true, new Vector3f(-1.123F, 8.0F, 2.685F), -22.5F, LidRest.COOKING_POT, true, null);
+                "cooking_pot", true, new Vector3f(-1.123F, 8.0F, 2.685F), -22.5F, LidRest.COOKING_POT, true, null, 4.0F, false);
         /**
          * Farm &amp; Charm's roaster: a pan 10 by 8 inside, floor 1 px, rim at 6, under a lid that covers it whole.
          */
         public static final Shape ROASTER = new Shape(Pot.ROASTER, 1.0F, 0.0F, 1.0F, 6.0F, 0.0F, 0.0F, 0.0F, true,
-                "roaster", false, new Vector3f(0.0F, 6.0F, 0.0F), 0.0F, LidRest.ROASTER, false, RoasterPan.Inside.ROASTER);
+                "roaster", false, new Vector3f(0.0F, 6.0F, 0.0F), 0.0F, LidRest.ROASTER, false, RoasterPan.Inside.ROASTER, 4.0F, false);
         /**
          * Candlelight's cooking pot: Farm &amp; Charm's pot 4 px taller, walls and floor 1 px, rim at 12; its longer stick stands on
          * the floor off the middle, to the back, and its lid lies askew the other way round.
          */
         public static final Shape CANDLELIGHT_POT = new Shape(Pot.CANDLELIGHT_POT, 1.0F, 9.5F, 1.0F, 12.0F, 22.5F, -1.05F, 2.0F, false,
-                "candlelight_cooking_pot", true, new Vector3f(-2.364F, 12.0F, 2.158F), 22.5F, LidRest.CANDLELIGHT_POT, true, null);
+                "candlelight_cooking_pot", true, new Vector3f(-2.364F, 12.0F, 2.158F), 22.5F, LidRest.CANDLELIGHT_POT, true, null, 4.0F,
+                false);
         /**
          * Candlelight's cooking pan: a pan 8 by 8 inside, floor 1 px, rim at 4, one long handle and no lid; what lies in it is in
          * sight in the world as at the station.
          */
         public static final Shape CANDLELIGHT_PAN = new Shape(Pot.CANDLELIGHT_PAN, 1.0F, 0.0F, 1.0F, 4.0F, 0.0F, 0.0F, 0.0F, true,
-                "candlelight_cooking_pan", false, new Vector3f(0.0F, 4.0F, 0.0F), 0.0F, null, true, RoasterPan.Inside.CANDLELIGHT_PAN);
+                "candlelight_cooking_pan", false, new Vector3f(0.0F, 4.0F, 0.0F), 0.0F, null, true, RoasterPan.Inside.CANDLELIGHT_PAN,
+                4.0F, false);
+        /**
+         * Bakery's small cooking pot: a saucepan 6 by 6 inside, walls and floor 1 px, rim at 5, one handle; it has no stick, so the
+         * spoon is Farm &amp; Charm's pot's own stick, standing on the floor at the front and leaning over the right wall towards the
+         * handle (the other way round from Farm &amp; Charm's), clear of the soup's middle and of the lid that lies askew over the
+         * back left half of the pot, hot or cold.
+         */
+        public static final Shape BAKERY_POT = new Shape(Pot.BAKERY_POT, 1.0F, 2.5F, 1.0F, 5.0F, -22.5F, -0.6F, -2.0F, false,
+                "bakery_small_cooking_pot", true, new Vector3f(2.364F, 5.0F, 2.364F), -45.0F, LidRest.BAKERY_POT, true, null, 3.0F,
+                true);
     }
 
     /** Arrays are as long as the biggest pot needs; a pot uses its own {@link Shape#slots} of them. */
@@ -169,7 +182,6 @@ public final class PotBehavior implements StationBehavior {
     private static final float ITEM_CLEARANCE = 2.1F;
     private static final float ITEM_ROOM = 2.9F;
     private static final float ITEM_RADIUS = 1.15F;
-    private static final float POT_HALF = 5.0F;
     /** A somersault of an item in the soup: from how strong a swirl, how often at the strongest (per second), how long, how high. */
     private static final float TUMBLE_FROM = 0.3F;
     private static final float TUMBLE_RATE = 0.35F;
@@ -254,6 +266,12 @@ public final class PotBehavior implements StationBehavior {
     private final Pot.Kind kind;
     private final float homeX;
     private final float homeZ;
+    /**
+     * The pot's inside against Farm &amp; Charm's ({@link Shape#inner}): what floats and where, the spoon's reach and girth are
+     * this much of theirs. Half the pot's width over its walls, where a bowl is offered and an egg is knocked.
+     */
+    private final float size;
+    private final float potHalf;
     private float brothFloor;
     private final float floorOfShape;
     private final float rimOfShape;
@@ -357,7 +375,6 @@ public final class PotBehavior implements StationBehavior {
     private static final float POUR_SPREAD = 1.4F;
     private static final float POUR_X = 7.4F;
     private static final float POUR_Z = 8.8F;
-    private static final float RIM_OUT = 5.0F;
     /** How fast the soup's colour follows what goes in, per second. */
     private static final float RECOLOUR_RATE = 4.0F;
     private static final Vector3f SCOOP_ORIGIN = new Vector3f(8.0F, 8.0F, 8.0F);
@@ -456,6 +473,8 @@ public final class PotBehavior implements StationBehavior {
         restLean = shape.lean();
         homeX = shape.homeX();
         homeZ = shape.homeZ();
+        size = shape.inner() / 4.0F;
+        potHalf = shape.inner() + 1.0F;
         tipX = homeX;
         tipZ = homeZ;
         book = new RecipeBook(new PotBook(kind));
@@ -666,8 +685,8 @@ public final class PotBehavior implements StationBehavior {
         int slot = PotLogic.vesselSlot(soup(view), player.getInventory());
         float surface = brothFloor + brothDepth * level;
         // Over the soup the cursor points at, also at its front, where the line to a point higher up is over the front rim.
-        Optional<Vector3f> over = slot < 0 ? Optional.empty() : CursorAim.within(view, surface, OFFER_LIFT, 8.0F - POT_HALF,
-                8.0F + POT_HALF, 8.0F - POT_HALF, 8.0F + POT_HALF);
+        Optional<Vector3f> over = slot < 0 ? Optional.empty() : CursorAim.within(view, surface, OFFER_LIFT, 8.0F - potHalf,
+                8.0F + potHalf, 8.0F - potHalf, 8.0F + potHalf);
         node.setVisible(over.isPresent());
         view.node("soup").ifPresent(soup -> soup.setEnabled(over.isPresent()));
         if (over.isEmpty()) {
@@ -747,7 +766,7 @@ public final class PotBehavior implements StationBehavior {
             return false;
         }
         return view.cursorOn(brothFloor + brothDepth * level)
-                .filter(point -> Math.abs(point.x - 8.0F) < POT_HALF && Math.abs(point.z - 8.0F) < POT_HALF).isPresent();
+                .filter(point -> Math.abs(point.x - 8.0F) < potHalf && Math.abs(point.z - 8.0F) < potHalf).isPresent();
     }
 
     @Override
@@ -884,11 +903,11 @@ public final class PotBehavior implements StationBehavior {
         java.util.function.DoubleSupplier surface = () -> brothFloor + brothDepth * level;
         // Poured on the right of the pot, where the spoon is not, tipped towards the middle; things that go in together come
         // down one behind the other, so that they do not stand in each other.
-        Vector3f onto = new Vector3f(POUR_X, 0.0F, POUR_Z + POUR_SPREAD * (index % 3 - 1));
+        Vector3f onto = new Vector3f(8.0F + (POUR_X - 8.0F) * size, 0.0F, 8.0F + ((POUR_Z - 8.0F) + POUR_SPREAD * (index % 3 - 1)) * size);
         if (KitchenLooks.isCracked(stack)) {
             // Knocked on the right rim, away from the spoon, and opened over the soup next to it.
-            Vector3f rim = new Vector3f(8.0F - RIM_OUT, rimTop, onto.z);
-            Vector3f over = new Vector3f(8.0F - 2.0F, 0.0F, onto.z);
+            Vector3f rim = new Vector3f(8.0F - potHalf, rimTop, onto.z);
+            Vector3f over = new Vector3f(8.0F - 2.0F * size, 0.0F, onto.z);
             NodeView inside = view.node("spill_" + index).orElse(hand);
             going[index] = new KitchenMotions.Crack(hand, inside, stack, from, rim, over, surface, broth, EGG_SIZE, EGG_INSIDE, true, 0.0F)
                     .onLanded(() -> view.playSound(PotSounds.PLOP, "broth", 0.35F, 1.25F));
@@ -1402,8 +1421,8 @@ public final class PotBehavior implements StationBehavior {
         });
         float before = lid;
         lid = Mth.clamp(lid + (view.isInUse() ? dt : -dt) / LID_MOVE, 0.0F, 1.0F);
-        // A pot without a lid in its scene (Candlelight's pan) has none to set down.
-        lidShown = open && (heated || !shape.lit()) && view.node("lid").isPresent();
+        // A pot without a lid in its scene (Candlelight's pan) has none to set down; Bakery's small pot has its lid on cold too.
+        lidShown = open && (heated || !shape.lit() || shape.lidCold()) && view.node("lid").isPresent();
         if (lidShown && (before < 1.0F && lid >= 1.0F || before > 0.0F && lid <= 0.0F)) {
             view.playSound(SoundEvents.LANTERN_PLACE, "lid", 0.25F, 0.8F + view.level().getRandom().nextFloat() * 0.1F);
         }
@@ -1510,7 +1529,7 @@ public final class PotBehavior implements StationBehavior {
             if (cursor.isPresent()) {
                 Vector3f inPot = potInverse.set(pot.sceneMatrix()).invert().transformPosition(cursor.get());
                 float distance = (float) Math.hypot(inPot.x, inPot.z);
-                float shorter = distance > SPOON_REACH ? SPOON_REACH / distance : 1.0F;
+                float shorter = distance > (SPOON_REACH * size) ? (SPOON_REACH * size) / distance : 1.0F;
                 wantX = inPot.x * shorter;
                 wantZ = inPot.z * shorter;
             }
@@ -1520,8 +1539,8 @@ public final class PotBehavior implements StationBehavior {
             wantX = tipX;
             wantZ = tipZ;
         } else if (stirred) {
-            wantX = view.state().getControl(CookingPotStation.SPOON_X) * SPOON_REACH;
-            wantZ = view.state().getControl(CookingPotStation.SPOON_Z) * SPOON_REACH;
+            wantX = view.state().getControl(CookingPotStation.SPOON_X) * (SPOON_REACH * size);
+            wantZ = view.state().getControl(CookingPotStation.SPOON_Z) * (SPOON_REACH * size);
         }
         handLeft -= dt;
         // Nobody holds it any more: it sets off softly and takes its time, the rest of its moves answer a hand.
@@ -1570,8 +1589,8 @@ public final class PotBehavior implements StationBehavior {
                 sendClock = SEND_INTERVAL;
                 sendTravel = 0.0F;
                 CompoundTag where = new CompoundTag();
-                where.putFloat(CookingPotStation.STIR_X, tipX / SPOON_REACH);
-                where.putFloat(CookingPotStation.STIR_Z, tipZ / SPOON_REACH);
+                where.putFloat(CookingPotStation.STIR_X, tipX / (SPOON_REACH * size));
+                where.putFloat(CookingPotStation.STIR_Z, tipZ / (SPOON_REACH * size));
                 where.putFloat(CookingPotStation.STIR_AT, time * 20.0F);
                 view.sendAction(CookingPotStation.ACTION_STIR, where);
             }
@@ -1590,7 +1609,7 @@ public final class PotBehavior implements StationBehavior {
         }
         // The lean grows with the distance from the middle, so it goes through the middle without a jump.
         float rest = (float) Math.tan(restLean * Mth.DEG_TO_RAD);
-        float held = (float) Math.tan(STIR_LEAN * Mth.DEG_TO_RAD) / SPOON_REACH;
+        float held = (float) Math.tan(STIR_LEAN * Mth.DEG_TO_RAD) / (SPOON_REACH * size);
         float leanX = Mth.lerp(grip, rest, tipX * held);
         float leanZ = Mth.lerp(grip, 0.0F, tipZ * held);
         // The shortest way from how the model leans by itself: the handle tips, it never twists about itself.
@@ -1633,7 +1652,7 @@ public final class PotBehavior implements StationBehavior {
             if (floats(i)) {
                 places[i] = Mth.lerp(Math.min(1.0F, dt * 2.5F), places[i], rank++ * Mth.TWO_PI / Math.max(present, 1));
                 float angle = turned + start + places[i];
-                place(i, Mth.cos(angle) * DRIFT_RADIUS, Mth.sin(angle) * DRIFT_RADIUS, dt);
+                place(i, Mth.cos(angle) * (DRIFT_RADIUS * size), Mth.sin(angle) * (DRIFT_RADIUS * size), dt);
             }
         }
         shoulder();
@@ -1685,13 +1704,13 @@ public final class PotBehavior implements StationBehavior {
         float[] standing = obstacles[present];
         standing[0] = spoonX + 8.0F;
         standing[1] = spoonZ + 8.0F;
-        standing[2] = SPOON_RADIUS;
+        standing[2] = (SPOON_RADIUS * size);
         int at = 3;
         for (int i = 0; i < slots; i++) {
             if (floats(i)) {
                 standing[at++] = itemX[i] + 8.0F;
                 standing[at++] = itemZ[i] + 8.0F;
-                standing[at++] = ITEM_RADIUS;
+                standing[at++] = (ITEM_RADIUS * size);
             }
         }
         view.node("broth").ifPresent(broth -> broth.setFloatingObstacles(standing));
@@ -1736,10 +1755,10 @@ public final class PotBehavior implements StationBehavior {
                     float dx = itemX[j] - itemX[i];
                     float dz = itemZ[j] - itemZ[i];
                     float apart = (float) Math.hypot(dx, dz);
-                    if (apart < ITEM_RADIUS * 2.0F) {
+                    if (apart < (ITEM_RADIUS * size) * 2.0F) {
                         float nx = apart > 0.001F ? dx / apart : Mth.cos(i + j);
                         float nz = apart > 0.001F ? dz / apart : Mth.sin(i + j);
-                        float move = (ITEM_RADIUS * 2.0F - apart) / 2.0F;
+                        float move = ((ITEM_RADIUS * size) * 2.0F - apart) / 2.0F;
                         shift(i, -nx * move, -nz * move);
                         shift(j, nx * move, nz * move);
                     }
@@ -1749,8 +1768,8 @@ public final class PotBehavior implements StationBehavior {
     }
 
     private void shift(int index, float x, float z) {
-        float nx = Mth.clamp(itemX[index] + x, -ITEM_ROOM, ITEM_ROOM);
-        float nz = Mth.clamp(itemZ[index] + z, -ITEM_ROOM, ITEM_ROOM);
+        float nx = Mth.clamp(itemX[index] + x, -(ITEM_ROOM * size), (ITEM_ROOM * size));
+        float nz = Mth.clamp(itemZ[index] + z, -(ITEM_ROOM * size), (ITEM_ROOM * size));
         pushX[index] += nx - itemX[index];
         pushZ[index] += nz - itemZ[index];
         itemX[index] = nx;
@@ -1781,13 +1800,13 @@ public final class PotBehavior implements StationBehavior {
             float dx = px - spoonX;
             float dz = pz - spoonZ;
             float away = (float) Math.hypot(dx, dz);
-            if (away < ITEM_CLEARANCE) {
-                float out = ITEM_CLEARANCE / Math.max(away, 0.01F);
+            if (away < (ITEM_CLEARANCE * size)) {
+                float out = (ITEM_CLEARANCE * size) / Math.max(away, 0.01F);
                 px = spoonX + dx * out;
                 pz = spoonZ + dz * out;
             }
-            px = Mth.clamp(px, -ITEM_ROOM, ITEM_ROOM);
-            pz = Mth.clamp(pz, -ITEM_ROOM, ITEM_ROOM);
+            px = Mth.clamp(px, -(ITEM_ROOM * size), (ITEM_ROOM * size));
+            pz = Mth.clamp(pz, -(ITEM_ROOM * size), (ITEM_ROOM * size));
         }
         pushX[index] = px - x;
         pushZ[index] = pz - z;

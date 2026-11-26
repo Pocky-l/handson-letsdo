@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.satisfy.bakery.core.block.entity.SmallCookingPotBlockEntity;
 import net.satisfy.candlelight.core.block.entity.CookingPanBlockEntity;
 import net.satisfy.candlelight.core.block.entity.LargeCookingPotBlockEntity;
 import net.satisfy.farm_and_charm.core.block.entity.CookingPotBlockEntity;
@@ -24,15 +25,16 @@ import com.pockyl.handson_letsdo.station.PotCooking;
 import com.pockyl.handson_letsdo.station.StirredPot;
 
 /**
- * Farm &amp; Charm's pot, its roaster and Candlelight's pot and pan, which tick alike, wait for the spoon: their own tick is held
- * back while a cook's batch waits to be stirred or cooks under the spoon, and while a finished dish waits for its bowls ({@link
- * PotCooking#holds}). Nothing inside their cooking is touched: every serving is still made by that tick, and with nobody at the
+ * Farm &amp; Charm's pot, its roaster, Candlelight's pot and pan and Bakery's small pot, which tick alike, wait for the spoon:
+ * their own tick is held back while a cook's batch waits to be stirred or cooks under the spoon, and while a finished dish waits
+ * for its bowls ({@link PotCooking#holds}). Nothing inside their cooking is touched: every serving is still made by that tick, and with nobody at the
  * station they are their own mod's. And they tell the clients near them what they hold (their mods tell them nothing), whenever it
  * changes, so that every client shows the pot as its station does with nobody at it ({@code BlockEntityUpdateMixin} sends it;
  * {@code CookingPanUpdateMixin} for Candlelight's pan, which answers that by itself).
  */
 @Pseudo
-@Mixin({CookingPotBlockEntity.class, RoasterBlockEntity.class, LargeCookingPotBlockEntity.class, CookingPanBlockEntity.class})
+@Mixin({CookingPotBlockEntity.class, RoasterBlockEntity.class, LargeCookingPotBlockEntity.class, CookingPanBlockEntity.class,
+        SmallCookingPotBlockEntity.class})
 public abstract class StirredPotMixin implements StirredPot {
     /** In what the clients are sent only, never saved: the server that sent it has this mod. */
     @Unique

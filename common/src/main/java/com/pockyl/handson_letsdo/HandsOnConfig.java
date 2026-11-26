@@ -25,6 +25,8 @@ public final class HandsOnConfig {
             "cooking_pot: Farm & Charm's cooking pot as a station, when that mod is there. Off, it keeps its own menu.",
             "candlelight_cooking_pot: Candlelight's cooking pot as a station, when that mod is there. Off, it keeps its own",
             "  menu. It is stirred as Farm & Charm's pot is, in the time cooking_pot_time gives.",
+            "bakery_small_cooking_pot: Bakery's small cooking pot as a station, when that mod is there. Off, it keeps its own",
+            "  menu. It is stirred as Farm & Charm's pot is, in the time cooking_pot_time gives.",
             "roaster: Farm & Charm's roaster as a station, when that mod is there. Off, it keeps its own menu.",
             "candlelight_cooking_pan: Candlelight's cooking pan as a station, when that mod is there. Off, it keeps its own",
             "  menu. It is swirled as Farm & Charm's roaster is, in the time roaster_time gives.",
@@ -45,14 +47,15 @@ public final class HandsOnConfig {
             "  it also cooks unstirred, Farm & Charm's way; stirring still cooks the whole pot at once and earns stars.",
             "recipe_book: the recipe book beside the stations. Each player's own: read on their client.",
             "Those are true or false. The cooking times are numbers from 0.1 to 10:",
-            "cooking_pot_time: how long a pot stirred at the station takes (Farm & Charm's and Candlelight's), as a multiple of",
-            "  the usual time: 1.0 as it is, 2.0 twice as long, 0.5 half. Food left alone, fed by a hopper or cooked in the pot's",
-            "  own menu keeps its own mod's time.",
+            "cooking_pot_time: how long a pot stirred at the station takes (Farm & Charm's, Candlelight's and Bakery's), as a",
+            "  multiple of the usual time: 1.0 as it is, 2.0 twice as long, 0.5 half. Food left alone, fed by a hopper or cooked",
+            "  in the pot's own menu keeps its own mod's time.",
             "roaster_time: the same for a roaster worked at the station (Farm & Charm's roaster and Candlelight's pan).");
 
     private static boolean fermentationBarrel = true;
     private static boolean cookingPot = true;
     private static boolean candlelightCookingPot = true;
+    private static boolean bakerySmallCookingPot = true;
     private static boolean stove = true;
     private static boolean candlelightStoves = true;
     private static boolean roaster = true;
@@ -85,6 +88,7 @@ public final class HandsOnConfig {
         fermentationBarrel = read(values, "fermentation_barrel", fermentationBarrel);
         cookingPot = read(values, "cooking_pot", cookingPot);
         candlelightCookingPot = read(values, "candlelight_cooking_pot", candlelightCookingPot);
+        bakerySmallCookingPot = read(values, "bakery_small_cooking_pot", bakerySmallCookingPot);
         stove = read(values, "stove", stove);
         candlelightStoves = read(values, "candlelight_stoves", candlelightStoves);
         roaster = read(values, "roaster", roaster);
@@ -147,6 +151,10 @@ public final class HandsOnConfig {
 
     public static boolean candlelightCookingPot() {
         return candlelightCookingPot;
+    }
+
+    public static boolean bakerySmallCookingPot() {
+        return bakerySmallCookingPot;
     }
 
     public static boolean stove() {

@@ -50,7 +50,9 @@ final class PotBook implements RecipeBook.Source {
                 foot.add(dish.vessel());
             }
             foot.add(new ItemStack(Items.CLOCK));
-            pages.add(new RecipeBook.Page(dish.id(), dish.result(), ingredients, foot, seconds, true));
+            // What this pot makes of it: Bakery's small pot makes one of a dish a serving, whatever the recipe gives.
+            ItemStack made = dish.result().copyWithCount(kind.perServing(dish));
+            pages.add(new RecipeBook.Page(dish.id(), made, ingredients, foot, seconds, true));
         }
         return pages;
     }

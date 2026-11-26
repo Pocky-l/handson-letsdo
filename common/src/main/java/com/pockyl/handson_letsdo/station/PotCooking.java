@@ -398,7 +398,7 @@ public final class PotCooking {
         if (!out.isEmpty() && !ItemStack.isSameItem(out, result)) {
             return 0;
         }
-        return (result.getMaxStackSize() - out.getCount()) / Math.max(1, result.getCount());
+        return (result.getMaxStackSize() - out.getCount()) / pot.kind().perServing(dish);
     }
 
     /** The batch under the spoon is done: its soup waits in the pot for its bowls, or a dish that needs none is made at once. */

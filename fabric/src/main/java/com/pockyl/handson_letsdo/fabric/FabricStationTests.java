@@ -261,6 +261,96 @@ public final class FabricStationTests implements FabricGameTest {
     }
 
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void bakerysPotIsAStationOnlyWithBakery(GameTestHelper helper) {
+        PotTests.thePotIsAStationOnlyWithFarmAndCharm(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void bakeryThePotsSlotsAreItsOwn(GameTestHelper helper) {
+        PotTests.thePotsSlotsAreItsOwn(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
+    public void bakeryAStirredPotCooksAndAnUnstirredOneWaits(GameTestHelper helper) {
+        PotTests.aStirredPotCooksAndAnUnstirredOneWaits(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void bakeryTheSoupIsFilledIntoBowls(GameTestHelper helper) {
+        PotTests.theSoupIsFilledIntoBowls(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void bakeryUnevenStacksMakeNoServingsFromNothing(GameTestHelper helper) {
+        PotTests.unevenStacksMakeNoServingsFromNothing(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void bakeryWhatAnIngredientLeavesGoesToTheCook(GameTestHelper helper) {
+        PotTests.whatAnIngredientLeavesGoesToTheCook(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 400)
+    public void bakeryStarsGiveBonusServings(GameTestHelper helper) {
+        PotTests.starsGiveBonusServings(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = PotTests.OWN_TIMEOUT)
+    public void bakeryAHopperFedPotCooksUpstreamsWay(GameTestHelper helper) {
+        PotTests.aHopperFedPotCooksUpstreamsWay(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
+    public void bakeryAHopperFeedsThePotByItselfBesideACook(GameTestHelper helper) {
+        PotTests.aHopperFeedsThePotByItselfBesideACook(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
+    public void bakeryACookInTheMenuCooksUpstreamsWay(GameTestHelper helper) {
+        PotTests.aCookInTheMenuCooksUpstreamsWay(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 300)
+    public void bakeryAPotLeftMidStirGoesBackToUpstreamsTick(GameTestHelper helper) {
+        PotTests.aPotLeftMidStirGoesBackToUpstreamsTick(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void bakeryADishThatNeedsNoBowlComesOutWhole(GameTestHelper helper) {
+        PotTests.aDishThatNeedsNoBowlComesOutWhole(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void bakeryTwoAlikeThrownInMakeTheirDish(GameTestHelper helper) {
+        PotTests.twoAlikeThrownInMakeTheirDish(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 600)
+    public void bakeryEveryDishIsLaidFromTheBookAndCooks(GameTestHelper helper) {
+        PotTests.everyDishIsLaidFromTheBookAndCooks(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void bakeryALearnedDishCooksForTheCookWhoLearnedIt(GameTestHelper helper) {
+        PotTests.aLearnedDishCooksForTheCookWhoLearnedIt(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void bakeryThePotTellsItsClientsWhatItHolds(GameTestHelper helper) {
+        PotTests.thePotTellsItsClientsWhatItHolds(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void bakeryThePotsDataStaysSmall(GameTestHelper helper) {
+        PotTests.thePotsDataStaysSmall(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void bakeryThePotsSceneIsRead(GameTestHelper helper) {
+        PotTests.thePotsSceneIsRead(helper, PotTests.BAKERY);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
     public void theStoveIsAStationOnlyWithFarmAndCharm(GameTestHelper helper) {
         StoveTests.theStoveIsAStationOnlyWithFarmAndCharm(helper);
     }
