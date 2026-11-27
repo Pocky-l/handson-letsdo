@@ -19,6 +19,7 @@ dependencies {
     modCompileOnly "maven.modrinth:lets-do-herbalbrews:${herbalbrews_fabric_version}"
     modCompileOnly "maven.modrinth:lets-do-candlelight-farmcharm-compat:${candlelight_fabric_version}"
     modCompileOnly "maven.modrinth:lets-do-bakery-farmcharm-compat:${bakery_fabric_version}"
+    modCompileOnly "maven.modrinth:lets-do-meadow:${meadow_fabric_version}"
 }
 
 loom {
@@ -99,6 +100,7 @@ tasks.named('processResources', ProcessResources) {
             herbalbrews_min_version          : herbalbrews_min_version,
             candlelight_min_version          : candlelight_min_version,
             bakery_min_version               : bakery_min_version,
+            meadow_min_version               : meadow_min_version,
     ]
     inputs.properties replaceProperties
     filesMatching('fabric.mod.json') {

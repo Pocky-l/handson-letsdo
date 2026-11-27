@@ -7,7 +7,7 @@ import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
 import com.pockyl.handson_letsdo.HandsOnLetsDo;
 
-/** {@link StationTests}, {@link PotTests}, {@link StoveTests}, {@link RoasterTests}, {@link KettleTests}, {@link CauldronTests}, {@link PressTests}, {@link MincerTests} and {@link BowlTests} on Forge. */
+/** {@link StationTests}, {@link PotTests}, {@link StoveTests}, {@link RoasterTests}, {@link KettleTests}, {@link CauldronTests}, {@link MeadowCauldronTests}, {@link PressTests}, {@link MincerTests} and {@link BowlTests} on Forge. */
 @GameTestHolder(HandsOnLetsDo.MOD_ID)
 @PrefixGameTestTemplate(false)
 public final class ModGameTests {
@@ -752,5 +752,40 @@ public final class ModGameTests {
     @GameTest(template = "room", timeoutTicks = 200)
     public static void theJuiceOfALoadRunsQuickly(GameTestHelper helper) {
         PressTests.theJuiceOfALoadRunsQuickly(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void meadowTheCauldronIsAStationOnlyWithMeadow(GameTestHelper helper) {
+        MeadowCauldronTests.theCauldronIsAStationOnlyWithMeadow(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void meadowTheCauldronsSlotsAreItsOwn(GameTestHelper helper) {
+        MeadowCauldronTests.theCauldronsSlotsAreItsOwn(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void meadowWaterIsPouredAndTheBucketComesBack(GameTestHelper helper) {
+        MeadowCauldronTests.waterIsPouredAndTheBucketComesBack(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void meadowFoodIsLaidOutForItsDish(GameTestHelper helper) {
+        MeadowCauldronTests.foodIsLaidOutForItsDish(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void meadowTheLadleHurriesTheDish(GameTestHelper helper) {
+        MeadowCauldronTests.theLadleHurriesTheDish(helper);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void meadowAHopperStillFeedsTheCauldron(GameTestHelper helper) {
+        MeadowCauldronTests.aHopperStillFeedsTheCauldron(helper);
+    }
+
+    @GameTest(template = "empty")
+    public static void meadowTheCauldronsScenesAreRead(GameTestHelper helper) {
+        MeadowCauldronTests.theCauldronsScenesAreRead(helper);
     }
 }

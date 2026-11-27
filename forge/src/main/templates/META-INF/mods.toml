@@ -69,3 +69,10 @@ displayTest="IGNORE_ALL_VERSION"
     versionRange="[${bakery_min_version},)"
     ordering="AFTER"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="meadow"
+    mandatory=false
+    versionRange="[${meadow_min_version},)"
+    ordering="AFTER"
+    side="BOTH"

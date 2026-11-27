@@ -3,11 +3,17 @@ package com.pockyl.handson_letsdo.station;
 import net.minecraft.nbt.CompoundTag;
 
 /**
- * What the station adds to HerbalBrews' brewing cauldron ({@code CauldronMixin}): the cauldron tells every client near it what it
- * holds and how far its brew is (HerbalBrews tells them nothing), so that it looks the same in the world as at the station: the
- * potions in their colours, the infusion afloat, the brew mixing.
+ * What the station adds to HerbalBrews' brewing cauldron ({@code CauldronMixin}) and Meadow's cooking cauldron
+ * ({@code MeadowCauldronMixin}): the cauldron tells every client near it what it holds and how far its brew is (neither mod tells
+ * them anything), so that it looks the same in the world as at the station: the potions in their colours, the infusion afloat, the
+ * brew mixing; the water, the food afloat, the dish.
  */
 public interface CauldronTold {
+    /** Whether this cauldron's station is on, so that it tells its clients: HerbalBrews' unless the cauldron says otherwise. */
+    default boolean handson$tells() {
+        return CauldronStation.isRegistered();
+    }
+
     /** On a client's copy: whether the server told it what the cauldron holds, which a server without this mod never does. */
     boolean handson$told();
 

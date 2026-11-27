@@ -6,6 +6,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 
 import com.pockyl.handson_letsdo.gametest.BowlTests;
 import com.pockyl.handson_letsdo.gametest.CauldronTests;
+import com.pockyl.handson_letsdo.gametest.MeadowCauldronTests;
 import com.pockyl.handson_letsdo.gametest.KettleTests;
 import com.pockyl.handson_letsdo.gametest.MincerTests;
 import com.pockyl.handson_letsdo.gametest.PotTests;
@@ -14,7 +15,7 @@ import com.pockyl.handson_letsdo.gametest.RoasterTests;
 import com.pockyl.handson_letsdo.gametest.StationTests;
 import com.pockyl.handson_letsdo.gametest.StoveTests;
 
-/** {@link StationTests}, {@link PotTests}, {@link StoveTests}, {@link RoasterTests}, {@link KettleTests}, {@link CauldronTests}, {@link PressTests}, {@link MincerTests} and {@link BowlTests} on Fabric: they run when the game starts with {@code -Dfabric-api.gametest}. */
+/** {@link StationTests}, {@link PotTests}, {@link StoveTests}, {@link RoasterTests}, {@link KettleTests}, {@link CauldronTests}, {@link MeadowCauldronTests}, {@link PressTests}, {@link MincerTests} and {@link BowlTests} on Fabric: they run when the game starts with {@code -Dfabric-api.gametest}. */
 public final class FabricStationTests implements FabricGameTest {
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
     public void modLoads(GameTestHelper helper) {
@@ -754,5 +755,40 @@ public final class FabricStationTests implements FabricGameTest {
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
     public void theJuiceOfALoadRunsQuickly(GameTestHelper helper) {
         PressTests.theJuiceOfALoadRunsQuickly(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void meadowTheCauldronIsAStationOnlyWithMeadow(GameTestHelper helper) {
+        MeadowCauldronTests.theCauldronIsAStationOnlyWithMeadow(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void meadowTheCauldronsSlotsAreItsOwn(GameTestHelper helper) {
+        MeadowCauldronTests.theCauldronsSlotsAreItsOwn(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void meadowWaterIsPouredAndTheBucketComesBack(GameTestHelper helper) {
+        MeadowCauldronTests.waterIsPouredAndTheBucketComesBack(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void meadowFoodIsLaidOutForItsDish(GameTestHelper helper) {
+        MeadowCauldronTests.foodIsLaidOutForItsDish(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void meadowTheLadleHurriesTheDish(GameTestHelper helper) {
+        MeadowCauldronTests.theLadleHurriesTheDish(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
+    public void meadowAHopperStillFeedsTheCauldron(GameTestHelper helper) {
+        MeadowCauldronTests.aHopperStillFeedsTheCauldron(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void meadowTheCauldronsScenesAreRead(GameTestHelper helper) {
+        MeadowCauldronTests.theCauldronsScenesAreRead(helper);
     }
 }

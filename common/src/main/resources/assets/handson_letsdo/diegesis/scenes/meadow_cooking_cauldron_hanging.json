@@ -1,0 +1,425 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
+  "$comment": "Meadow's cooking cauldron, hanging in its frame over its own fire, 11 px higher than a standing one. The station hides the block wherever this scene is drawn, with somebody at it or not, and shows it here (the cauldron tells the clients what it holds): the same cauldron, inside x 3.96..11.96 and z 4..12 over a floor at y 12.0, its rim at 20.0, its water as Meadow counts it, the food afloat on it, the dish in the middle. The scene faces the cook; the code turns the cauldron to the way the block stands.",
+  "work_plane": 20.0,
+  "idle_visible": true,
+  "camera": {
+    "position": [
+      8,
+      54.0,
+      -22
+    ],
+    "target": [
+      8,
+      19.5,
+      8
+    ],
+    "fov": 30
+  },
+  "interface": {
+    "hide_player": true,
+    "inventory_panel": false,
+    "outline_color": "#FFFFE8C0"
+  },
+  "inventory_drawer": {
+    "side": "bottom",
+    "style": "minimal",
+    "always_open": true,
+    "compact": true,
+    "background": "#00000000",
+    "slot_color": "#8C1E140C"
+  },
+  "nodes": [
+    {
+      "$comment": "The cauldron, turned by the code to the world's sides. Its children are in its own axes, pixels from the middle of its foot.",
+      "id": "cauldron",
+      "pos": [
+        8,
+        0,
+        8
+      ],
+      "pickable": false,
+      "visual": {
+        "model": "handson_letsdo:diegesis/meadow_cooking_cauldron/body_hanging",
+        "anchor": [
+          8,
+          0,
+          8
+        ],
+        "lit_as_block": true
+      },
+      "children": [
+        {
+          "$comment": "Meadow's own frame, chains, fire and logs of its hanging cauldron, as it has them.",
+          "id": "frame",
+          "pickable": false,
+          "visual": {
+            "model": "handson_letsdo:diegesis/meadow_cooking_cauldron/frame",
+            "anchor": [
+              8,
+              0,
+              8
+            ],
+            "lit_as_block": true
+          }
+        },
+        {
+          "$comment": "Its lid, on it while a dish cooks (as Meadow shows it), set down behind it while somebody cooks; moved by the code.",
+          "id": "lid",
+          "pos": [
+            -0.04,
+            20.0,
+            0
+          ],
+          "pickable": false,
+          "hidden": true,
+          "visual": {
+            "model": "handson_letsdo:diegesis/meadow_cooking_cauldron/lid",
+            "anchor": [
+              7.96,
+              0,
+              8
+            ],
+            "lit_as_block": true
+          }
+        },
+        {
+          "$comment": "The ladle. At rest its foot stands on the floor and it leans on the west rim; taken by its upper part (a click holds it, a press drags it) it stirs, its foot following the hand round the water. Placed, turned and shown by the code from its foot; its box is in its own axes, along it from its foot.",
+          "id": "ladle",
+          "pos": [
+            0,
+            0,
+            0
+          ],
+          "strokes": true,
+          "visual": {
+            "model": "handson_letsdo:diegesis/meadow_cooking_cauldron/ladle",
+            "anchor": [
+              7.5,
+              1,
+              7.5
+            ],
+            "lit_as_block": true
+          },
+          "collider": {
+            "from": [
+              -1.6,
+              6,
+              -1.6
+            ],
+            "to": [
+              1.6,
+              10.4,
+              1.6
+            ]
+          },
+          "hidden": true
+        },
+        {
+          "$comment": "The water, Meadow's own count of it: 100 fills it to y 19.0, where Meadow draws its water.",
+          "id": "water",
+          "pickable": false,
+          "tank": {
+            "tank": "water",
+            "inner": {
+              "from": [
+                -4.04,
+                12.0,
+                -4
+              ],
+              "to": [
+                3.96,
+                19.0,
+                4
+              ]
+            }
+          }
+        },
+        {
+          "$comment": "Food afloat on the water (on the floor without it), the cauldron's slot 1; moved by the code.",
+          "id": "item_0",
+          "pos": [
+            0,
+            12.0,
+            0
+          ],
+          "slot": {
+            "slot": "ingredients[0]",
+            "size": 3.2,
+            "counts": "hover",
+            "highlight": false
+          }
+        },
+        {
+          "id": "item_1",
+          "pos": [
+            0,
+            12.0,
+            0
+          ],
+          "slot": {
+            "slot": "ingredients[1]",
+            "size": 3.2,
+            "counts": "hover",
+            "highlight": false
+          }
+        },
+        {
+          "id": "item_2",
+          "pos": [
+            0,
+            12.0,
+            0
+          ],
+          "slot": {
+            "slot": "ingredients[2]",
+            "size": 3.2,
+            "counts": "hover",
+            "highlight": false
+          }
+        },
+        {
+          "id": "item_3",
+          "pos": [
+            0,
+            12.0,
+            0
+          ],
+          "slot": {
+            "slot": "ingredients[3]",
+            "size": 3.2,
+            "counts": "hover",
+            "highlight": false
+          }
+        },
+        {
+          "id": "item_4",
+          "pos": [
+            0,
+            12.0,
+            0
+          ],
+          "slot": {
+            "slot": "ingredients[4]",
+            "size": 3.2,
+            "counts": "hover",
+            "highlight": false
+          }
+        },
+        {
+          "id": "item_5",
+          "pos": [
+            0,
+            12.0,
+            0
+          ],
+          "slot": {
+            "slot": "ingredients[5]",
+            "size": 3.2,
+            "counts": "hover",
+            "highlight": false
+          }
+        }
+      ]
+    },
+    {
+      "$comment": "The dish that is done, the cauldron's slot 0: it floats up in the middle, leant back to face the camera; a click takes it into the inventory. Drawn and moved by the code.",
+      "id": "dish",
+      "pos": [
+        8,
+        12.0,
+        8
+      ],
+      "rotation": [
+        50,
+        0,
+        0
+      ],
+      "hidden": true,
+      "collider": {
+        "from": [
+          -2,
+          -2,
+          -2
+        ],
+        "to": [
+          2,
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "$comment": "What a stack on the cursor is brought to: the inside and the air over it. Water is poured, food dropped in.",
+      "id": "mouth",
+      "drop_zone": "ingredients",
+      "collider": {
+        "from": [
+          3,
+          12.0,
+          3
+        ],
+        "to": [
+          13,
+          26.0,
+          13
+        ]
+      }
+    },
+    {
+      "$comment": "Takes the click of an empty hand over the inside while water from the inventory is offered; off otherwise.",
+      "id": "dip",
+      "collider": {
+        "from": [
+          3,
+          12.0,
+          3
+        ],
+        "to": [
+          13,
+          26.0,
+          13
+        ]
+      }
+    },
+    {
+      "$comment": "Water from the inventory, shown see-through over the inside to an empty hand. Leant back to face the camera above; moved by the code.",
+      "id": "offer",
+      "pos": [
+        8,
+        24.0,
+        8
+      ],
+      "rotation": [
+        50,
+        0,
+        0
+      ],
+      "scale": 0.35,
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "$comment": "The bucket or bottle water is poured from. Moved by the code.",
+      "id": "pour_hand",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "hidden": true,
+      "pickable": false
+    },
+    {
+      "id": "badge",
+      "pos": [
+        -0.6,
+        27.5,
+        3.6
+      ],
+      "rotation": [
+        -50,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "dial_track",
+      "pos": [
+        -0.6,
+        27.52,
+        3.58
+      ],
+      "rotation": [
+        -50,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "dial",
+      "pos": [
+        -0.6,
+        27.54,
+        3.56
+      ],
+      "rotation": [
+        -50,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "dial_more",
+      "pos": [
+        -0.6,
+        27.55,
+        3.55
+      ],
+      "rotation": [
+        -50,
+        0,
+        0
+      ],
+      "pickable": false,
+      "$comment": "The badge's pale count of what is still to come, and its time."
+    },
+    {
+      "id": "preview",
+      "pos": [
+        -0.6,
+        27.58,
+        3.52
+      ],
+      "rotation": [
+        40,
+        0,
+        0
+      ],
+      "scale": 0.125,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -12,
+          -12,
+          -12
+        ],
+        "to": [
+          12,
+          12,
+          12
+        ]
+      }
+    },
+    {
+      "id": "book_open",
+      "pos": [
+        16.33,
+        34.22,
+        -5
+      ],
+      "rotation": [
+        -50,
+        0,
+        0
+      ],
+      "scale": 0.69,
+      "hidden": true,
+      "collider": {
+        "from": [
+          -5.3,
+          -0.4,
+          -3.9
+        ],
+        "to": [
+          5.3,
+          1.4,
+          3.9
+        ]
+      }
+    }
+  ]
+}

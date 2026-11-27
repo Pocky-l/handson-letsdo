@@ -13,6 +13,7 @@
     "CookingPanUpdateMixin",
     "CraftingBowlMixin",
     "FermentationBarrelMixin",
+    "MeadowCauldronMixin",
     "MincerMixin",
     "StirredPotMixin",
     "TeaKettleMixin"

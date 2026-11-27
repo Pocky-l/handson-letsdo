@@ -1,0 +1,141 @@
+{
+  "textures": {
+    "1": "meadow:block/cooking_cauldron_side",
+    "particle": "meadow:block/cooking_cauldron"
+  },
+  "elements": [
+    {
+      "name": "lid",
+      "from": [
+        3.96,
+        0,
+        4
+      ],
+      "to": [
+        11.96,
+        1,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            10,
+            8,
+            2
+          ],
+          "rotation": 90,
+          "texture": "#1"
+        },
+        "east": {
+          "uv": [
+            16,
+            9,
+            8,
+            10
+          ],
+          "texture": "#1"
+        },
+        "south": {
+          "uv": [
+            15,
+            2,
+            16,
+            10
+          ],
+          "rotation": 90,
+          "texture": "#1"
+        },
+        "west": {
+          "uv": [
+            8,
+            9,
+            16,
+            10
+          ],
+          "texture": "#1"
+        },
+        "up": {
+          "uv": [
+            8,
+            2,
+            16,
+            10
+          ],
+          "rotation": 90,
+          "texture": "#1"
+        },
+        "down": {
+          "uv": [
+            8,
+            2,
+            16,
+            10
+          ],
+          "rotation": 90,
+          "texture": "#1"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        1,
+        7
+      ],
+      "to": [
+        9,
+        2,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            2,
+            11
+          ],
+          "texture": "#1"
+        },
+        "east": {
+          "uv": [
+            2,
+            10,
+            0,
+            11
+          ],
+          "texture": "#1"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            2,
+            11
+          ],
+          "texture": "#1"
+        },
+        "west": {
+          "uv": [
+            2,
+            10,
+            0,
+            11
+          ],
+          "texture": "#1"
+        },
+        "up": {
+          "uv": [
+            0,
+            12,
+            2,
+            10
+          ],
+          "texture": "#1"
+        }
+      },
+      "name": "lid_top"
+    }
+  ]
+}

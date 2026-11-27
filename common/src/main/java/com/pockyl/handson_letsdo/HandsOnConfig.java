@@ -38,6 +38,8 @@ public final class HandsOnConfig {
             "  in their own time either way.",
             "brewing_cauldron: HerbalBrews' brewing cauldron as a station, when that mod is there. Off, it keeps its own menu.",
             "  Left alone it brews in its own time; stirred at the station, faster.",
+            "meadow_cooking_cauldron: Meadow's cooking cauldron, standing or hanging, as a station, when that mod is there. Off,",
+            "  it keeps its own menu. Left alone it cooks in its own time; stirred at the station, faster.",
             "apple_press: Vinery's apple press as a station, when that mod is there. Off, it keeps its own menu. At the station it",
             "  presses as the cook presses the screw's cap; left alone, it presses and bottles in the times Vinery's own config",
             "  gives it.",
@@ -64,6 +66,7 @@ public final class HandsOnConfig {
     private static boolean candlelightCookingPan = true;
     private static boolean teaKettle = true;
     private static boolean brewingCauldron = true;
+    private static boolean meadowCookingCauldron = true;
     private static boolean applePress = true;
     private static boolean mincer = true;
     private static boolean craftingBowl = true;
@@ -98,6 +101,7 @@ public final class HandsOnConfig {
         candlelightCookingPan = read(values, "candlelight_cooking_pan", candlelightCookingPan);
         teaKettle = read(values, "tea_kettle", teaKettle);
         brewingCauldron = read(values, "brewing_cauldron", brewingCauldron);
+        meadowCookingCauldron = read(values, "meadow_cooking_cauldron", meadowCookingCauldron);
         applePress = read(values, "apple_press", applePress);
         mincer = read(values, "mincer", mincer);
         craftingBowl = read(values, "crafting_bowl", craftingBowl);
@@ -183,6 +187,10 @@ public final class HandsOnConfig {
 
     public static boolean brewingCauldron() {
         return brewingCauldron;
+    }
+
+    public static boolean meadowCookingCauldron() {
+        return meadowCookingCauldron;
     }
 
     public static boolean applePress() {

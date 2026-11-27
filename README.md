@@ -14,7 +14,7 @@
 
 <p align="center"><i>An addon by Pocky for the <a href="https://www.curseforge.com/members/satisfy/projects">Let's Do</a> mods by satisfy: work at their stations with your own hands.</i></p>
 
-<p align="center"><b>The fermentation barrel, the apple press, the cooking pots, the stove, the roaster, the cooking pan, the mincer, the crafting bowl, the tea kettle and the brewing cauldron open right where they stand, with no menu screen. You stir the soup, turn the mincer's crank and whisk the dough yourself, and players nearby see what you make.</b></p>
+<p align="center"><b>The fermentation barrel, the apple press, the cooking pots, the stove, the roaster, the cooking pan, the mincer, the crafting bowl, the tea kettle and the cauldrons open right where they stand, with no menu screen. You stir the soup, turn the mincer's crank and whisk the dough yourself, and players nearby see what you make.</b></p>
 
 <p align="center"><img src="docs/showcase/cooking_pot.gif" alt="Water and barley go into the cooking pot on the stove, then the soup is stirred with the pot's stick until it is done" width="720"></p>
 
@@ -57,6 +57,9 @@ Built on [Diegesis](https://www.curseforge.com/minecraft/mc-mods/diegesis), from
   water in and drop the leaves in. The kettle whistles when the tea is done and is poured from its spout.
 - **Brewing cauldron** (HerbalBrews). Pour three potions in from their bottles and throw the herbal infusion after them.
   Stir with the cauldron's own stick to hurry the brew while the colours mix, then fill the flask right at the cauldron.
+- **Cooking cauldron** ([Meadow](https://www.curseforge.com/minecraft/mc-mods/lets-do-meadow), Minecraft 1.20.1). Standing on its stove tiles or hanging in
+  its frame over the fire. Pour water in from a bucket or a bottle and drop the food in to float; stir with the ladle to
+  hurry the dish, then take it out of the water.
 - **The badge beside every station** shows what the next step needs: the bowl or bottle to take the result in, the fuel or
   heat that is missing, or the tool your hand should take.
 - **Nothing breaks.** The stations work on the blocks' own storage: hoppers keep working, the result is made by the Let's Do
@@ -89,6 +92,8 @@ stirring the pot waits for, and scales the time of the pot and the roaster.
 [![Let's Do: Candlelight](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-candlelight.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat) ✅ **[Let's Do: Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)** (optional) - its cooking pot, its cooking pan and its eleven stoves
 
 [![Let's Do: Bakery](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-bakery.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-bakery-farm-charm-compat) ✅ **[Let's Do: Bakery](https://www.curseforge.com/minecraft/mc-mods/lets-do-bakery-farm-charm-compat)** (optional) - its small cooking pot (Minecraft 1.20.1; on 1.21.1 Bakery gave it no menu)
+
+[![Let's Do: Meadow](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-meadow.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-meadow) ✅ **[Let's Do: Meadow](https://www.curseforge.com/minecraft/mc-mods/lets-do-meadow)** (optional) - its cooking cauldron, standing or hanging (Minecraft 1.20.1; on 1.21.1 Meadow's cooking pot has no menu)
 
 ## Installation
 

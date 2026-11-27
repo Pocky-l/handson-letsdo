@@ -17,6 +17,7 @@ import com.pockyl.handson_letsdo.station.CauldronStation;
 import com.pockyl.handson_letsdo.station.CookingPotStation;
 import com.pockyl.handson_letsdo.station.FarmCharmStove;
 import com.pockyl.handson_letsdo.station.KettleStation;
+import com.pockyl.handson_letsdo.station.MeadowCauldronStation;
 import com.pockyl.handson_letsdo.station.MincerStation;
 import com.pockyl.handson_letsdo.station.OvenStation;
 import com.pockyl.handson_letsdo.station.PressStation;
@@ -150,6 +151,10 @@ public final class HandsOnLetsDoClient {
         }
         if (Diegesis.stationType(CauldronStation.ID).isPresent()) {
             DiegesisClient.registerBehavior(CauldronStation.ID, CauldronBehavior::new);
+        }
+        if (Diegesis.stationType(MeadowCauldronStation.ID).isPresent()) {
+            DiegesisClient.registerBehavior(MeadowCauldronStation.ID, MeadowCauldronBehavior::new);
+            DiegesisClient.registerBehavior(MeadowCauldronStation.HANGING_ID, MeadowCauldronBehavior::new);
         }
         if (Diegesis.stationType(PressStation.ID).isPresent()) {
             DiegesisClient.registerBehavior(PressStation.ID, PressBehavior::new);

@@ -202,6 +202,44 @@
         "F014"
       ],
       "reason": "HerbalBrews' own inner walls of its cauldron's rim, a box turned inside out, kept as it has them"
+    },
+    {
+      "model": "handson_letsdo:diegesis/meadow_cooking_cauldron/body",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001",
+        "G002",
+        "D001",
+        "D002",
+        "H001",
+        "H006"
+      ],
+      "reason": "Meadow's own cooking cauldron, kept as it has it: walls on 3.96, handles on 0.99 leaning 22.5 degrees"
+    },
+    {
+      "model": "handson_letsdo:diegesis/meadow_cooking_cauldron/body_hanging",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001",
+        "G002",
+        "D002",
+        "Z003"
+      ],
+      "reason": "Meadow's own hanging cauldron and its bail, kept as it has them"
+    },
+    {
+      "model": "handson_letsdo:diegesis/meadow_cooking_cauldron/frame",
+      "element": "*",
+      "face": "*",
+      "flags": [
+        "G001",
+        "D001",
+        "H002",
+        "Z002"
+      ],
+      "reason": "Meadow's own frame, chains, fire sheets and logs of its hanging cauldron, kept as it has them"
     }
   ]
 }
