@@ -4,7 +4,7 @@ All notable changes to this mod are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.0+1.21.1] - Unreleased
+## [1.2.0+1.21.1] - 2026-11-27
 ### Added
 - [Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)'s eleven stoves are stations that bake as [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s stove does.
 - [HerbalBrews](https://www.curseforge.com/minecraft/mc-mods/lets-do-herbal-brews)'s brewing cauldron is a station: potions are poured in, stirred together and drawn into the flask.
