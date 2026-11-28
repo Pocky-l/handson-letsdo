@@ -95,6 +95,8 @@ stirring the pot waits for, and scales the time of the pot and the roaster.
 
 [![Let's Do: Meadow](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-meadow.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-meadow) ✅ **[Let's Do: Meadow](https://www.curseforge.com/minecraft/mc-mods/lets-do-meadow)** (optional) - its cooking cauldron, standing or hanging (Minecraft 1.20.1; on 1.21.1 Meadow's cooking pot has no menu)
 
+[![Let's Do Addon: Corn Expansion](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-corn-expansion.png)](https://modrinth.com/mod/lets-do-addon-corn-expansion) ✅ **[Let's Do Addon: Corn Expansion](https://modrinth.com/mod/lets-do-addon-corn-expansion)** (optional) - its corn dough in the crafting bowl, cornmeal and corn flour milled at the mincer, polenta and cornbread on the stove
+
 ## Installation
 
 1. Minecraft 1.20.1 with [Forge](https://files.minecraftforge.net), Minecraft 1.21.1 with

@@ -53,6 +53,7 @@ dependencies {
         gameTestMods "maven.modrinth:lets-do-brewery-farmcharm-compat:${brewery_fabric_version}"
         gameTestMods "maven.modrinth:lets-do-meadow:${meadow_fabric_version}"
         gameTestMods "maven.modrinth:lets-do-nethervinery:${nethervinery_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-addon-corn-expansion:${cornexpansion_fabric_version}"
     }
     gameTestMods "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
     // Not in the fabric-api jar: the module that runs the tests (the version fabric-api's POM names).

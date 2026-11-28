@@ -644,6 +644,11 @@ public final class ModGameTests {
         PressTests.thePressesSceneIsRead(helper);
     }
 
+    @GameTest(template = "empty")
+    public static void cornExpansionsRecipesAreAtOurStations(GameTestHelper helper) {
+        CornExpansionTests.cornExpansionsRecipesAreAtOurStations(helper);
+    }
+
     @GameTest(template = "room")
     public static void theMincerIsAStationOnlyWithFarmCharm(GameTestHelper helper) {
         MincerTests.theMincerIsAStationOnlyWithFarmCharm(helper);

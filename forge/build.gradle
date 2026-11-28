@@ -79,6 +79,7 @@ if (!bare) {
             brewery       : "lets-do-brewery-farmcharm-compat:${brewery_version}",
             meadow        : "lets-do-meadow:${meadow_version}",
             nethervinery  : "lets-do-nethervinery:${nethervinery_version}",
+            cornexpansion : "lets-do-addon-corn-expansion:${cornexpansion_version}",
     ]
     dependencies {
         modRuntimeOnly "maven.modrinth:architectury-api:${architectury_version}"

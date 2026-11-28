@@ -6,6 +6,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 
 import com.pockyl.handson_letsdo.gametest.BowlTests;
 import com.pockyl.handson_letsdo.gametest.CauldronTests;
+import com.pockyl.handson_letsdo.gametest.CornExpansionTests;
 import com.pockyl.handson_letsdo.gametest.MeadowCauldronTests;
 import com.pockyl.handson_letsdo.gametest.KettleTests;
 import com.pockyl.handson_letsdo.gametest.MincerTests;
@@ -650,6 +651,11 @@ public final class FabricStationTests implements FabricGameTest {
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
     public void theMincerIsAStationOnlyWithFarmCharm(GameTestHelper helper) {
         MincerTests.theMincerIsAStationOnlyWithFarmCharm(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void cornExpansionsRecipesAreAtOurStations(GameTestHelper helper) {
+        CornExpansionTests.cornExpansionsRecipesAreAtOurStations(helper);
     }
 
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)

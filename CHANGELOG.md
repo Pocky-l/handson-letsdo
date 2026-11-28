@@ -4,7 +4,14 @@ All notable changes to this mod are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.1+1.20.1] - 2026-11-28
+## [1.3.0+1.20.1] - 2026-11-28
+### Added
+- [Corn Expansion](https://modrinth.com/mod/lets-do-addon-corn-expansion)'s recipes at the stations: its corn dough mixes golden in the crafting bowl, the mincer mills its kernels into cornmeal and corn flour, and polenta and grandma's cornbread bake on the stove.
+
+### Changed
+- The mincer mills what it grinds into meal or flour with a dusty sound and flour's dust: no meat juice from crops, bones or corn, and no stone dust from wheat.
+- Corn syrup is poured from its bottle wherever honey is.
+
 ### Fixed
 - [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s stove takes every fuel a furnace takes, also modded fuels that set their own burn time.
 

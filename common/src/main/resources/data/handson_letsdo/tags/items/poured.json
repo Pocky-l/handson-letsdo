@@ -47,6 +47,10 @@
     {
       "id": "#candlelight:white_effect",
       "required": false
+    },
+    {
+      "id": "cornexpansion:corn_syrup",
+      "required": false
     }
   ]
 }

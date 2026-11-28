@@ -14,6 +14,7 @@ import com.pockyl.diegesis.api.client.DiegesisParticles;
 import com.pockyl.diegesis.api.client.MeshShape;
 import com.pockyl.diegesis.api.client.NodeView;
 import com.pockyl.diegesis.api.client.StationView;
+import com.pockyl.handson_letsdo.station.MincerStation;
 
 import java.util.HashMap;
 import java.util.List;
@@ -129,7 +130,7 @@ final class MincerOutlet {
             }
             node.scaleTo(quiet ? 1.0F : 0.3F, 0.0F);
         });
-        if (!quiet) {
+        if (!quiet && meat[index]) {
             view.playSound(SoundEvents.SLIME_SQUISH_SMALL, "die", 0.06F, 1.6F + random.nextFloat() * 0.3F);
         }
     }
@@ -194,6 +195,7 @@ final class MincerOutlet {
         SoundEvent sound = switch (kind) {
             case "STONE", "METAL" -> SoundEvents.STONE_HIT;
             case "WOOD" -> SoundEvents.WOOD_HIT;
+            case MincerStation.MILLED -> SoundEvents.SAND_STEP;
             default -> SoundEvents.SLIME_SQUISH_SMALL;
         };
         view.playSound(sound, "minced", 0.12F, 1.2F + random.nextFloat() * 0.3F);
@@ -275,7 +277,7 @@ final class MincerOutlet {
                     view.spawnParticles(DiegesisParticles.DUST, new Vector3f(9.5F, 16.4F, 8.0F), new Vector3f(0.0F, 1.0F, 0.0F), 1.0F, 1, grey);
                 }
             }
-            case "WOOD" -> {
+            case "WOOD", MincerStation.MILLED -> {
                 dust += dt * DUST_RATE * pace;
                 while (dust >= 1.0F) {
                     dust -= 1.0F;

@@ -18,13 +18,15 @@ import java.util.Map;
 
 /**
  * What a bowlful turns into as it is whisked, drawn as that and nothing else: a thick mass with its own texture, firmness and sheen.
- * Whipped butter keeps its swirls, a dough is matte and keeps the whisk's furrows, a porridge holds its oat flakes (and the berries
+ * Whipped butter keeps its swirls, a dough is matte and keeps the whisk's furrows (a corn dough golden), a porridge holds its oat flakes (and the berries
  * that went in), a salad holds its leaves, tomato, onion and carrot as pieces, minced meat for dog food is grainy and matte, cat food is chunks
  * of its meat and fish in a paste. Whatever no
  * kind fits (another mod's recipe) is a runny batter in the colour of what it makes, which levels soon after the whisk.
  */
 enum BowlMass {
     DOUGH("dough", 0xFFEFD6B1, false, 0.75F, 1.0F, 0),
+    /** Corn Expansion's corn dough: a dough, golden as its cornmeal. */
+    CORN_DOUGH("dough", 0xFFF0CB82, false, 0.75F, 1.0F, 0),
     BUTTER("butter", 0xFFF4D98B, false, 0.9F, 0.85F, 0),
     PORRIDGE("porridge", 0xFFE9DCC3, false, 0.45F, 0.6F, 6),
     PORRIDGE_BERRIES("porridge_berries", 0xFFE7D7C2, false, 0.45F, 0.6F, 6),
@@ -146,7 +148,7 @@ enum BowlMass {
             return BUTTER;
         }
         if (has(name, "dough", "pastry", "crust")) {
-            return DOUGH;
+            return has(name, "corn", "maize") ? CORN_DOUGH : DOUGH;
         }
         if (has(name, "oatmeal", "porridge", "muesli", "granola", "cereal")) {
             return berries ? PORRIDGE_BERRIES : PORRIDGE;
