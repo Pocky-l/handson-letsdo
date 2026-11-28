@@ -2,6 +2,8 @@
   "handson_letsdo.book.seconds": "%s s",
   "handson_letsdo.book.minutes": "%s min",
   "handson_letsdo.book.tab.all": "All recipes",
+  "handson_letsdo.book.tab.dishes": "Dishes",
+  "handson_letsdo.book.tab.knife": "Knife cuts",
   "handson_letsdo.book.tab.recent": "Made lately",
   "handson_letsdo.book.only_ready": "Showing what you can make",
   "handson_letsdo.book.showing_all": "Showing all",

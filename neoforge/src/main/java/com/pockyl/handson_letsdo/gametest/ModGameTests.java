@@ -663,4 +663,49 @@ public final class ModGameTests {
     public static void theJuiceOfALoadRunsQuickly(GameTestHelper helper) {
         PressTests.theJuiceOfALoadRunsQuickly(helper);
     }
+
+    @GameTest(template = "room")
+    public static void theBoardIsAStationOnlyWithFarmCharm(GameTestHelper helper) {
+        BoardTests.theBoardIsAStationOnlyWithFarmCharm(helper);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void aBatchOfSixteenIsCutAfterTheToolsStrokes(GameTestHelper helper) {
+        BoardTests.aBatchOfSixteenIsCutAfterTheToolsStrokes(helper);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void nothingIsCutBeforeTheLastStroke(GameTestHelper helper) {
+        BoardTests.nothingIsCutBeforeTheLastStroke(helper);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 200)
+    public static void anAxeStripsALog(GameTestHelper helper) {
+        BoardTests.anAxeStripsALog(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void layersMakeTheirDishRoundAfterRound(GameTestHelper helper) {
+        BoardTests.layersMakeTheirDishRoundAfterRound(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void anOrderedDishTakesItsOrder(GameTestHelper helper) {
+        BoardTests.anOrderedDishTakesItsOrder(helper);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 100)
+    public static void theBoardsOwnUseMakesEveryRound(GameTestHelper helper) {
+        BoardTests.theBoardsOwnUseMakesEveryRound(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void aToolIsStuckInAndPulledOut(GameTestHelper helper) {
+        BoardTests.aToolIsStuckInAndPulledOut(helper);
+    }
+
+    @GameTest(template = "empty")
+    public static void theBoardsSceneIsRead(GameTestHelper helper) {
+        BoardTests.theBoardsSceneIsRead(helper);
+    }
 }

@@ -10,6 +10,8 @@
     "BlockEntityUpdateMixin",
     "CauldronMixin",
     "CraftingBowlMixin",
+    "CuttingBoardBlockMixin",
+    "CuttingBoardItemsAccessor",
     "FermentationBarrelMixin",
     "MincerMixin",
     "StirredPotMixin",

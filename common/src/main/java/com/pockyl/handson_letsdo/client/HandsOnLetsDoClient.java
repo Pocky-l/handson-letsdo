@@ -15,6 +15,7 @@ import com.pockyl.handson_letsdo.station.BarrelStation;
 import com.pockyl.handson_letsdo.station.BowlStation;
 import com.pockyl.handson_letsdo.station.CauldronStation;
 import com.pockyl.handson_letsdo.station.CookingPotStation;
+import com.pockyl.handson_letsdo.station.CuttingBoardStation;
 import com.pockyl.handson_letsdo.station.FarmCharmStove;
 import com.pockyl.handson_letsdo.station.KettleStation;
 import com.pockyl.handson_letsdo.station.MincerStation;
@@ -155,6 +156,9 @@ public final class HandsOnLetsDoClient {
         }
         if (Diegesis.stationType(BowlStation.ID).isPresent()) {
             DiegesisClient.registerBehavior(BowlStation.ID, BowlBehavior::new);
+        }
+        if (Diegesis.stationType(CuttingBoardStation.ID).isPresent()) {
+            DiegesisClient.registerBehavior(CuttingBoardStation.ID, BoardBehavior::new);
         }
     }
 }

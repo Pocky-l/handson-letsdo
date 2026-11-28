@@ -595,6 +595,10 @@ public final class StationTests {
             helper.assertTrue(in != null, "scene " + path + " is there");
             JsonElement root = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             withoutNotes(root);
+            // Repeated nodes (lift_0, lift_1...) are laid out as the library lays them out when it loads a scene.
+            DataResult<JsonElement> expanded = com.pockyl.diegesis.impl.scene.NodeTemplates.expand(root, id -> null);
+            helper.assertTrue(expanded.error().isEmpty(), "the scene's repeated nodes are laid out");
+            root = expanded.result().orElse(root);
             DataResult<SceneDefinition> read = SceneDefinition.CODEC.parse(JsonOps.INSTANCE, root);
             helper.assertTrue(read.error().isEmpty(), "the scene is read: " + read.error().map(Object::toString).orElse(""));
             Set<String> ids = new HashSet<>();

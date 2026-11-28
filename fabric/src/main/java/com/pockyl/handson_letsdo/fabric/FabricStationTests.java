@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 
+import com.pockyl.handson_letsdo.gametest.BoardTests;
 import com.pockyl.handson_letsdo.gametest.BowlTests;
 import com.pockyl.handson_letsdo.gametest.CauldronTests;
 import com.pockyl.handson_letsdo.gametest.KettleTests;
@@ -664,5 +665,50 @@ public final class FabricStationTests implements FabricGameTest {
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
     public void theJuiceOfALoadRunsQuickly(GameTestHelper helper) {
         PressTests.theJuiceOfALoadRunsQuickly(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void theBoardIsAStationOnlyWithFarmCharm(GameTestHelper helper) {
+        BoardTests.theBoardIsAStationOnlyWithFarmCharm(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
+    public void aBatchOfSixteenIsCutAfterTheToolsStrokes(GameTestHelper helper) {
+        BoardTests.aBatchOfSixteenIsCutAfterTheToolsStrokes(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
+    public void nothingIsCutBeforeTheLastStroke(GameTestHelper helper) {
+        BoardTests.nothingIsCutBeforeTheLastStroke(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
+    public void anAxeStripsALog(GameTestHelper helper) {
+        BoardTests.anAxeStripsALog(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void layersMakeTheirDishRoundAfterRound(GameTestHelper helper) {
+        BoardTests.layersMakeTheirDishRoundAfterRound(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void anOrderedDishTakesItsOrder(GameTestHelper helper) {
+        BoardTests.anOrderedDishTakesItsOrder(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void theBoardsOwnUseMakesEveryRound(GameTestHelper helper) {
+        BoardTests.theBoardsOwnUseMakesEveryRound(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void aToolIsStuckInAndPulledOut(GameTestHelper helper) {
+        BoardTests.aToolIsStuckInAndPulledOut(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void theBoardsSceneIsRead(GameTestHelper helper) {
+        BoardTests.theBoardsSceneIsRead(helper);
     }
 }

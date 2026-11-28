@@ -4,6 +4,10 @@ All notable changes to this mod are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0+1.21.1] - 2026-11-28
+### Added
+- [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s cutting board is a station: lay the food down and cut it on its dashed marks, up to sixteen at a time, strip logs with an axe, and put pet food, feed and rope together layer by layer.
+
 ## [1.2.0+1.21.1] - 2026-11-27
 ### Added
 - [Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)'s eleven stoves are stations that bake as [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s stove does.

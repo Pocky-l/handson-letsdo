@@ -10,7 +10,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.pockyl.handson_letsdo.client.HandsOnLetsDoClient;
+import com.pockyl.diegesis.api.client.DiegesisClient;
 import com.pockyl.handson_letsdo.station.BowlStation;
+import com.pockyl.handson_letsdo.station.CuttingBoardStation;
 import com.pockyl.handson_letsdo.station.FarmCharmStove;
 import com.pockyl.handson_letsdo.station.MincerStation;
 
@@ -30,6 +32,10 @@ abstract class StationRenderersMixin {
             CallbackInfo callback) {
         boolean drawnByScene = FarmCharmStove.isStove(blockEntity) || MincerStation.isMincer(blockEntity) || BowlStation.isBowl(blockEntity);
         if (drawnByScene && HandsOnLetsDoClient.standsInFor(blockEntity.getBlockPos())) {
+            callback.cancel();
+        }
+        // The board keeps its block; what lies on it and the tool stuck in are the scene's wherever it is drawn.
+        if (CuttingBoardStation.isBoard(blockEntity) && DiegesisClient.isSceneDrawn(blockEntity.getBlockPos())) {
             callback.cancel();
         }
     }

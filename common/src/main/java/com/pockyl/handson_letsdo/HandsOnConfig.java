@@ -43,6 +43,8 @@ public final class HandsOnConfig {
             "  way.",
             "crafting_bowl: Farm & Charm's crafting bowl as a station, when that mod is there. Off, it is stirred by right clicks,",
             "  Farm & Charm's way.",
+            "cutting_board: Farm & Charm's cutting board as a station, when that mod is there (1.21.1). Off, things are laid",
+            "  and cut by right clicks, Farm & Charm's way.",
             "stirring_required: food a cook puts into the pot at the station waits for the spoon while the cook is at it. Off,",
             "  it also cooks unstirred, Farm & Charm's way; stirring still cooks the whole pot at once and earns stars.",
             "recipe_book: the recipe book beside the stations. Each player's own: read on their client.",
@@ -64,6 +66,7 @@ public final class HandsOnConfig {
     private static boolean applePress = true;
     private static boolean mincer = true;
     private static boolean craftingBowl = true;
+    private static boolean cuttingBoard = true;
     private static boolean stirringRequired = true;
     private static boolean recipeBook = true;
     private static float cookingPotTime = 1.0F;
@@ -97,6 +100,7 @@ public final class HandsOnConfig {
         applePress = read(values, "apple_press", applePress);
         mincer = read(values, "mincer", mincer);
         craftingBowl = read(values, "crafting_bowl", craftingBowl);
+        cuttingBoard = read(values, "cutting_board", cuttingBoard);
         stirringRequired = read(values, "stirring_required", stirringRequired);
         recipeBook = read(values, "recipe_book", recipeBook);
         cookingPotTime = readTime(values, "cooking_pot_time", cookingPotTime);
@@ -187,6 +191,10 @@ public final class HandsOnConfig {
 
     public static boolean craftingBowl() {
         return craftingBowl;
+    }
+
+    public static boolean cuttingBoard() {
+        return cuttingBoard;
     }
 
     /** How many times as long as usual a roaster worked at the station takes. */

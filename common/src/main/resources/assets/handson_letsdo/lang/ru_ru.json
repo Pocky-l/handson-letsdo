@@ -2,6 +2,8 @@
   "handson_letsdo.book.seconds": "%s с",
   "handson_letsdo.book.minutes": "%s мин",
   "handson_letsdo.book.tab.all": "Все рецепты",
+  "handson_letsdo.book.tab.dishes": "Блюда",
+  "handson_letsdo.book.tab.knife": "Нарезка ножом",
   "handson_letsdo.book.tab.recent": "Недавние",
   "handson_letsdo.book.only_ready": "Только то, что можно сделать",
   "handson_letsdo.book.showing_all": "Показано всё",

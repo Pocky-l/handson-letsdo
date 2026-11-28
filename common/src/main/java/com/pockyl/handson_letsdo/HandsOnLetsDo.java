@@ -8,6 +8,7 @@ import com.pockyl.handson_letsdo.station.BarrelStation;
 import com.pockyl.handson_letsdo.station.BowlStation;
 import com.pockyl.handson_letsdo.station.CauldronStation;
 import com.pockyl.handson_letsdo.station.CookingPotStation;
+import com.pockyl.handson_letsdo.station.CuttingBoardStation;
 import com.pockyl.handson_letsdo.station.KettleStation;
 import com.pockyl.handson_letsdo.station.MincerStation;
 import com.pockyl.handson_letsdo.station.OvenStation;
@@ -57,5 +58,6 @@ public final class HandsOnLetsDo {
         PressStation.register();
         MincerStation.register();
         BowlStation.register();
+        CuttingBoardStation.register();
     }
 }
