@@ -4,6 +4,10 @@ All notable changes to this mod are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1+1.20.1] - 2026-11-28
+### Fixed
+- [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s stove takes every fuel a furnace takes, also modded fuels that set their own burn time.
+
 ## [1.2.0+1.20.1] - 2026-11-27
 ### Added
 - [Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)'s eleven stoves are stations that bake as [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s stove does.
