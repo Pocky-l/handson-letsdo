@@ -51,6 +51,7 @@ dependencies {
     compileOnly "maven.modrinth:lets-do-farm-charm:${farm_and_charm_version}"
     compileOnly "maven.modrinth:lets-do-herbalbrews:${herbalbrews_version}"
     compileOnly "maven.modrinth:lets-do-candlelight-farmcharm-compat:${candlelight_version}"
+    compileOnly "maven.modrinth:lets-do-wok-bowl:${wok_and_bowl_version}"
     compileOnly "maven.modrinth:lets-do-foundation:${foundation_version}"
 }
 
@@ -67,6 +68,7 @@ if (!bare) {
             bakery        : "lets-do-bakery-farmcharm-compat:${bakery_version}",
             brewery       : "lets-do-brewery-farmcharm-compat:${brewery_version}",
             meadow        : "lets-do-meadow:${meadow_version}",
+            wok_and_bowl  : "lets-do-wok-bowl:${wok_and_bowl_version}",
     ]
     dependencies {
         localRuntime "maven.modrinth:architectury-api:${architectury_version}"
@@ -122,6 +124,7 @@ var generateModMetadata = tasks.register('generateModMetadata', ProcessResources
             farm_and_charm_min_version       : farm_and_charm_min_version,
             herbalbrews_min_version          : herbalbrews_min_version,
             candlelight_min_version          : candlelight_min_version,
+            wok_and_bowl_min_version         : wok_and_bowl_min_version,
     ]
     inputs.properties replaceProperties
     expand replaceProperties

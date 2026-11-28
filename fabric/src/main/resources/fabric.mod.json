@@ -29,6 +29,7 @@
     "vinery": ">=${vinery_min_version}",
     "farm_and_charm": ">=${farm_and_charm_min_version}",
     "herbalbrews": ">=${herbalbrews_min_version}",
-    "candlelight": ">=${candlelight_min_version}"
+    "candlelight": ">=${candlelight_min_version}",
+    "wok_and_bowl": ">=${wok_and_bowl_min_version}"
   }
 }

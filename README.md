@@ -14,7 +14,7 @@
 
 <p align="center"><i>An addon by Pocky for the <a href="https://www.curseforge.com/members/satisfy/projects">Let's Do</a> mods by satisfy: work at their stations with your own hands.</i></p>
 
-<p align="center"><b>The fermentation barrel, the apple press, the cooking pots, the stove, the roaster, the cooking pan, the mincer, the crafting bowl, the cutting board, the tea kettle and the brewing cauldron open right where they stand, with no menu screen. You stir the soup, turn the mincer's crank and whisk the dough yourself, and players nearby see what you make.</b></p>
+<p align="center"><b>The fermentation barrel, the apple press, the cooking pots, the stove, the roaster, the cooking pan, the mincer, the crafting bowl, the cutting board, the wok, the tea kettle and the brewing cauldron open right where they stand, with no menu screen. You stir the soup, turn the mincer's crank and whisk the dough yourself, and players nearby see what you make.</b></p>
 
 <p align="center"><img src="docs/showcase/cooking_pot.gif" alt="Water and barley go into the cooking pot on the stove, then the soup is stirred with the pot's stick until it is done" width="720"></p>
 
@@ -52,6 +52,8 @@ Built on [Diegesis](https://www.curseforge.com/minecraft/mc-mods/diegesis), from
   bowlful is porridge, dough or butter.
 - **Cutting board** (Farm & Charm). Lay the food down and bring the knife onto the dashed marks; the last stroke cuts up
   to sixteen at once. Logs are stripped with an axe, and pet food, feed and rope are put together layer by layer.
+- **Wok** ([Wok & Bowl](https://www.curseforge.com/minecraft/mc-mods/lets-do-wok-bowl)). Throw the food in piece by piece, then take the wok by a handle and flick it up
+  when it calls for a toss. Pour the sauce in, strike flint and steel for a flambé, and flick once more to serve.
 - **Tea kettle** ([HerbalBrews](https://www.curseforge.com/minecraft/mc-mods/lets-do-herbal-brews)). Lift the lid, pour
   water in and drop the leaves in. The kettle whistles when the tea is done and is poured from its spout.
 - **Brewing cauldron** (HerbalBrews). Pour three potions in from their bottles and throw the herbal infusion after them.
@@ -70,6 +72,7 @@ Built on [Diegesis](https://www.curseforge.com/minecraft/mc-mods/diegesis), from
 | Take something back | Click it at the station |
 | Stir, crank, whisk, press | Take the stick, crank, whisk or cap and move the mouse |
 | Cut | Click the dashed mark with a knife on the cursor or in your inventory |
+| Toss the wok | Click a handle with an empty hand, then flick the mouse up |
 | Fill a bowl or a bottle | Click the soup, the tub, the bung or the spout with it |
 | Leave | Escape or the inventory key |
 
@@ -87,6 +90,7 @@ stirring the pot waits for, and scales the time of the pot and the roaster.
 [![Let's Do: HerbalBrews](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-herbal-brews.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-herbal-brews) ✅ **[Let's Do: HerbalBrews](https://www.curseforge.com/minecraft/mc-mods/lets-do-herbal-brews)** (optional) - the iron and copper tea kettles and the brewing cauldron
 
 [![Let's Do: Candlelight](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-candlelight.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat) ✅ **[Let's Do: Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)** (optional) - its cooking pot, its cooking pan and its eleven stoves
+[![Let's Do: Wok & Bowl](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-wok-bowl.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-wok-bowl) ✅ **[Let's Do: Wok & Bowl](https://www.curseforge.com/minecraft/mc-mods/lets-do-wok-bowl)** (optional, Minecraft 1.21.1) - its wok
 
 ## Installation
 

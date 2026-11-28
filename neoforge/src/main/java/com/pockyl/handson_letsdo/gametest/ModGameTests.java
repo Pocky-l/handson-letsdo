@@ -708,4 +708,34 @@ public final class ModGameTests {
     public static void theBoardsSceneIsRead(GameTestHelper helper) {
         BoardTests.theBoardsSceneIsRead(helper);
     }
+
+    @GameTest(template = "room")
+    public static void theWokIsAStationOnlyWithWokAndBowl(GameTestHelper helper) {
+        WokTests.theWokIsAStationOnlyWithWokAndBowl(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void foodGoesInOneByOneAsTheWokTakesIt(GameTestHelper helper) {
+        WokTests.foodGoesInOneByOneAsTheWokTakesIt(helper);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 300)
+    public static void aFlickTossesWhenTheWokCalls(GameTestHelper helper) {
+        WokTests.aFlickTossesWhenTheWokCalls(helper);
+    }
+
+    @GameTest(template = "room", timeoutTicks = 600)
+    public static void theSauceAndAFlickServeTheDish(GameTestHelper helper) {
+        WokTests.theSauceAndAFlickServeTheDish(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void aPickedRecipeGoesInInItsOrder(GameTestHelper helper) {
+        WokTests.aPickedRecipeGoesInInItsOrder(helper);
+    }
+
+    @GameTest(template = "empty")
+    public static void theWoksSceneIsRead(GameTestHelper helper) {
+        WokTests.theWoksSceneIsRead(helper);
+    }
 }

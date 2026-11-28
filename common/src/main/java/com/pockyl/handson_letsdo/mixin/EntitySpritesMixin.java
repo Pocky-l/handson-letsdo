@@ -25,7 +25,8 @@ abstract class EntitySpritesMixin {
     private static final ResourceLocation HANDSON_BLOCKS = ResourceLocation.fromNamespaceAndPath("minecraft", "blocks");
     @Unique
     private static final List<ResourceLocation> HANDSON_SPRITES = List.of(ResourceLocation.fromNamespaceAndPath("farm_and_charm", "entity/mincer"),
-            ResourceLocation.fromNamespaceAndPath("farm_and_charm", "entity/crafting_bowl"), ResourceLocation.fromNamespaceAndPath("farm_and_charm", "entity/crafting_bowl_full"));
+            ResourceLocation.fromNamespaceAndPath("farm_and_charm", "entity/crafting_bowl"), ResourceLocation.fromNamespaceAndPath("farm_and_charm", "entity/crafting_bowl_full"),
+            ResourceLocation.fromNamespaceAndPath("wok_and_bowl", "entity/wok"));
 
     @Inject(method = "load", at = @At("RETURN"))
     private static void handson$addEntitySprites(ResourceManager resources, ResourceLocation atlas,

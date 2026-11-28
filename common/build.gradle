@@ -25,6 +25,7 @@ dependencies {
     compileOnly "maven.modrinth:lets-do-farm-charm:${farm_and_charm_version}"
     compileOnly "maven.modrinth:lets-do-herbalbrews:${herbalbrews_version}"
     compileOnly "maven.modrinth:lets-do-candlelight-farmcharm-compat:${candlelight_version}"
+    compileOnly "maven.modrinth:lets-do-wok-bowl:${wok_and_bowl_version}"
     compileOnly "maven.modrinth:lets-do-foundation:${foundation_version}"
 }
 

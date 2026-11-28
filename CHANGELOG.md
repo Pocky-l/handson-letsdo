@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.0+1.21.1] - 2026-11-28
 ### Added
 - [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s cutting board is a station: lay the food down and cut it on its dashed marks, up to sixteen at a time, strip logs with an axe, and put pet food, feed and rope together layer by layer.
+- [Wok & Bowl](https://www.curseforge.com/minecraft/mc-mods/lets-do-wok-bowl)'s wok is a station: throw the food in, take the wok by a handle and flick it up when it calls for a toss, pour the sauce, flambé with flint and steel, and flick once more to serve.
 
 ### Fixed
 - Opening Farm & Charm's stove no longer crashes the game alongside [Decorative Blocks](https://www.curseforge.com/minecraft/mc-mods/decorative-blocks): the stove now asks the loader what burns, as a furnace does, so it also takes every modded fuel a furnace takes.

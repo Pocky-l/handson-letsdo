@@ -1,0 +1,77 @@
+{
+  "textures": {
+    "wok": "wok_and_bowl:entity/wok",
+    "particle": "wok_and_bowl:entity/wok"
+  },
+  "elements": [
+    {
+      "name": "handle",
+      "from": [
+        0.0,
+        2.0,
+        5.0
+      ],
+      "to": [
+        2.0,
+        4.0,
+        11.0
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            1.5,
+            10.5,
+            2.0,
+            12.0
+          ],
+          "texture": "#wok"
+        },
+        "down": {
+          "uv": [
+            2.0,
+            12.0,
+            2.5,
+            10.5
+          ],
+          "texture": "#wok"
+        },
+        "south": {
+          "uv": [
+            1.5,
+            12.0,
+            2.0,
+            12.5
+          ],
+          "texture": "#wok"
+        },
+        "north": {
+          "uv": [
+            3.5,
+            12.0,
+            4.0,
+            12.5
+          ],
+          "texture": "#wok"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            12.0,
+            1.5,
+            12.5
+          ],
+          "texture": "#wok"
+        },
+        "east": {
+          "uv": [
+            2.0,
+            12.0,
+            3.5,
+            12.5
+          ],
+          "texture": "#wok"
+        }
+      }
+    }
+  ]
+}

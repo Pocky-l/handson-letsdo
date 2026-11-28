@@ -1,0 +1,90 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
+  "$comment": "Wok & Bowl's wok (1.21.1). Its renderer draws it from an entity model; the scene draws the same wok (models cut from that model, its texture by id) on node wok, which the code turns back to the block's facing and moves as Wok & Bowl moves it (a toss, the wobble while it calls, the simmer), and as the cook's hand holds it. The block's own model (the grate and legs over a campfire) stays. Each handle is a click node of its own, outlined under the pointer: a click takes the wok in hand, a flick up tosses. piece_N are what lies in the wok, dish_N the dishes, both built from their icons by the code. pan takes an empty hand's click (Wok & Bowl's empty hand), mouth catches stacks let go over the wok. Camera, badge and book as at the roaster, lowered with the wok's rim (y 4 against the roaster's 6).",
+  "work_plane": 3,
+  "idle_visible": true,
+  "camera": {
+    "position": [8, 37.5, -22],
+    "target": [8, 3, 8],
+    "fov": 30
+  },
+  "interface": {
+    "hide_player": true,
+    "inventory_panel": false,
+    "outline_color": "#FFFFE8C0"
+  },
+  "inventory_drawer": {
+    "side": "bottom",
+    "style": "minimal",
+    "always_open": true,
+    "compact": true,
+    "background": "#00000000",
+    "slot_color": "#8C1E140C"
+  },
+  "nodes": [
+    {
+      "id": "wok",
+      "pos": [8, 0, 8],
+      "pickable": false,
+      "visual": {"model": "handson_letsdo:diegesis/wok/body", "lit_as_block": true},
+      "children": [
+        {
+          "id": "handle_right",
+          "strokes": true,
+          "visual": {"model": "handson_letsdo:diegesis/wok/handle_right", "lit_as_block": true},
+          "collider": {"from": [5.6, 1.4, -3.4], "to": [8.6, 4.6, 3.4]}
+        },
+        {
+          "id": "handle_left",
+          "strokes": true,
+          "visual": {"model": "handson_letsdo:diegesis/wok/handle_left", "lit_as_block": true},
+          "collider": {"from": [-8.6, 1.4, -3.4], "to": [-5.6, 4.6, 3.4]}
+        },
+        {
+          "id": "piece",
+          "pos": [0, 0, 0],
+          "repeat": {"count": [1, 6, 1], "step": [0, 0, 0]},
+          "pickable": false,
+          "hidden": true
+        },
+        {
+          "id": "dish",
+          "pos": [0, 0, 0],
+          "repeat": {"count": [1, 3, 1], "step": [0, 0, 0]},
+          "pickable": false,
+          "hidden": true
+        }
+      ]
+    },
+    {
+      "id": "pan",
+      "collider": {"from": [4, 0.5, 4], "to": [12, 5, 12]}
+    },
+    {
+      "id": "mouth",
+      "drop_zone": "hand",
+      "collider": {"from": [3, 0.5, 3], "to": [13, 8, 13]}
+    },
+    {"id": "badge", "pos": [-0.6, 11, 3.6], "rotation": [-50, 0, 0], "pickable": false},
+    {"id": "dial_track", "pos": [-0.6, 11.02, 3.58], "rotation": [-50, 0, 0], "pickable": false},
+    {"id": "dial", "pos": [-0.6, 11.04, 3.56], "rotation": [-50, 0, 0], "pickable": false},
+    {"$comment": "The badge's pale count of what is still to come, and its time.",
+      "id": "dial_more", "pos": [-0.6, 11.05, 3.55], "rotation": [-50, 0, 0], "pickable": false},
+    {
+      "id": "preview",
+      "pos": [-0.6, 11.08, 3.52],
+      "rotation": [40, 0, 0],
+      "scale": 0.125,
+      "hidden": true,
+      "collider": {"from": [-12, -12, -12], "to": [12, 12, 12]}
+    },
+    {
+      "id": "book_open",
+      "pos": [16.33, 17.72, -5],
+      "rotation": [-50, 0, 0],
+      "scale": 0.69,
+      "hidden": true,
+      "collider": {"from": [-5.3, -0.4, -3.9], "to": [5.3, 1.4, 3.9]}
+    }
+  ]
+}

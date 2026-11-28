@@ -18,6 +18,7 @@ dependencies {
     modCompileOnly "maven.modrinth:lets-do-farm-charm:${farm_and_charm_fabric_version}"
     modCompileOnly "maven.modrinth:lets-do-herbalbrews:${herbalbrews_fabric_version}"
     modCompileOnly "maven.modrinth:lets-do-candlelight-farmcharm-compat:${candlelight_fabric_version}"
+    modCompileOnly "maven.modrinth:lets-do-wok-bowl:${wok_and_bowl_fabric_version}"
     modCompileOnly "maven.modrinth:lets-do-foundation:${foundation_fabric_version}"
 }
 
@@ -52,6 +53,7 @@ dependencies {
         gameTestMods "maven.modrinth:lets-do-bakery-farmcharm-compat:${bakery_fabric_version}"
         gameTestMods "maven.modrinth:lets-do-brewery-farmcharm-compat:${brewery_fabric_version}"
         gameTestMods "maven.modrinth:lets-do-meadow:${meadow_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-wok-bowl:${wok_and_bowl_fabric_version}"
         gameTestMods "maven.modrinth:cloth-config:${cloth_config_fabric_version}"
     }
     gameTestMods "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
@@ -99,6 +101,7 @@ tasks.named('processResources', ProcessResources) {
             farm_and_charm_min_version       : farm_and_charm_min_version,
             herbalbrews_min_version          : herbalbrews_min_version,
             candlelight_min_version          : candlelight_min_version,
+            wok_and_bowl_min_version         : wok_and_bowl_min_version,
     ]
     inputs.properties replaceProperties
     filesMatching('fabric.mod.json') {

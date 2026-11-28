@@ -13,6 +13,7 @@ import com.pockyl.handson_letsdo.client.HandsOnLetsDoClient;
 import com.pockyl.diegesis.api.client.DiegesisClient;
 import com.pockyl.handson_letsdo.station.BowlStation;
 import com.pockyl.handson_letsdo.station.CuttingBoardStation;
+import com.pockyl.handson_letsdo.station.WokStation;
 import com.pockyl.handson_letsdo.station.FarmCharmStove;
 import com.pockyl.handson_letsdo.station.MincerStation;
 
@@ -35,7 +36,7 @@ abstract class StationRenderersMixin {
             callback.cancel();
         }
         // The board keeps its block; what lies on it and the tool stuck in are the scene's wherever it is drawn.
-        if (CuttingBoardStation.isBoard(blockEntity) && DiegesisClient.isSceneDrawn(blockEntity.getBlockPos())) {
+        if ((CuttingBoardStation.isBoard(blockEntity) || WokStation.isWok(blockEntity)) && DiegesisClient.isSceneDrawn(blockEntity.getBlockPos())) {
             callback.cancel();
         }
     }

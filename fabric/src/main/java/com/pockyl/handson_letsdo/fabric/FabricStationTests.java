@@ -6,6 +6,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 
 import com.pockyl.handson_letsdo.gametest.BoardTests;
 import com.pockyl.handson_letsdo.gametest.BowlTests;
+import com.pockyl.handson_letsdo.gametest.WokTests;
 import com.pockyl.handson_letsdo.gametest.CauldronTests;
 import com.pockyl.handson_letsdo.gametest.KettleTests;
 import com.pockyl.handson_letsdo.gametest.MincerTests;
@@ -710,5 +711,35 @@ public final class FabricStationTests implements FabricGameTest {
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
     public void theBoardsSceneIsRead(GameTestHelper helper) {
         BoardTests.theBoardsSceneIsRead(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void theWokIsAStationOnlyWithWokAndBowl(GameTestHelper helper) {
+        WokTests.theWokIsAStationOnlyWithWokAndBowl(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void foodGoesInOneByOneAsTheWokTakesIt(GameTestHelper helper) {
+        WokTests.foodGoesInOneByOneAsTheWokTakesIt(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 300)
+    public void aFlickTossesWhenTheWokCalls(GameTestHelper helper) {
+        WokTests.aFlickTossesWhenTheWokCalls(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 600)
+    public void theSauceAndAFlickServeTheDish(GameTestHelper helper) {
+        WokTests.theSauceAndAFlickServeTheDish(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void aPickedRecipeGoesInInItsOrder(GameTestHelper helper) {
+        WokTests.aPickedRecipeGoesInInItsOrder(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void theWoksSceneIsRead(GameTestHelper helper) {
+        WokTests.theWoksSceneIsRead(helper);
     }
 }
