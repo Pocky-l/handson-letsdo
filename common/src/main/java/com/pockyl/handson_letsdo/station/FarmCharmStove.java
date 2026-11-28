@@ -6,12 +6,10 @@ import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import com.pockyl.diegesis.api.station.StationContext;
@@ -64,9 +62,6 @@ public final class FarmCharmStove implements KitchenOven {
     /** Every block whose block entity is this stove: Farm &amp; Charm's and Candlelight's. */
     private static final Set<ResourceLocation> BLOCK_IDS = blockIds();
 
-    /** What burns and for how long, as furnaces know it; read again every few seconds, as tags may change. */
-    private static Map<Item, Integer> fuels = Map.of();
-    private static long fuelsReadAt;
     private static Block stoveBlock;
     /** The bakings made of each list of dishes read. */
     private static final Map<List<Dish>, List<Baking>> READ = new IdentityHashMap<>();
@@ -194,19 +189,10 @@ public final class FarmCharmStove implements KitchenOven {
         container.setChanged();
     }
 
-    /** Whatever a furnace burns, for as long: the stove reads the furnaces' own list. */
+    /** Whatever a furnace burns: the stove asks the loader, as the furnace does. */
     @Override
     public boolean isFuel(ItemStack stack) {
-        return !stack.isEmpty() && fuels().getOrDefault(stack.getItem(), 0) > 0;
-    }
-
-    private static synchronized Map<Item, Integer> fuels() {
-        long now = System.currentTimeMillis();
-        if (fuels.isEmpty() || now - fuelsReadAt > 5000L) {
-            fuels = Map.copyOf(AbstractFurnaceBlockEntity.getFuel());
-            fuelsReadAt = now;
-        }
-        return fuels;
+        return FurnaceFuel.burnTime(stack) > 0;
     }
 
     @Override
