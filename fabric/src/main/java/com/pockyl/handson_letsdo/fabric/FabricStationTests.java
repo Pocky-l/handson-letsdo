@@ -8,6 +8,7 @@ import com.pockyl.handson_letsdo.gametest.BoardTests;
 import com.pockyl.handson_letsdo.gametest.BowlTests;
 import com.pockyl.handson_letsdo.gametest.WokTests;
 import com.pockyl.handson_letsdo.gametest.CauldronTests;
+import com.pockyl.handson_letsdo.gametest.CornExpansionTests;
 import com.pockyl.handson_letsdo.gametest.KettleTests;
 import com.pockyl.handson_letsdo.gametest.MincerTests;
 import com.pockyl.handson_letsdo.gametest.PotTests;
@@ -686,6 +687,16 @@ public final class FabricStationTests implements FabricGameTest {
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE, timeoutTicks = 200)
     public void anAxeStripsALog(GameTestHelper helper) {
         BoardTests.anAxeStripsALog(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void cornExpansionsRecipesAreAtOurStations(GameTestHelper helper) {
+        CornExpansionTests.cornExpansionsRecipesAreAtOurStations(helper);
+    }
+
+    @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)
+    public void cornExpansionsDishesAreLaidOnTheBoard(GameTestHelper helper) {
+        BoardTests.cornExpansionsDishesAreLaidOnTheBoard(helper);
     }
 
     @GameTest(template = FabricGameTest.EMPTY_STRUCTURE)

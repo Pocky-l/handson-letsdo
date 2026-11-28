@@ -63,6 +63,10 @@
     {
       "id": "#c:buckets/water",
       "required": false
+    },
+    {
+      "id": "cornexpansion:corn_syrup",
+      "required": false
     }
   ]
 }

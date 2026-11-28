@@ -209,7 +209,7 @@ public final class MincerLogic implements StationLogic {
         if (count > 0) {
             CompoundTag data = new CompoundTag();
             data.putString(MincerStation.ITEM, BuiltInRegistries.ITEM.getKey(recipe.result().getItem()).toString());
-            data.putString(MincerStation.KIND, FarmCharmDishes.mincedKind(station.level(), recipe.id()));
+            data.putString(MincerStation.KIND, MincerStation.looks(FarmCharmDishes.mincedKind(station.level(), recipe.id()), recipe.result()));
             station.effect(MincerStation.EFFECT_MINCED, MincerStation.DIE, data);
         }
     }

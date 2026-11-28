@@ -54,6 +54,7 @@ dependencies {
         gameTestMods "maven.modrinth:lets-do-brewery-farmcharm-compat:${brewery_fabric_version}"
         gameTestMods "maven.modrinth:lets-do-meadow:${meadow_fabric_version}"
         gameTestMods "maven.modrinth:lets-do-wok-bowl:${wok_and_bowl_fabric_version}"
+        gameTestMods "maven.modrinth:lets-do-addon-corn-expansion:${cornexpansion_fabric_version}"
         gameTestMods "maven.modrinth:cloth-config:${cloth_config_fabric_version}"
     }
     gameTestMods "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"

@@ -8,8 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - [Farm & Charm](https://www.curseforge.com/minecraft/mc-mods/lets-do-farm-charm)'s cutting board is a station: lay the food down and cut it on its dashed marks, up to sixteen at a time, strip logs with an axe, and put pet food, feed and rope together layer by layer.
 - [Wok & Bowl](https://www.curseforge.com/minecraft/mc-mods/lets-do-wok-bowl)'s wok is a station: throw the food in, take the wok by a handle and flick it up when it calls for a toss, pour the sauce, flambé with flint and steel, and flick once more to serve.
+- [Corn Expansion](https://modrinth.com/mod/lets-do-addon-corn-expansion)'s recipes at the stations: its corn dough mixes golden in the crafting bowl, the mincer mills its kernels into cornmeal and corn flour, polenta and grandma's cornbread bake on the stove, and its popcorn tins, polenta dishes and corn dogs are laid on the cutting board.
+
+### Changed
+- The mincer mills what it grinds into meal or flour with a dusty sound and flour's dust: no meat juice from crops, bones or corn, and no stone dust from wheat.
+- Corn syrup is poured from its bottle wherever honey is.
 
 ### Fixed
+- Minced meat is pressed out of the mincer's die in strands and lies thick on the heap, as on 1.20.1.
 - Opening Farm & Charm's stove no longer crashes the game alongside [Decorative Blocks](https://www.curseforge.com/minecraft/mc-mods/decorative-blocks): the stove now asks the loader what burns, as a furnace does, so it also takes every modded fuel a furnace takes.
 
 ## [1.2.0+1.21.1] - 2026-11-27

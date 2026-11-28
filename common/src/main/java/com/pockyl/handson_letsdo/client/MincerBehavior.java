@@ -88,6 +88,8 @@ public final class MincerBehavior implements StationBehavior {
     private final CrankFeel feel = new CrankFeel();
     private final MincerOutlet outlet = new MincerOutlet();
     private String grinds = "";
+    /** How what it grinds looks and sounds going through ({@link MincerStation#looks}). */
+    private String looks = "";
     private float creakAt = -10.0F;
     private float caughtAt = -10.0F;
     private final UsableCache usable = new UsableCache();
@@ -243,12 +245,13 @@ public final class MincerBehavior implements StationBehavior {
         view.playSound(grind(data.getString(MincerStation.KIND)), MincerStation.DIE, 0.3F, 1.0F);
     }
 
-    /** What a load sounds like coming out: soft for meat and fruit, gritty for stone, wood and metal. */
+    /** What a load sounds like coming out: soft for meat and fruit, gritty for stone, wood and metal, sandy for meal. */
     private static SoundEvent grind(String kind) {
         return switch (kind) {
             case "WOOD" -> SoundEvents.WOOD_BREAK;
             case "STONE" -> SoundEvents.GRAVEL_BREAK;
             case "METAL" -> SoundEvents.GRINDSTONE_USE;
+            case MincerStation.MILLED -> SoundEvents.SAND_BREAK;
             default -> SoundEvents.SLIME_SQUISH_SMALL;
         };
     }
@@ -261,6 +264,7 @@ public final class MincerBehavior implements StationBehavior {
             inputColor = 0xFF000000 | FoodColors.main(lying);
         }
         grinds = view.state().data().getString(MincerStation.GRINDS);
+        looks = MincerStation.looks(grinds, making);
     }
 
     @Override
@@ -281,7 +285,7 @@ public final class MincerBehavior implements StationBehavior {
         Dish recipe = MincerRecipes.taking(recipes, lying);
         int perInput = recipe == null ? 1 : recipe.result().getCount();
         outlet.frame(view, dt, view.state().getItem(MincerStation.MINCED_SLOT), making, perInput, data.getInt(MincerStation.LOAD_SIZE), turned,
-                Math.min(1.0F, pace / FULL_PACE), grinds);
+                Math.min(1.0F, pace / FULL_PACE), looks);
         outline(view);
         guide(view);
         book.frame(view, dt);
@@ -383,13 +387,14 @@ public final class MincerBehavior implements StationBehavior {
         view.node("crank").ifPresent(node -> node.shake(0.12F * hard, 0.1F));
         view.node("body").ifPresent(node -> node.shake(0.05F * hard, 0.08F));
         view.node("input").ifPresent(node -> node.shake(0.15F * hard, 0.1F));
-        SoundEvent crunch = switch (grinds) {
+        SoundEvent crunch = switch (looks) {
             case "WOOD" -> SoundEvents.WOOD_BREAK;
             case "STONE" -> SoundEvents.GRAVEL_HIT;
             case "METAL" -> SoundEvents.GRINDSTONE_USE;
+            case MincerStation.MILLED -> SoundEvents.SAND_HIT;
             default -> SoundEvents.SLIME_SQUISH_SMALL;
         };
-        float volume = "METAL".equals(grinds) ? 0.07F : "WOOD".equals(grinds) ? 0.1F : 0.16F;
+        float volume = "METAL".equals(looks) ? 0.07F : "WOOD".equals(looks) ? 0.1F : 0.16F;
         view.playSound(crunch, "hopper", volume * (0.7F + 0.6F * hard), 0.8F + view.level().random.nextFloat() * 0.3F);
         view.spawnParticles(DiegesisParticles.DUST, new Vector3f(9.5F, 16.2F, 8.0F), new Vector3f(0.0F, 1.2F, 0.0F), 1.0F, 2, inputColor);
     }

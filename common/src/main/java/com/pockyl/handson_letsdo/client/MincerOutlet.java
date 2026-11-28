@@ -1,6 +1,5 @@
 package com.pockyl.handson_letsdo.client;
 
-import net.minecraft.tags.ItemTags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -14,6 +13,7 @@ import com.pockyl.diegesis.api.client.DiegesisParticles;
 import com.pockyl.diegesis.api.client.MeshShape;
 import com.pockyl.diegesis.api.client.NodeView;
 import com.pockyl.diegesis.api.client.StationView;
+import com.pockyl.handson_letsdo.station.MincerStation;
 
 import java.util.HashMap;
 import java.util.List;
@@ -96,7 +96,7 @@ final class MincerOutlet {
         while (shown < want && clock >= nextAt) {
             Item next = shown < fromLying && !lying.isEmpty() ? lying.getItem() : making.isEmpty() ? lying.getItem() : making.getItem();
             boolean quiet = shown < fromLying && lying.getCount() > 0 && pending == 0 && turned <= 0.0F && clock < 0.5F;
-            comeOut(view, shown, next, quiet);
+            comeOut(view, shown, next, quiet, kind);
             shown++;
             nextAt = quiet ? clock : clock + NEXT_AFTER;
         }
@@ -107,11 +107,14 @@ final class MincerOutlet {
         grinding(view, dt, making, pace, kind);
     }
 
-    /** Piece {@code index} comes out of the die; {@code quiet}: it lies there already. */
-    private void comeOut(StationView view, int index, Item what, boolean quiet) {
+    /**
+     * Piece {@code index} comes out of the die; {@code quiet}: it lies there already. Minced meat ({@code kind} MEAT, which
+     * {@link MincerStation#looks} leaves only to what is eaten) comes out thicker, with a squish.
+     */
+    private void comeOut(StationView view, int index, Item what, boolean quiet, String kind) {
         item[index] = what;
         ItemStack stack = new ItemStack(what);
-        meat[index] = stack.is(ItemTags.MEAT);
+        meat[index] = "MEAT".equals(kind);
         yaw[index] = random.nextFloat() * 360.0F;
         age[index] = quiet ? Float.NaN : 0.0F;
         Optional<ItemVoxels.Icon> icon = ItemVoxels.icon(stack);
@@ -127,7 +130,7 @@ final class MincerOutlet {
             }
             node.scaleTo(quiet ? 1.0F : 0.3F, 0.0F);
         });
-        if (!quiet) {
+        if (!quiet && meat[index]) {
             view.playSound(SoundEvents.SLIME_SQUISH_SMALL, "die", 0.06F, 1.6F + random.nextFloat() * 0.3F);
         }
     }
@@ -192,6 +195,7 @@ final class MincerOutlet {
         SoundEvent sound = switch (kind) {
             case "STONE", "METAL" -> SoundEvents.STONE_HIT;
             case "WOOD" -> SoundEvents.WOOD_HIT;
+            case MincerStation.MILLED -> SoundEvents.SAND_STEP;
             default -> SoundEvents.SLIME_SQUISH_SMALL;
         };
         view.playSound(sound, "minced", 0.12F, 1.2F + random.nextFloat() * 0.3F);
@@ -206,7 +210,7 @@ final class MincerOutlet {
      * comes out next is turned; they break off when it comes out.
      */
     private void strand(StationView view, ItemStack making, int load, float turned, String kind) {
-        boolean pressed = !making.isEmpty() && load > 0 && "MEAT".equals(kind) && making.is(ItemTags.MEAT);
+        boolean pressed = !making.isEmpty() && load > 0 && "MEAT".equals(kind);
         float within = pressed ? turned * load - Mth.floor(turned * load) : 0.0F;
         int bits = pressed ? Mth.floor(within * STRAND / STRAND_BIT) : 0;
         if (bits == strandBits) {
@@ -272,7 +276,7 @@ final class MincerOutlet {
                     view.spawnParticles(DiegesisParticles.DUST, new Vector3f(9.5F, 16.4F, 8.0F), new Vector3f(0.0F, 1.0F, 0.0F), 1.0F, 1, grey);
                 }
             }
-            case "WOOD" -> {
+            case "WOOD", MincerStation.MILLED -> {
                 dust += dt * DUST_RATE * pace;
                 while (dust >= 1.0F) {
                     dust -= 1.0F;

@@ -236,6 +236,46 @@ public final class BoardTests {
         });
     }
 
+    /**
+     * Corn Expansion's dishes are laid on the board as its recipes say: polenta and butter make buttery polenta; four popcorn, each a
+     * layer of its own, and paper to finish make a tin; minced beef, an egg and cornmeal finished with a stick make a raw corn dog.
+     */
+    public static void cornExpansionsDishesAreLaidOnTheBoard(GameTestHelper helper) {
+        if (!HandsOnLetsDo.has("cornexpansion")) {
+            helper.succeed();
+            return;
+        }
+        if (withoutBoard(helper)) {
+            return;
+        }
+        record Laid(String dish, List<ItemStack> layers) {
+        }
+        List<Laid> dishes = List.of(
+                new Laid("buttery_polenta", List.of(new ItemStack(corn("polenta")), new ItemStack(farmCharm("butter")))),
+                new Laid("popcorn_tin", List.of(new ItemStack(corn("popcorn")), new ItemStack(corn("popcorn")), new ItemStack(corn("popcorn")),
+                        new ItemStack(corn("popcorn")), new ItemStack(Items.PAPER))),
+                new Laid("raw_corn_dog", List.of(new ItemStack(farmCharm("minced_beef")), new ItemStack(Items.EGG), new ItemStack(corn("cornmeal")),
+                        new ItemStack(Items.STICK))));
+        for (Laid laid : dishes) {
+            helper.setBlock(AT, Blocks.AIR);
+            Setup setup = board(helper);
+            for (ItemStack layer : laid.layers()) {
+                place(setup, layer.copy());
+                setup.cook.inventoryMenu.setCarried(ItemStack.EMPTY);
+            }
+            Item dish = corn(laid.dish());
+            helper.assertTrue(count(setup.cook, dish) == 1, laid.dish() + " is made and goes to the cook, got " + count(setup.cook, dish)
+                    + ", the board holds " + setup.board.items());
+            helper.assertTrue(setup.board.items().isEmpty(), laid.dish() + ": the layers were used up");
+        }
+        helper.setBlock(AT, Blocks.AIR);
+        helper.succeed();
+    }
+
+    private static Item corn(String path) {
+        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("cornexpansion", path));
+    }
+
     /** A cleaver on the cursor stuck into the bare board stays there, and an empty-hand take pulls it out to the cook. */
     public static void aToolIsStuckInAndPulledOut(GameTestHelper helper) {
         if (withoutBoard(helper)) {

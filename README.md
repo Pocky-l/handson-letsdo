@@ -92,6 +92,8 @@ stirring the pot waits for, and scales the time of the pot and the roaster.
 [![Let's Do: Candlelight](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-candlelight.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat) ✅ **[Let's Do: Candlelight](https://www.curseforge.com/minecraft/mc-mods/lets-do-candlelight-farm-charm-compat)** (optional) - its cooking pot, its cooking pan and its eleven stoves
 [![Let's Do: Wok & Bowl](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-wok-bowl.png)](https://www.curseforge.com/minecraft/mc-mods/lets-do-wok-bowl) ✅ **[Let's Do: Wok & Bowl](https://www.curseforge.com/minecraft/mc-mods/lets-do-wok-bowl)** (optional, Minecraft 1.21.1) - its wok
 
+[![Let's Do Addon: Corn Expansion](https://raw.githubusercontent.com/Pocky-l/handson-letsdo/main/docs/compat/lets-do-corn-expansion.png)](https://modrinth.com/mod/lets-do-addon-corn-expansion) ✅ **[Let's Do Addon: Corn Expansion](https://modrinth.com/mod/lets-do-addon-corn-expansion)** (optional) - its corn dough in the crafting bowl, cornmeal and corn flour milled at the mincer, polenta and cornbread on the stove, its popcorn tins, polenta dishes and corn dogs on the cutting board
+
 ## Installation
 
 1. Minecraft 1.20.1 with [Forge](https://files.minecraftforge.net), Minecraft 1.21.1 with

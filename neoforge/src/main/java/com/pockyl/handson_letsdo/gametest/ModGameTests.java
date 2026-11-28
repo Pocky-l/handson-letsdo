@@ -684,6 +684,16 @@ public final class ModGameTests {
         BoardTests.anAxeStripsALog(helper);
     }
 
+    @GameTest(template = "empty")
+    public static void cornExpansionsRecipesAreAtOurStations(GameTestHelper helper) {
+        CornExpansionTests.cornExpansionsRecipesAreAtOurStations(helper);
+    }
+
+    @GameTest(template = "room")
+    public static void cornExpansionsDishesAreLaidOnTheBoard(GameTestHelper helper) {
+        BoardTests.cornExpansionsDishesAreLaidOnTheBoard(helper);
+    }
+
     @GameTest(template = "room")
     public static void layersMakeTheirDishRoundAfterRound(GameTestHelper helper) {
         BoardTests.layersMakeTheirDishRoundAfterRound(helper);

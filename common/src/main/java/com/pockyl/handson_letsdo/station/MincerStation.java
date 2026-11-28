@@ -1,10 +1,12 @@
 package com.pockyl.handson_letsdo.station;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,6 +18,7 @@ import com.pockyl.diegesis.api.state.StationSchema;
 import com.pockyl.diegesis.api.station.StationType;
 import com.pockyl.handson_letsdo.HandsOnConfig;
 import com.pockyl.handson_letsdo.HandsOnLetsDo;
+import com.pockyl.handson_letsdo.KitchenTags;
 
 import java.util.function.Supplier;
 
@@ -109,6 +112,25 @@ public final class MincerStation {
     /** Whether the cook's own use reaches the mincer: sneaking empties it Farm &amp; Charm's way; a mincer this mod does not know too. */
     private static boolean opens(Player player, BlockPos pos, BlockState state) {
         return !player.isSecondaryUseActive() && Mincer.of(player.level().getBlockEntity(pos)) != null;
+    }
+
+    /** How a load goes through when it is milled to meal or flour, whatever its recipe's class: {@link #looks}. */
+    public static final String MILLED = "MILLED";
+
+    /**
+     * How a load of Farm &amp; Charm's recipe class {@code kind} that makes {@code result} looks and sounds going through: the class,
+     * except that what is milled to meal is {@link #MILLED}. The class is only upstream's difficulty: a MEAT recipe that makes nothing
+     * to eat (crops into seeds, a bone into bone meal, Corn Expansion's kernels into cornmeal and corn flour) has no juice to drip, and
+     * a STONE recipe that makes flour gives flour's dust, not stone's. How heavy it turns stays the class's ({@link #heaviness}).
+     */
+    public static String looks(String kind, ItemStack result) {
+        if (result.isEmpty()) {
+            return kind;
+        }
+        if ("MEAT".equals(kind) && !result.has(DataComponents.FOOD) || "STONE".equals(kind) && KitchenTags.is(result, KitchenTags.DISSOLVES)) {
+            return MILLED;
+        }
+        return kind;
     }
 
     /**
