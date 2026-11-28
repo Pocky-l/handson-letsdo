@@ -5,7 +5,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
@@ -98,7 +97,7 @@ final class MincerOutlet {
         while (shown < want && clock >= nextAt) {
             Item next = shown < fromLying && !lying.isEmpty() ? lying.getItem() : making.isEmpty() ? lying.getItem() : making.getItem();
             boolean quiet = shown < fromLying && lying.getCount() > 0 && pending == 0 && turned <= 0.0F && clock < 0.5F;
-            comeOut(view, shown, next, quiet);
+            comeOut(view, shown, next, quiet, kind);
             shown++;
             nextAt = quiet ? clock : clock + NEXT_AFTER;
         }
@@ -109,12 +108,14 @@ final class MincerOutlet {
         grinding(view, dt, making, pace, kind);
     }
 
-    /** Piece {@code index} comes out of the die; {@code quiet}: it lies there already. */
-    private void comeOut(StationView view, int index, Item what, boolean quiet) {
+    /**
+     * Piece {@code index} comes out of the die; {@code quiet}: it lies there already. Minced meat ({@code kind} MEAT, which
+     * {@link MincerStation#looks} leaves only to what is eaten) comes out thicker, with a squish.
+     */
+    private void comeOut(StationView view, int index, Item what, boolean quiet, String kind) {
         item[index] = what;
         ItemStack stack = new ItemStack(what);
-        FoodProperties food = what.getFoodProperties();
-        meat[index] = food != null && food.isMeat();
+        meat[index] = "MEAT".equals(kind);
         yaw[index] = random.nextFloat() * 360.0F;
         age[index] = quiet ? Float.NaN : 0.0F;
         Optional<ItemVoxels.Icon> icon = ItemVoxels.icon(stack);
@@ -210,8 +211,7 @@ final class MincerOutlet {
      * comes out next is turned; they break off when it comes out.
      */
     private void strand(StationView view, ItemStack making, int load, float turned, String kind) {
-        boolean pressed = !making.isEmpty() && load > 0 && "MEAT".equals(kind) && making.getItem().getFoodProperties() != null
-                && making.getItem().getFoodProperties().isMeat();
+        boolean pressed = !making.isEmpty() && load > 0 && "MEAT".equals(kind);
         float within = pressed ? turned * load - Mth.floor(turned * load) : 0.0F;
         int bits = pressed ? Mth.floor(within * STRAND / STRAND_BIT) : 0;
         if (bits == strandBits) {

@@ -5,7 +5,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -120,17 +119,15 @@ public final class MincerStation {
 
     /**
      * How a load of Farm &amp; Charm's recipe class {@code kind} that makes {@code result} looks and sounds going through: the class,
-     * except that what is milled to meal is {@link #MILLED}. The class is only upstream's difficulty: a MEAT recipe that makes no
-     * meat (crops into seeds, a bone into bone meal, Corn Expansion's kernels into cornmeal and corn flour) has no juice to drip, and
+     * except that what is milled to meal is {@link #MILLED}. The class is only upstream's difficulty: a MEAT recipe that makes nothing
+     * to eat (crops into seeds, a bone into bone meal, Corn Expansion's kernels into cornmeal and corn flour) has no juice to drip, and
      * a STONE recipe that makes flour gives flour's dust, not stone's. How heavy it turns stays the class's ({@link #heaviness}).
      */
     public static String looks(String kind, ItemStack result) {
         if (result.isEmpty()) {
             return kind;
         }
-        FoodProperties food = result.getItem().getFoodProperties();
-        boolean meat = food != null && food.isMeat();
-        if ("MEAT".equals(kind) && !meat || "STONE".equals(kind) && KitchenTags.is(result, KitchenTags.DISSOLVES)) {
+        if ("MEAT".equals(kind) && result.getItem().getFoodProperties() == null || "STONE".equals(kind) && KitchenTags.is(result, KitchenTags.DISSOLVES)) {
             return MILLED;
         }
         return kind;
