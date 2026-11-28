@@ -6,10 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.3.0+1.20.1] - 2026-11-28
 ### Added
-- [Corn Expansion](https://modrinth.com/mod/lets-do-addon-corn-expansion)'s recipes at the stations: its corn dough mixes golden in the crafting bowl, the mincer mills its kernels into cornmeal and corn flour, and polenta and grandma's cornbread bake on the stove.
+- [Corn Expansion](https://modrinth.com/mod/lets-do-addon-corn-expansion)'s recipes work at the stations: corn dough in the bowl, cornmeal and corn flour at the mincer, polenta and cornbread on the stove.
 
 ### Changed
-- The mincer mills what it grinds into meal or flour with a dusty sound and flour's dust: no meat juice from crops, bones or corn, and no stone dust from wheat.
+- The mincer mills grain, corn, crops and bones into meal or flour with dust and a dry sound instead of meat juice.
 - Corn syrup is poured from its bottle wherever honey is.
 
 ### Fixed
